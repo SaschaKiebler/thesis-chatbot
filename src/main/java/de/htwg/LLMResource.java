@@ -33,21 +33,25 @@ public class LLMResource {
         if (message == null || message.isEmpty()) {
             return "Please provide a message";
         }
-        Message inputMessage = new Message.MessageBuilder()
+        messageRepository.persist(new Message.MessageBuilder()
                 .message(message)
                 .model(Modeltype.COMMERCIAL.toString())
-                .build();
-        messageRepository.persist(inputMessage);
+                .build());
         return openAIService.chat(message);
     }
 
     @POST
     @Path("/opensource")
     @Produces(MediaType.TEXT_PLAIN)
+    @Transactional
     public String sendRequestOpenSource(@QueryParam("message") String message) {
         if (message == null || message.isEmpty()) {
             return "Please provide a message";
         }
+        messageRepository.persist(new Message.MessageBuilder()
+                .message(message)
+                .model(Modeltype.OPEN_SOURCE.toString())
+                .build());
 
         return togetherAIService.chat(message);
     }
