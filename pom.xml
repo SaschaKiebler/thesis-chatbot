@@ -78,6 +78,25 @@
     </dependency>
 
     <dependency>
+      <groupId>io.quarkiverse.langchain4j</groupId>
+      <artifactId>quarkus-langchain4j-pgvector</artifactId>
+      <version>0.8.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-embeddings-all-minilm-l6-v2-q</artifactId>
+      <version>0.27.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-document-parser-apache-pdfbox</artifactId>
+      <version>0.27.1</version>
+    </dependency>
+
+
+    <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
