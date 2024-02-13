@@ -14,6 +14,7 @@ public class DocumentRetriever implements Retriever<TextSegment> {
     private final EmbeddingStoreRetriever retriever;
 
     DocumentRetriever(PgVectorEmbeddingStore store, AllMiniLmL6V2QuantizedEmbeddingModel model) {
+        // maxResults can be adapted, the bigger the more context gets send to the ai
         retriever = EmbeddingStoreRetriever.from(store, model, 5);
     }
 

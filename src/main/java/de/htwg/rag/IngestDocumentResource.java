@@ -31,6 +31,7 @@ public class IngestDocumentResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public void uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
         try {
+            // try to create a new file and safe the pdf to the UPLOAD_DIRECTORY
             String filePath = UPLOAD_DIRECTORY + "/" + name + ".pdf";
             File file = new File(filePath);
             file.getParentFile().mkdirs();
@@ -39,6 +40,7 @@ public class IngestDocumentResource {
             fileOutputStream.write(pdfFile.file);
             fileOutputStream.close();
 
+            // load the document with the documentParser and ingest it as a list, mabye add the possibility to send multiple files at once
             Document document = FileSystemDocumentLoader.loadDocument(filePath, new ApachePdfBoxDocumentParser());
             documentIngestor.ingest(List.of(document));
 
