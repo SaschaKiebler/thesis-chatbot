@@ -26,7 +26,7 @@ public class IngestDocumentResource {
     @Inject
     DocumentIngestor documentIngestor;
 
-    private static final String UPLOAD_DIRECTORY = System.getProperty("user.home") + "/uploads";
+    private static final String UPLOAD_DIRECTORY = "resources/pdfs";
 
     @POST
     @Path("/pdf")
