@@ -1,5 +1,7 @@
-package de.htwg;
+package de.htwg.llms;
 
+import de.htwg.chat.Message;
+import de.htwg.chat.MessageRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

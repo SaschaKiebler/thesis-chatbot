@@ -1,4 +1,4 @@
-package de.htwg;
+package de.htwg.llms;
 
 public enum Modeltype {
     COMMERCIAL(){

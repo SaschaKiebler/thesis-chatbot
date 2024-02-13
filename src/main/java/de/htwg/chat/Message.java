@@ -1,7 +1,5 @@
-package de.htwg;
+package de.htwg.chat;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

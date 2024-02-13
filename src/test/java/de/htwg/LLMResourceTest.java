@@ -1,5 +1,7 @@
 package de.htwg;
 
+import de.htwg.llms.OpenAIService;
+import de.htwg.llms.TogetherAIService;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

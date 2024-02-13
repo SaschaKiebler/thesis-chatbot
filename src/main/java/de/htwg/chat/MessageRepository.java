@@ -1,9 +1,9 @@
-package de.htwg;
+package de.htwg.chat;
 
+import de.htwg.chat.Message;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.Date;
 import java.util.UUID;
 
 @ApplicationScoped
