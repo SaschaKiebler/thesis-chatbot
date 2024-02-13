@@ -12,8 +12,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.reactive.MultipartForm;
 import org.jboss.resteasy.reactive.PartType;
-
-import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,7 +43,6 @@ public class IngestDocumentResource {
             documentIngestor.ingest(List.of(document));
 
         } catch (IOException e) {
-            // Handle exceptions (e.g., file not found, no write permission)
             throw new RuntimeException("Error saving file", e);
         }
     }

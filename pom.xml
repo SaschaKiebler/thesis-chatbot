@@ -95,6 +95,13 @@
       <version>0.27.1</version>
     </dependency>
 
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-embeddings</artifactId>
+      <version>0.27.1</version>
+    </dependency>
+
+
 
     <dependency>
       <groupId>io.rest-assured</groupId>
