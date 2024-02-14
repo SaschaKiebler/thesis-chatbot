@@ -14,12 +14,15 @@ public class DocumentRetriever implements Retriever<TextSegment> {
     private final EmbeddingStoreRetriever retriever;
 
     DocumentRetriever(PgVectorEmbeddingStore store, AllMiniLmL6V2QuantizedEmbeddingModel model) {
-        // maxResults can be adapted, the bigger the more context gets send to the ai
+        // maxResults can be adapted, the bigger, the more context gets send to the AI
         retriever = EmbeddingStoreRetriever.from(store, model, 5);
     }
 
     @Override
     public List<TextSegment> findRelevant(String s) {
+        if (s.isEmpty()) {
+            throw new IllegalArgumentException("No input provided");
+        }
         return retriever.findRelevant(s);
     }
 }
