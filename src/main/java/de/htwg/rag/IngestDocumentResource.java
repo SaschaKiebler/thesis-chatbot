@@ -37,6 +37,7 @@ public class IngestDocumentResource {
             file.getParentFile().mkdirs();
             file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
+            if (pdfFile.file == null) throw new RuntimeException("File is null");
             fileOutputStream.write(pdfFile.file);
             fileOutputStream.close();
 
