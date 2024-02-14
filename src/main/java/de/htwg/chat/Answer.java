@@ -21,7 +21,7 @@ public class Answer {
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
-    @Column(length = 1000)
+    @Column(length = 3000)
     private String answer;
     private String model;
 

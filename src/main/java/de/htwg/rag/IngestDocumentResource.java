@@ -33,13 +33,7 @@ public class IngestDocumentResource {
         try {
             // try to create a new file and safe the pdf to the UPLOAD_DIRECTORY
             String filePath = UPLOAD_DIRECTORY + "/" + name + ".pdf";
-            File file = new File(filePath);
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            if (pdfFile.file == null) throw new RuntimeException("File is null");
-            fileOutputStream.write(pdfFile.file);
-            fileOutputStream.close();
+            safeFile(filePath, pdfFile.file);
 
             // load the document with the documentParser and ingest it as a list, mabye add the possibility to send multiple files at once
             Document document = FileSystemDocumentLoader.loadDocument(filePath, new ApachePdfBoxDocumentParser());
@@ -48,6 +42,15 @@ public class IngestDocumentResource {
         } catch (IOException e) {
             throw new RuntimeException("Error saving file", e);
         }
+    }
+
+    public void safeFile(String filePath, byte[] file) throws IOException {
+        File newFile = new File(filePath);
+        newFile.getParentFile().mkdirs();
+        newFile.createNewFile();
+        FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+        fileOutputStream.write(file);
+        fileOutputStream.close();
     }
 
     public static class PdfFile {

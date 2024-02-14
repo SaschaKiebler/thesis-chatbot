@@ -1,5 +1,6 @@
 package de.htwg.chat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ public class Message {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
+    @Column(length = 3000)
     private String message;
     private Date date;
     private String model;

@@ -52,6 +52,10 @@ public class LLMResource {
         // get the answer from the AI
         String answer = openAIService.chat(message);
 
+        if (answer == null) {
+            return "Sorry, the service is currently not available. Please try again later.";
+        }
+
         // save the answer
         answerRepository.persist(new Answer.AnswerBuilder()
                 .answer(answer)
@@ -79,7 +83,12 @@ public class LLMResource {
         messageRepository.persist(msg);
 
         // get the answer from the AI
-        String answer = openAIService.chat(message);
+        String answer = togetherAIService.chat(message);
+
+        if (answer == null) {
+            return "Sorry, the service is currently not available. Please try again later.";
+        }
+        System.out.println("Answer: " + answer);
         // save the answer
         answerRepository.persist(new Answer.AnswerBuilder()
                 .answer(answer)
