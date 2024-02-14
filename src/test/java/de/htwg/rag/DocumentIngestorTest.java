@@ -2,49 +2,83 @@ package de.htwg.rag;
 
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.Metadata;
-import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
-import dev.langchain4j.model.output.Response;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
 
 @QuarkusTest
-@ExtendWith(MockitoExtension.class)
 class DocumentIngestorTest {
 
     @InjectMock
     PgVectorEmbeddingStore store;
 
-    @InjectMock
-    AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel;
 
-    @InjectMocks
     DocumentIngestor documentIngestor;
+    Document document1;
+    Document document2;
+    Document document3;
+    List<TextSegment> textSegments;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        documentIngestor = new DocumentIngestor();
+        documentIngestor.setStore(store);
+        documentIngestor.setEmbeddingModel(new AllMiniLmL6V2QuantizedEmbeddingModel());
+        document1 = new Document("This is a test document");
+        document2 = new Document("This is another test document");
+        document3 = new Document("This is a third test document");
+
+        textSegments = Arrays.asList(
+                new TextSegment("This is a test document",Metadata.metadata("index",0)),
+                new TextSegment("This is another test document",Metadata.metadata("index",0)),
+                new TextSegment("This is a third test document", Metadata.metadata("index",0)));
     }
 
     @Test
-    void testIngest() {
+    void testIngestForEmptyList() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            documentIngestor.ingest(Arrays.asList());
+        });
+    }
+
+    @Test
+    void testIngestForValidList() {
+        List<Document> documents = Arrays.asList(document1, document2, document3);
+
+        when(store.addAll(anyList(), eq(textSegments))).thenReturn(List.of("test","test","test"));
+
+        assertDoesNotThrow(() -> {
+            documentIngestor.ingest(documents);
+        });
+
+        verify(store, times(1)).addAll(anyList(), eq(textSegments));
+
+    }
+
+    @Test
+    void testIngestForListOfOneDocument() {
+        List<Document> documents = Arrays.asList(document1);
+        List<TextSegment> textSegments = Arrays.asList(new TextSegment("This is a test document", Metadata.metadata("index",0)));
+
+        when(store.addAll(anyList(), eq(textSegments))).thenReturn(List.of("test"));
+
+        assertDoesNotThrow(() -> {
+            documentIngestor.ingest(documents);
+        });
+
+        verify(store, times(1)).addAll(anyList(), eq(textSegments));
 
     }
 

@@ -1,4 +1,4 @@
-package de.htwg;
+package de.htwg.llms;
 
 import de.htwg.llms.OpenAIService;
 import de.htwg.llms.TogetherAIService;

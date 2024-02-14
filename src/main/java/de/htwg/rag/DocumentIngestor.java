@@ -19,14 +19,27 @@ public class DocumentIngestor {
     @Inject
     AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel;
 
-    // create the Ingestor and ingest the documents into the store. Maybe adapt the overlapSize for better performance
+    // creates the Ingestor and ingests the documents into the store. Maybe adapt the overlapSize for better performance
     public void ingest(List<Document> documents) {
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .embeddingStore(store)
                 .embeddingModel(embeddingModel)
                 .documentSplitter(recursive(500, 0))
                 .build();
+        if (documents.isEmpty()) {
+            throw new IllegalArgumentException("No documents to ingest");
+        }
+        else {
+            ingestor.ingest(documents);
+        }
 
-        ingestor.ingest(documents);
+    }
+
+    public void setStore(PgVectorEmbeddingStore store) {
+        this.store = store;
+    }
+
+    public void setEmbeddingModel(AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel) {
+        this.embeddingModel = embeddingModel;
     }
 }
