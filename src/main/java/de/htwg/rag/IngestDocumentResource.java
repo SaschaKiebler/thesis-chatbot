@@ -35,7 +35,8 @@ public class IngestDocumentResource {
             String filePath = UPLOAD_DIRECTORY + "/" + name + ".pdf";
             safeFile(filePath, pdfFile.file);
 
-            // load the document with the documentParser and ingest it as a list, mabye add the possibility to send multiple files at once
+            // load the document with the documentParser and ingest it as a list,
+            // mabye add the possibility to send multiple files at once
             Document document = FileSystemDocumentLoader.loadDocument(filePath, new ApachePdfBoxDocumentParser());
             documentIngestor.ingest(List.of(document));
 

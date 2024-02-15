@@ -1,9 +1,6 @@
 package de.htwg.chat;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -28,6 +25,9 @@ public class Message {
     private Date date;
     private String model;
 
+    @ManyToOne(targetEntity = Conversation.class)
+    private Conversation conversation;
+
     public Message() {
     }
 
@@ -35,6 +35,7 @@ public class Message {
         this.message = messageBuilder.message;
         this.date = messageBuilder.date;
         this.model = messageBuilder.model;
+        this.conversation = messageBuilder.conversation;
     }
 
     public UUID getId() {
@@ -69,11 +70,20 @@ public class Message {
         this.model = model;
     }
 
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
 
     public static class MessageBuilder{
         private String message;
         private Date date;
         private String model;
+        private Conversation conversation;
 
         public MessageBuilder() {
             this.date = new Date();
@@ -92,6 +102,11 @@ public class Message {
 
         public MessageBuilder model(String model){
             this.model = model;
+            return this;
+        }
+
+        public MessageBuilder conversation(Conversation conversation){
+            this.conversation = conversation;
             return this;
         }
 

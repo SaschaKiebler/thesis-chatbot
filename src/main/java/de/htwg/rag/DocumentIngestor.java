@@ -19,7 +19,8 @@ public class DocumentIngestor {
     @Inject
     AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel;
 
-    // creates the Ingestor and ingests the documents into the store. Maybe adapt the overlapSize for better performance
+    // creates the Ingestor and ingests the documents into the store.
+    // Maybe adapt the overlapSize or change the Documentsplitter for better performance
     public void ingest(List<Document> documents) {
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .embeddingStore(store)

@@ -30,6 +30,7 @@ public class Answer {
     @ManyToOne(targetEntity = Message.class)
     private Message message;
 
+
     public Answer() {
     }
 
@@ -38,6 +39,46 @@ public class Answer {
         this.date = answerBuilder.date;
         this.model = answerBuilder.model;
         this.message = answerBuilder.message;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
     }
 
     public static class AnswerBuilder{

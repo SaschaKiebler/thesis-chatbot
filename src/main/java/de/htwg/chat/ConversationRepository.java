@@ -6,9 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.UUID;
 
 @ApplicationScoped
-public class AnswerRepository implements PanacheRepository<Answer> {
-
-    public Answer findByMessageId(UUID id) {
-        return find("messageId", id).firstResult();
+public class ConversationRepository implements PanacheRepository<Conversation> {
+    public Conversation findById(UUID uuid) {
+        return find("id", uuid).firstResult();
     }
 }

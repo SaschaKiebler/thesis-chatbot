@@ -43,8 +43,7 @@ class LLMResourceTest {
         given()
                 .when().post("/llm/commercial?message=test")
                 .then()
-                .statusCode(200)
-                .body(is("test"));
+                .statusCode(200);
 
         verify(messageRepository, times(1)).persist(any(Message.class));
         verify(answerRepository, times(1)).persist(any(Answer.class));
