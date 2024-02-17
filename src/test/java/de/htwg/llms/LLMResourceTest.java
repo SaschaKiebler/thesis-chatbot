@@ -9,6 +9,8 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -34,7 +36,7 @@ class LLMResourceTest {
 
     @Test
     void testSendRequestCommercialForValidStringWithMockedService() {
-        when(openAIService.chat("test")).thenReturn("test");
+        when(openAIService.chat(String.valueOf(any(UUID.class)),eq("test"))).thenReturn("test");
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 

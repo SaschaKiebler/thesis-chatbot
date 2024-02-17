@@ -3,12 +3,15 @@ package de.htwg.chat.memory;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
-@RequestScoped
+@ApplicationScoped
 public class CustomMemoryProvider implements ChatMemoryProvider {
 
-    private final CustomChatMemoryStore store = new CustomChatMemoryStore();
+    @Inject
+    CustomChatMemoryStore store;
     @Override
     public ChatMemory get(Object memoryId) {
         return MessageWindowChatMemory.builder()

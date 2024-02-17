@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 import java.util.UUID;
 
 @Entity
-public class SystemMessage {
+public class SystemPrompt {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -18,10 +18,10 @@ public class SystemMessage {
     @ManyToOne(targetEntity = Conversation.class)
     private Conversation conversation;
 
-    public SystemMessage() {
+    public SystemPrompt() {
     }
 
-    public SystemMessage(String message) {
+    public SystemPrompt(String message) {
         this.message = message;
     }
 

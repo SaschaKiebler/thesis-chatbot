@@ -37,7 +37,7 @@ public class LLMResource {
 
     public LLMResource(OpenAIService openAIService, TogetherAIService togetherAIService) {
         this.togetherAIService = togetherAIService;
-
+        this.openAIService = openAIService;
     }
 
 
@@ -59,27 +59,12 @@ public class LLMResource {
 
         conversationRepository.persist(conversation);
 
-        // save the user message
-        /*Message msg = new Message.MessageBuilder()
-                .message(message)
-                .model(Modeltype.COMMERCIAL.toString())
-                .conversation(conversation)
-                .build();
-        messageRepository.persist(msg);*/
-
         // get the answer from the AI
         String answer = openAIService.chat(conversation.getId().toString(), message);
 
         if (answer == null) {
             return "Sorry, the service is currently not available. Please try again later.";
         }
-
-        // save the answer
-        /*answerRepository.persist(new Answer.AnswerBuilder()
-                .answer(answer)
-                .message(msg)
-                .model(Modeltype.COMMERCIAL.toString())
-                .build()); */
         return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).build();
 
     }
