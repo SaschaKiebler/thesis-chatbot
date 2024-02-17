@@ -1,11 +1,9 @@
 package de.htwg.llms;
 
-import de.htwg.chat.Answer;
-import de.htwg.chat.AnswerRepository;
-import de.htwg.chat.Message;
-import de.htwg.chat.MessageRepository;
-import de.htwg.llms.OpenAIService;
-import de.htwg.llms.TogetherAIService;
+import de.htwg.chat.entities.Answer;
+import de.htwg.chat.repositories.AnswerRepository;
+import de.htwg.chat.entities.Message;
+import de.htwg.chat.repositories.MessageRepository;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

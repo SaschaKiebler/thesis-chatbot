@@ -1,5 +1,6 @@
-package de.htwg.chat;
+package de.htwg.chat.repositories;
 
+import de.htwg.chat.entities.Conversation;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 

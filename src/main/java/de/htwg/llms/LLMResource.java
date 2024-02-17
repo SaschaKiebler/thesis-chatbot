@@ -1,8 +1,11 @@
 package de.htwg.llms;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import de.htwg.chat.*;
-import dev.langchain4j.service.AiServices;
+import de.htwg.chat.entities.Answer;
+import de.htwg.chat.entities.Conversation;
+import de.htwg.chat.entities.Message;
+import de.htwg.chat.repositories.AnswerRepository;
+import de.htwg.chat.repositories.ConversationRepository;
+import de.htwg.chat.repositories.MessageRepository;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -10,7 +13,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
-import java.util.List;
 import java.util.UUID;
 
 @Path("/llm")
@@ -34,7 +36,6 @@ public class LLMResource {
 
 
     public LLMResource(OpenAIService openAIService, TogetherAIService togetherAIService) {
-        this.openAIService = openAIService;
         this.togetherAIService = togetherAIService;
 
     }
@@ -59,26 +60,26 @@ public class LLMResource {
         conversationRepository.persist(conversation);
 
         // save the user message
-        Message msg = new Message.MessageBuilder()
+        /*Message msg = new Message.MessageBuilder()
                 .message(message)
                 .model(Modeltype.COMMERCIAL.toString())
                 .conversation(conversation)
                 .build();
-        messageRepository.persist(msg);
+        messageRepository.persist(msg);*/
 
         // get the answer from the AI
-        String answer = openAIService.chat(message);
+        String answer = openAIService.chat(conversation.getId().toString(), message);
 
         if (answer == null) {
             return "Sorry, the service is currently not available. Please try again later.";
         }
 
         // save the answer
-        answerRepository.persist(new Answer.AnswerBuilder()
+        /*answerRepository.persist(new Answer.AnswerBuilder()
                 .answer(answer)
                 .message(msg)
                 .model(Modeltype.COMMERCIAL.toString())
-                .build());
+                .build()); */
         return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).build();
 
     }
