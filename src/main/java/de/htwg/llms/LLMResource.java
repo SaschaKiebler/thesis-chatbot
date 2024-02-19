@@ -1,16 +1,15 @@
 package de.htwg.llms;
 
-import de.htwg.chat.entities.Answer;
 import de.htwg.chat.entities.Conversation;
-import de.htwg.chat.entities.Message;
-import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.repositories.ConversationRepository;
-import de.htwg.chat.repositories.MessageRepository;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.UUID;
@@ -26,20 +25,7 @@ public class LLMResource {
     TogetherAIService togetherAIService;
 
     @Inject
-    MessageRepository messageRepository;
-
-    @Inject
-    AnswerRepository answerRepository;
-
-    @Inject
     ConversationRepository conversationRepository;
-
-
-    public LLMResource(OpenAIService openAIService, TogetherAIService togetherAIService) {
-        this.togetherAIService = togetherAIService;
-        this.openAIService = openAIService;
-    }
-
 
     @POST
     @Path("/commercial")
@@ -53,9 +39,6 @@ public class LLMResource {
 
         // Set the conversation to provide a memory id for the chat
         Conversation conversation = getConversation(conversationId);
-
-
-        conversationRepository.persist(conversation);
 
         // get the answer from the AI
         String answer = openAIService.chat(conversation.getId().toString(), message);
@@ -79,9 +62,6 @@ public class LLMResource {
 
         // Set the conversation to provide a memory id for the chat
         Conversation conversation = getConversation(conversationId);
-
-
-        conversationRepository.persist(conversation);
 
         // get the answer from the AI
         String answer = togetherAIService.chat(conversation.getId().toString(), message);
