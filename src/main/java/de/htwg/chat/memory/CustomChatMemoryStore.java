@@ -58,42 +58,61 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     @Override
     @Transactional
     public void updateMessages(Object memoryId, List<ChatMessage> messages) {
-
-        if (memoryId == "default"){
+        if (memoryId.equals("default")) {
             return;
         }
 
         UUID memoryIdUUID = UUID.fromString((String) memoryId);
-        List<ChatMessage> existingMessages = new ArrayList<>(getListOfMessages(memoryIdUUID));
+        List<ChatMessage> existingMessages = getListOfMessages(memoryIdUUID);
 
-        // check if the message is already in the database, if not, add it.
-        // Problem: what if the user sends the same message twice?
         for (ChatMessage message : messages) {
             if (!existingMessages.contains(message)) {
-                if (message instanceof UserMessage) {
-                    Message msg = new Message.MessageBuilder()
-                            .message(message.text())
-                            .model(Modeltype.COMMERCIAL.toString())
-                            .conversation(conversationRepository.findById(memoryIdUUID))
-                            .build();
-                    messageRepository.persist(msg);
-                } else if (message instanceof AiMessage){
-                    Answer answer = new Answer.AnswerBuilder()
-                            .answer(message.text())
-                            .model(Modeltype.COMMERCIAL.toString())
-                            // looks ugly but works for now
-                            .message(messageRepository.findByConversationId(memoryIdUUID).get(messageRepository.findByConversationId(memoryIdUUID).size() - 1))
-                            .build();
-                    answerRepository.persist(answer);
-                }
-                else{
-                    SystemPrompt systemPrompt = new SystemPrompt();
-                    systemPrompt.setMessage(message.text());
-                    systemPrompt.setConversation(conversationRepository.findById(memoryIdUUID));
-                    systemPromptRepository.persist(systemPrompt);
-                }
+                persistMessage(memoryIdUUID, message);
             }
         }
+    }
+
+    private void persistMessage(UUID memoryIdUUID, ChatMessage message) {
+        if (message instanceof UserMessage) {
+            persistUserMessage(memoryIdUUID, message);
+        } else if (message instanceof AiMessage) {
+            persistAiMessage(memoryIdUUID, message);
+        } else {
+            persistSystemMessage(memoryIdUUID, message);
+        }
+    }
+
+    private void persistUserMessage(UUID memoryIdUUID, ChatMessage message) {
+        Message msg = new Message.MessageBuilder()
+                .message(message.text())
+                .model(Modeltype.COMMERCIAL.toString())
+                .conversation(conversationRepository.findById(memoryIdUUID))
+                .build();
+        messageRepository.persist(msg);
+    }
+
+
+    private void persistAiMessage(UUID memoryIdUUID, ChatMessage message) {
+        Message lastMessage = getLastMessage(memoryIdUUID);
+        Answer answer = new Answer.AnswerBuilder()
+                .answer(message.text())
+                .model(Modeltype.COMMERCIAL.toString())
+                .message(lastMessage)
+                .build();
+        answerRepository.persist(answer);
+    }
+
+
+    private void persistSystemMessage(UUID memoryIdUUID, ChatMessage message) {
+        SystemPrompt systemPrompt = new SystemPrompt();
+        systemPrompt.setMessage(message.text());
+        systemPrompt.setConversation(conversationRepository.findById(memoryIdUUID));
+        systemPromptRepository.persist(systemPrompt);
+    }
+
+    private Message getLastMessage(UUID memoryIdUUID) {
+        List<Message> messages = messageRepository.findByConversationId(memoryIdUUID);
+        return messages.get(messages.size() - 1);
     }
 
     private List<ChatMessage> getListOfMessages(UUID memoryId) {

@@ -15,6 +15,9 @@
     <quarkus.platform.version>3.7.2</quarkus.platform.version>
     <skipITs>true</skipITs>
     <surefire-plugin.version>3.2.5</surefire-plugin.version>
+
+    <langchain4j.version>0.27.1</langchain4j.version>
+    <quarkus-langchain4j.version>0.8.2</quarkus-langchain4j.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -63,7 +66,7 @@
     <dependency>
       <groupId>io.quarkiverse.langchain4j</groupId>
       <artifactId>quarkus-langchain4j-core</artifactId>
-      <version>0.8.0</version>
+      <version>${quarkus-langchain4j.version}</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -80,39 +83,39 @@
     <dependency>
       <groupId>io.quarkiverse.langchain4j</groupId>
       <artifactId>quarkus-langchain4j-pgvector</artifactId>
-      <version>0.8.0</version>
+      <version>${quarkus-langchain4j.version}</version>
     </dependency>
 
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-embeddings-all-minilm-l6-v2-q</artifactId>
-      <version>0.27.1</version>
+      <version>${langchain4j.version}</version>
     </dependency>
 
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-document-parser-apache-pdfbox</artifactId>
-      <version>0.27.1</version>
+      <version>${langchain4j.version}</version>
     </dependency>
 
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-embeddings</artifactId>
-      <version>0.27.1</version>
+      <version>${langchain4j.version}</version>
     </dependency>
 
-
+    <dependency>
+      <groupId>io.quarkiverse.langchain4j</groupId>
+      <artifactId>quarkus-langchain4j-openai</artifactId>
+      <version>${quarkus-langchain4j.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.quarkiverse.langchain4j</groupId>
-      <artifactId>quarkus-langchain4j-openai</artifactId>
-      <version>0.8.0</version>
-    </dependency>
+
       <dependency>
           <groupId>io.github.cdimascio</groupId>
           <artifactId>dotenv-java</artifactId>

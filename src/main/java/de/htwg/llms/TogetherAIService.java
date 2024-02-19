@@ -3,6 +3,7 @@ package de.htwg.llms;
 import de.htwg.rag.DocumentRetriever;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+
 import io.quarkiverse.langchain4j.RegisterAiService;
 
 @RegisterAiService(modelName = "opensource", retriever = DocumentRetriever.class)

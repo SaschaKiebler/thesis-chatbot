@@ -4,20 +4,28 @@ import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
+import java.util.function.Supplier;
+
 @ApplicationScoped
-public class CustomMemoryProvider implements ChatMemoryProvider {
+public class CustomMemoryProvider implements Supplier<ChatMemoryProvider> {
 
     @Inject
     CustomChatMemoryStore store;
+
+
+
     @Override
-    public ChatMemory get(Object memoryId) {
+    public ChatMemoryProvider get() {
+        return this::createChatMemory;
+    }
+
+    private ChatMemory createChatMemory(Object memoryId) {
         return MessageWindowChatMemory.builder()
-                .chatMemoryStore(store)
-                .maxMessages(10)
+                .maxMessages(20)
                 .id(memoryId)
+                .chatMemoryStore(store)
                 .build();
     }
 }

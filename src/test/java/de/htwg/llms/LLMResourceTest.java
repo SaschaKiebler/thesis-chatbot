@@ -1,8 +1,10 @@
 package de.htwg.llms;
 
 import de.htwg.chat.entities.Answer;
+import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.entities.Message;
+import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,21 +35,32 @@ class LLMResourceTest {
     @InjectMock
     AnswerRepository answerRepository;
 
+    @InjectMock
+    ConversationRepository conversationRepository;
+
 
 
     @Test
     void testSendRequestCommercialForValidStringWithMockedService() {
-        when(openAIService.chat(String.valueOf(any(UUID.class)),eq("test"))).thenReturn("test");
+        Conversation conversation = new Conversation();
+        conversation.setId(UUID.randomUUID());
+
+        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+        when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        doNothing().when(conversationRepository).persist(any(Conversation.class));
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 
-        given()
-                .when().post("/llm/commercial?message=test")
-                .then()
-                .statusCode(200);
 
-        verify(messageRepository, times(1)).persist(any(Message.class));
-        verify(answerRepository, times(1)).persist(any(Answer.class));
+        given()
+                .when().post("/llm/commercial?message=test&conversationId=" + conversation.getId())
+                .then()
+                .statusCode(200)
+                .body(
+                        is("{\"answer\":\"test\",\"conversationId\":\""
+                                + conversation.getId()
+                                + "\"}"));
+
     }
 
     @Test
@@ -61,8 +75,6 @@ class LLMResourceTest {
                 .statusCode(200)
                 .body(is("test"));
 
-        verify(messageRepository, times(1)).persist(any(Message.class));
-        verify(answerRepository, times(1)).persist(any(Answer.class));
     }
 
     @Test

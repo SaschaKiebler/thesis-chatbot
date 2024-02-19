@@ -80,11 +80,11 @@ public class LLMResource {
         }
 
         // save the user message
-        Message msg = new Message.MessageBuilder()
+        /*Message msg = new Message.MessageBuilder()
                 .message(message)
                 .model(Modeltype.OPEN_SOURCE.toString())
                 .build();
-        messageRepository.persist(msg);
+        messageRepository.persist(msg);*/
 
         // get the answer from the AI
         String answer = togetherAIService.chat(message);
@@ -93,11 +93,11 @@ public class LLMResource {
             return "Sorry, the service is currently not available. Please try again later.";
         }
         // save the answer
-        answerRepository.persist(new Answer.AnswerBuilder()
+        /*answerRepository.persist(new Answer.AnswerBuilder()
                 .answer(answer)
                 .message(msg)
                 .model(Modeltype.OPEN_SOURCE.toString())
-                .build());
+                .build());*/
 
         return answer;
     }

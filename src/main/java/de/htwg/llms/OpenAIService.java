@@ -2,7 +2,6 @@ package de.htwg.llms;
 
 import de.htwg.chat.memory.CustomMemoryProvider;
 import de.htwg.rag.DocumentRetriever;
-import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
