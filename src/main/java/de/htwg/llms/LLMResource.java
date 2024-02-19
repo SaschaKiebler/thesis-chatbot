@@ -52,10 +52,8 @@ public class LLMResource {
         }
 
         // Set the conversation to provide a memory id for the chat
-        Conversation conversation = new Conversation();
-        if (conversationId != null && !conversationId.isEmpty()) {
-            conversation = conversationRepository.findById(UUID.fromString(conversationId));
-        }
+        Conversation conversation = getConversation(conversationId);
+
 
         conversationRepository.persist(conversation);
 
@@ -71,35 +69,37 @@ public class LLMResource {
 
     @POST
     @Path("/opensource")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public String sendRequestOpenSource(@QueryParam("message") String message) {
+    public String sendRequestOpenSource(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId) {
         // test for null or empty input
         if (message == null || message.isEmpty()) {
             return "Please provide a message";
         }
 
-        // save the user message
-        /*Message msg = new Message.MessageBuilder()
-                .message(message)
-                .model(Modeltype.OPEN_SOURCE.toString())
-                .build();
-        messageRepository.persist(msg);*/
+        // Set the conversation to provide a memory id for the chat
+        Conversation conversation = getConversation(conversationId);
+
+
+        conversationRepository.persist(conversation);
 
         // get the answer from the AI
-        String answer = togetherAIService.chat(message);
+        String answer = togetherAIService.chat(conversation.getId().toString(), message);
 
         if (answer == null) {
             return "Sorry, the service is currently not available. Please try again later.";
         }
-        // save the answer
-        /*answerRepository.persist(new Answer.AnswerBuilder()
-                .answer(answer)
-                .message(msg)
-                .model(Modeltype.OPEN_SOURCE.toString())
-                .build());*/
+        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).build();
+    }
 
-        return answer;
+    private Conversation getConversation(String conversationId) {
+        if (conversationId != null && !conversationId.isEmpty()) {
+            return conversationRepository.findById(UUID.fromString(conversationId));
+        } else {
+            Conversation conversation = new Conversation();
+            conversationRepository.persist(conversation);
+            return conversation;
+        }
     }
 
 }

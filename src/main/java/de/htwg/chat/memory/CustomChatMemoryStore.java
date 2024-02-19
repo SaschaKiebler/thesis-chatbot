@@ -38,6 +38,8 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     @Inject
     SystemPromptRepository systemPromptRepository;
 
+    private Modeltype modelType;
+
 
     @Override
     public List<ChatMessage> getMessages(Object memoryId) {
@@ -83,9 +85,12 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     }
 
     private void persistUserMessage(UUID memoryIdUUID, ChatMessage message) {
+        if (modelType == null) {
+         setModelType(Modeltype.COMMERCIAL);
+        }
         Message msg = new Message.MessageBuilder()
                 .message(message.text())
-                .model(Modeltype.COMMERCIAL.toString())
+                .model(modelType.toString())
                 .conversation(conversationRepository.findById(memoryIdUUID))
                 .build();
         messageRepository.persist(msg);
@@ -93,10 +98,13 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
 
 
     private void persistAiMessage(UUID memoryIdUUID, ChatMessage message) {
+        if(modelType == null) {
+            setModelType(Modeltype.COMMERCIAL);
+        }
         Message lastMessage = getLastMessage(memoryIdUUID);
         Answer answer = new Answer.AnswerBuilder()
                 .answer(message.text())
-                .model(Modeltype.COMMERCIAL.toString())
+                .model(modelType.toString())
                 .message(lastMessage)
                 .build();
         answerRepository.persist(answer);
@@ -112,7 +120,12 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
 
     private Message getLastMessage(UUID memoryIdUUID) {
         List<Message> messages = messageRepository.findByConversationId(memoryIdUUID);
-        return messages.get(messages.size() - 1);
+        try {
+            return messages.get(messages.size() - 1);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+
     }
 
     private List<ChatMessage> getListOfMessages(UUID memoryId) {
@@ -141,5 +154,9 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     @Override
     public void deleteMessages(Object memoryId) {
         // stays empty because there is no use-case doing deletes on the db from here
+    }
+
+    public void setModelType(Modeltype modelType) {
+        this.modelType = modelType;
     }
 }

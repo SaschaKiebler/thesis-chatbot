@@ -6,8 +6,9 @@ import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@RegisterAiService(modelName = "commercial", retriever = DocumentRetriever.class, chatMemoryProviderSupplier = RegisterAiService.BeanChatMemoryProviderSupplier.class)
+@RegisterAiService(modelName = "commercial", retriever = DocumentRetriever.class)
 public interface OpenAIService {
     @SystemMessage("""
             Du bist Experte im deutschen Gesundheitswesen und in der Gesundheitsinformatik. 

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -65,15 +64,23 @@ class LLMResourceTest {
 
     @Test
     void testSendRequestOpenSourceForValidStringWithMockedService() {
-        when(togetherAIService.chat("test")).thenReturn("test");
+        Conversation conversation = new Conversation();
+        conversation.setId(UUID.randomUUID());
+
+        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+        when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 
         given()
-                .when().post("/llm/opensource?message=test")
+                .when().post("/llm/opensource?message=test&conversationId=" + conversation.getId())
                 .then()
                 .statusCode(200)
-                .body(is("test"));
+                .body(
+                        is("{\"answer\":\"test\",\"conversationId\":\""
+                                + conversation.getId()
+                                + "\"}"));
+
 
     }
 
