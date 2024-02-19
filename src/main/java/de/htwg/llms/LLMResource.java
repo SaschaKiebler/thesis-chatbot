@@ -2,6 +2,7 @@ package de.htwg.llms;
 
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.ConversationRepository;
+import io.quarkiverse.langchain4j.ModelName;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
