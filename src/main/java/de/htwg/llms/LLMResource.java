@@ -1,7 +1,11 @@
 package de.htwg.llms;
 
+import de.htwg.chat.entities.Answer;
 import de.htwg.chat.entities.Conversation;
+import de.htwg.chat.entities.Message;
+import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.repositories.ConversationRepository;
+import de.htwg.chat.repositories.MessageRepository;
 import io.quarkiverse.langchain4j.ModelName;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,6 +32,12 @@ public class LLMResource {
     @Inject
     ConversationRepository conversationRepository;
 
+    @Inject
+    AnswerRepository answerRepository;
+
+    @Inject
+    MessageRepository messageRepository;
+
     @POST
     @Path("/commercial")
     @Produces(MediaType.APPLICATION_JSON)
@@ -47,7 +57,15 @@ public class LLMResource {
         if (answer == null) {
             return "Sorry, the service is currently not available. Please try again later.";
         }
-        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).build();
+        // get answerId from the db
+        Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
+        Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
+
+        if (safedAnswer == null) {
+            return "Something went wrong. Please try again later";
+        }
+
+        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build();
 
     }
 

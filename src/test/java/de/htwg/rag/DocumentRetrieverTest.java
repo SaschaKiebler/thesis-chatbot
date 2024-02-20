@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -55,7 +56,7 @@ class DocumentRetrieverTest {
         List<EmbeddingMatch<TextSegment>> matches = List.of(mock(EmbeddingMatch.class));
 
         when(model.embed("test")).thenReturn(response);
-        when(store.findRelevant(embeddedText, 5)).thenReturn( matches);
+        when(store.findRelevant(any(Embedding.class), anyInt(),anyInt())).thenReturn( matches);
 
         List<TextSegment> relevant = documentRetriever.findRelevant("test");
         assertEquals(1, relevant.size());

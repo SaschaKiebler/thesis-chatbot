@@ -22,6 +22,10 @@ public class MessageRepository implements PanacheRepository<Message> {
         return find("conversation.id", id).list();
     }
 
+    public Message findByConversationIdAndMessage(UUID conversationId, String message) {
+        return find("conversation.id = ?1 and message like '"+ message +"%'", conversationId).firstResult();
+    }
+
 
 
 }
