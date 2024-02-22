@@ -43,9 +43,14 @@ class LLMResourceTest {
     void testSendRequestCommercialForValidStringWithMockedService() {
         Conversation conversation = new Conversation();
         conversation.setId(UUID.randomUUID());
+        Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
+        Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
 
         when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
         when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString())).thenReturn(message);
+        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),eq("test"))).thenReturn(answer);
+
         doNothing().when(conversationRepository).persist(any(Conversation.class));
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));

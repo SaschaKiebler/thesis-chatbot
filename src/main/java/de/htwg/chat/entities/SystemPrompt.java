@@ -49,5 +49,40 @@ public class SystemPrompt {
         this.conversation = conversation;
     }
 
+    public SystemPrompt(SystemPromptBuilder builder) {
+        this.id = builder.id;
+        this.message = builder.message;
+        this.conversation = builder.conversation;
+    }
+
+    public static SystemPromptBuilder builder() {
+        return new SystemPromptBuilder();
+    }
+
+    public static class SystemPromptBuilder {
+        private UUID id;
+        private String message;
+        private Conversation conversation;
+
+        public SystemPromptBuilder id(UUID id) {
+            this.id = id;
+            return this;
+        }
+
+        public SystemPromptBuilder message(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public SystemPromptBuilder conversation(Conversation conversation) {
+            this.conversation = conversation;
+            return this;
+        }
+
+        public SystemPrompt build() {
+            return new SystemPrompt(this);
+        }
+    }
+
 
 }

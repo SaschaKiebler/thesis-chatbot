@@ -59,10 +59,13 @@ public class LLMResource {
         }
         // get answerId from the db
         Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
+        if (messageFromDb == null) {
+            return "Something went wrong. No message found. Please try again later";
+        }
         Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
 
         if (safedAnswer == null) {
-            return "Something went wrong. Please try again later";
+            return "Something went wrong. No Answer found. Please try again later";
         }
 
         return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build();

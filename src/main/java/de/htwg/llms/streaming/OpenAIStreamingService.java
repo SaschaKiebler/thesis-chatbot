@@ -68,7 +68,7 @@ public class OpenAIStreamingService {
                             @QueryParam("conversationId") String conversationId,
                             @QueryParam("message") String messageText) {
 
-        StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
+       /* StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY"))
                 .build();
 
@@ -109,7 +109,7 @@ public class OpenAIStreamingService {
     },
     eventSink::close
             );
-
+*/
     }
 
     @GET

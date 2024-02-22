@@ -1,6 +1,7 @@
 package de.htwg.chat.memory;
 
 import de.htwg.chat.entities.Answer;
+import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.entities.Message;
 import de.htwg.chat.entities.SystemPrompt;
 import de.htwg.chat.repositories.AnswerRepository;
@@ -65,8 +66,11 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         }
 
         UUID memoryIdUUID = UUID.fromString((String) memoryId);
-        ChatMessage message = messages.get(messages.size() - 1);
-                persistMessage(memoryIdUUID, message);
+
+        if(messages.size() > 0) {
+            ChatMessage message = messages.get(messages.size() - 1);
+            persistMessage(memoryIdUUID, message);
+        }
     }
 
     private void persistMessage(UUID memoryIdUUID, ChatMessage message) {
@@ -83,7 +87,7 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         if (modelType == null) {
          setModelType(Modeltype.COMMERCIAL);
         }
-        Message msg = new Message.MessageBuilder()
+        Message msg = Message.builder()
                 .message(message.text())
                 .model(modelType.toString())
                 .conversation(conversationRepository.findById(memoryIdUUID))
@@ -97,7 +101,7 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
             setModelType(Modeltype.COMMERCIAL);
         }
         Message lastMessage = getLastMessage(memoryIdUUID);
-        Answer answer = new Answer.AnswerBuilder()
+        Answer answer = Answer.builder()
                 .answer(message.text())
                 .model(modelType.toString())
                 .message(lastMessage)
@@ -107,9 +111,8 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
 
 
     private void persistSystemMessage(UUID memoryIdUUID, ChatMessage message) {
-        SystemPrompt systemPrompt = new SystemPrompt();
-        systemPrompt.setMessage(message.text());
-        systemPrompt.setConversation(conversationRepository.findById(memoryIdUUID));
+        Conversation conversation = conversationRepository.findById(memoryIdUUID);
+        SystemPrompt systemPrompt = SystemPrompt.builder().message(message.text()).conversation(conversation).build();
         systemPromptRepository.persist(systemPrompt);
     }
 

@@ -81,7 +81,11 @@ public class Answer {
         this.message = message;
     }
 
+    public static AnswerBuilder builder(){
+        return new AnswerBuilder();
+    }
     public static class AnswerBuilder{
+        private UUID id;
         private String answer;
         private Date date;
         private String model;
@@ -89,6 +93,11 @@ public class Answer {
 
         public AnswerBuilder() {
             this.date = new Date();
+        }
+
+        public AnswerBuilder id(UUID id){
+            this.id = id;
+            return this;
         }
 
         public AnswerBuilder answer(String answer){

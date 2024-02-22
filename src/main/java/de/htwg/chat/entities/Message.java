@@ -78,9 +78,14 @@ public class Message {
         this.conversation = conversation;
     }
 
+    public static MessageBuilder builder(){
+        return new MessageBuilder();
+    }
 
     public static class MessageBuilder{
         private String message;
+
+        private UUID id;
         private Date date;
         private String model;
         private Conversation conversation;
@@ -89,6 +94,11 @@ public class Message {
             this.date = new Date();
         }
 
+
+        public MessageBuilder id(UUID id){
+            this.id = id;
+            return this;
+        }
 
         public MessageBuilder message(String message){
             this.message = message;
