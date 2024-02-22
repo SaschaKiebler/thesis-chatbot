@@ -63,12 +63,10 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         if (memoryId.equals("default")) {
             return;
         }
-        System.out.println(messages.toString());
+
         UUID memoryIdUUID = UUID.fromString((String) memoryId);
         ChatMessage message = messages.get(messages.size() - 1);
                 persistMessage(memoryIdUUID, message);
-
-
     }
 
     private void persistMessage(UUID memoryIdUUID, ChatMessage message) {

@@ -19,9 +19,8 @@ public class CustomMemoryProvider implements Supplier<ChatMemoryProvider> {
         if (this.store == null) {
             throw new IllegalStateException("ChatMemoryStore is not injected");
         }
-        store.setModelType(Modeltype.OPEN_SOURCE);
         return memoryId -> MessageWindowChatMemory.builder()
-                .maxMessages(20)
+                .maxMessages(10)
                 .id(memoryId)
                 .chatMemoryStore(store)
                 .build();

@@ -8,8 +8,7 @@ import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 import jakarta.inject.Inject;
 
-// chatMemoryProviderSupplier = CustomMemoryProvider.class not working because of DI. the Builder of
-// MessageWindowChatMemory implements a new store and uses the new keyword so DI is not possible.
+// chatMemoryProviderSupplier = CustomMemoryProvider.class not working because of DI. Error says store is null
 @RegisterAiService(modelName = "commercial", retriever = DocumentRetriever.class)
 public interface OpenAIService {
     @SystemMessage("""
