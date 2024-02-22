@@ -62,7 +62,6 @@ public class OpenAIStreamingService {
     @Path("chat")
     @Produces(MediaType.TEXT_PLAIN)
     @RestStreamElementType(MediaType.TEXT_PLAIN)
-    @Transactional
     public void chatService(@Context SseEventSink eventSink,
                             @Context Sse sse,
                             @QueryParam("conversationId") String conversationId,
@@ -73,7 +72,7 @@ public class OpenAIStreamingService {
                 .build();
 
         OpenAIService openAIService = AiServices.builder(OpenAIService.class)
-                .chatMemoryProvider(provider.get())
+                //.chatMemoryProvider(provider.get())
                 .retriever(documentRetriever)
                 .streamingChatLanguageModel(model)
                 .build();
@@ -84,7 +83,7 @@ public class OpenAIStreamingService {
         }
         else{
             conversation = new Conversation();
-            conversationRepository.persist(conversation);
+            saveConversation(conversation);
         }
 
          TokenStream tokenStream = openAIService.chat(conversation.getId().toString(), messageText);
@@ -112,66 +111,9 @@ public class OpenAIStreamingService {
 */
     }
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @RestStreamElementType(MediaType.TEXT_PLAIN)
     @Transactional
-    public void getMessages(@Context SseEventSink eventSink,
-                            @Context Sse sse, @QueryParam("conversationId") String conversationId, @QueryParam("message") String message){
-
-        //Handle Conversation for Chatmemory. Should be a seperate service and not in the resource
-        Conversation conversation;
-        if(conversationId != null && !conversationId.isEmpty()){
-            conversation = conversationRepository.findById(UUID.fromString(conversationId));
-        }
-        else{
-            conversation = new Conversation();
-            conversationRepository.persist(conversation);
-        }
-
-        // Add UserInput to ChatMemory, retriever has to be added. Make retriever optional to have the comparison
-        if (message != null && !message.isEmpty()) {
-            provider.get().get(conversation.getId().toString()).add(userMessage(message));
-        }
-
-        // Get Messages from ChatMemory
-        List<ChatMessage> messages = provider.get().get(conversation.getId().toString()).messages();
-
-
-        final AiMessage[] answerToSafe = {null};
-
-        // Streams the response from the AI as SSE.
-        Multi.createFrom().emitter(emitter -> model.generate(messages, new StreamingResponseHandler<AiMessage>() {
-            String answer = "";
-            @Override
-            public void onNext(String token) {
-                answer += token;
-                emitter.emit(answer);
-            }
-
-            @Override
-            public void onComplete(Response<AiMessage> response) {
-                emitter.emit(conversation.getId().toString());  // only for test. Should be removed bc otherwise the chat will show id
-                System.out.println("onComplete: " + response);
-                // save the answer to the chat memory
-                answerToSafe[0] = response.content();
-                emitter.complete();
-            }
-
-            @Override
-            public void onError(Throwable error) {
-                error.printStackTrace();
-                emitter.fail(error);
-            }
-        })).subscribe().with(
-                item -> eventSink.send(sse.newEvent((String) item)),
-                failure -> {
-                    System.out.println("Error in streaming response: " + failure.getMessage());
-                    eventSink.close();
-                },
-                eventSink::close
-            );
-
+    public void saveConversation(Conversation conversation){
+        conversationRepository.persist(conversation);
     }
 
 }
