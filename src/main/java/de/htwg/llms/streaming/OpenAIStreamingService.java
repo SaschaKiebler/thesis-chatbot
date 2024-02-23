@@ -13,9 +13,11 @@ import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.service.TokenStream;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.common.annotation.NonBlocking;
 import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -29,6 +31,7 @@ import jakarta.ws.rs.sse.Sse;
 import jakarta.ws.rs.sse.SseEventSink;
 import org.jboss.resteasy.reactive.RestStreamElementType;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,11 +42,6 @@ import static dev.langchain4j.data.message.UserMessage.userMessage;
 @Path("restApi")
 @ApplicationScoped
 public class OpenAIStreamingService {
-
-    StreamingChatLanguageModel model = OpenAiStreamingChatModel
-            .builder()
-            .apiKey(System.getenv("OPENAI_API_KEY"))
-            .build();
     @Inject
     CustomMemoryProvider provider;
 
@@ -62,6 +60,7 @@ public class OpenAIStreamingService {
     @Path("chat")
     @Produces(MediaType.TEXT_PLAIN)
     @RestStreamElementType(MediaType.TEXT_PLAIN)
+    @NonBlocking
     public void chatService(@Context SseEventSink eventSink,
                             @Context Sse sse,
                             @QueryParam("conversationId") String conversationId,
@@ -77,14 +76,8 @@ public class OpenAIStreamingService {
                 .streamingChatLanguageModel(model)
                 .build();
 
-        Conversation conversation;
-        if(conversationId != null && !conversationId.isEmpty()){
-            conversation = conversationRepository.findById(UUID.fromString(conversationId)).await().indefinitely();
-        }
-        else{
-            conversation = new Conversation();
-            saveConversation(conversation);
-        }
+        Conversation conversation = getConversation(conversationId).await().atMost(Duration.ofSeconds(5));
+
 
          TokenStream tokenStream = openAIService.chat(conversation.getId().toString(), messageText);
 
@@ -111,9 +104,19 @@ public class OpenAIStreamingService {
 
     }
 
-    @Transactional
-    public void saveConversation(Conversation conversation){
-        conversationRepository.persist(conversation);
+    @WithTransaction
+    public Uni<Conversation> saveConversation(Conversation conversation){
+        return conversationRepository.persist(conversation);
     }
 
+    public Uni<Conversation> getConversation(String conversationId) {
+        if (conversationId != null && !conversationId.isEmpty()) {
+            // Fetch the conversation reactively
+            return conversationRepository.findById(UUID.fromString(conversationId));
+        } else {
+            // Create a new conversation and save it reactively
+            Conversation conversation = new Conversation();
+            return saveConversation(conversation);
+        }
+    }
 }
