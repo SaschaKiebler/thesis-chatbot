@@ -60,7 +60,7 @@ class CustomChatMemoryStoreTest {
         conversation.setId(java.util.UUID.randomUUID());
 
         doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId())).thenReturn(conversation);
+        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
         when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of());
 
         customChatMemoryStore.updateMessages(conversation.getId().toString(), List.of());
@@ -74,7 +74,7 @@ class CustomChatMemoryStoreTest {
         conversation.setId(java.util.UUID.randomUUID());
 
         doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId())).thenReturn(conversation);
+        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
         when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of(new Message.MessageBuilder().message("test").conversation(conversation).build()));
 
         customChatMemoryStore.updateMessages(conversation.getId().toString(), List.of(new UserMessage("test,test")));
@@ -89,7 +89,7 @@ class CustomChatMemoryStoreTest {
         conversation.setId(java.util.UUID.randomUUID());
 
         doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId())).thenReturn(conversation);
+        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
         when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of());
 
         customChatMemoryStore.updateMessages(conversation.getId().toString(), List.of(new UserMessage("test,test")));
@@ -104,7 +104,7 @@ class CustomChatMemoryStoreTest {
         conversation.setId(java.util.UUID.randomUUID());
 
         doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId())).thenReturn(conversation);
+        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
         when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of(
                 new Message.MessageBuilder().message("test").conversation(conversation).build()));
         when(systemPromptRepository.findByConversationId(any(UUID.class))).thenReturn(new SystemPrompt("test"));

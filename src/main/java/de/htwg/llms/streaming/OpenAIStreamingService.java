@@ -67,19 +67,19 @@ public class OpenAIStreamingService {
                             @QueryParam("conversationId") String conversationId,
                             @QueryParam("message") String messageText) {
 
-       /* StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
+        StreamingChatLanguageModel model = OpenAiStreamingChatModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY"))
                 .build();
 
         OpenAIService openAIService = AiServices.builder(OpenAIService.class)
-                //.chatMemoryProvider(provider.get())
+                .chatMemoryProvider(provider.get())
                 .retriever(documentRetriever)
                 .streamingChatLanguageModel(model)
                 .build();
 
         Conversation conversation;
         if(conversationId != null && !conversationId.isEmpty()){
-            conversation = conversationRepository.findById(UUID.fromString(conversationId));
+            conversation = conversationRepository.findById(UUID.fromString(conversationId)).await().indefinitely();
         }
         else{
             conversation = new Conversation();
@@ -108,7 +108,7 @@ public class OpenAIStreamingService {
     },
     eventSink::close
             );
-*/
+
     }
 
     @Transactional

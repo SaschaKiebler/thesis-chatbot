@@ -6,12 +6,15 @@ import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.entities.Message;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
+import dev.langchain4j.service.OnCompleteOrOnError;
+import dev.langchain4j.service.TokenStream;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -46,8 +49,13 @@ class LLMResourceTest {
         Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
         Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
 
-        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
-        when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        when(conversationRepository.findById(any(UUID.class)).await().indefinitely()).thenReturn(conversation);
+        when(openAIService.chat(anyString(),eq("test"))).thenReturn(new TokenStream() {
+            @Override
+            public OnCompleteOrOnError onNext(Consumer<String> consumer) {
+                return null;
+            }
+        });
         when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString())).thenReturn(message);
         when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),eq("test"))).thenReturn(answer);
 
@@ -72,7 +80,7 @@ class LLMResourceTest {
         Conversation conversation = new Conversation();
         conversation.setId(UUID.randomUUID());
 
-        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+        when(conversationRepository.findById(any(UUID.class)).await().indefinitely()).thenReturn(conversation);
         when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));

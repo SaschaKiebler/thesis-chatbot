@@ -15,6 +15,7 @@ import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -90,7 +91,7 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         Message msg = Message.builder()
                 .message(message.text())
                 .model(modelType.toString())
-                .conversation(conversationRepository.findById(memoryIdUUID))
+                .conversation(conversationRepository.findById(memoryIdUUID).await().indefinitely())
                 .build();
         messageRepository.persist(msg);
     }
@@ -111,7 +112,7 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
 
 
     private void persistSystemMessage(UUID memoryIdUUID, ChatMessage message) {
-        Conversation conversation = conversationRepository.findById(memoryIdUUID);
+        Conversation conversation = conversationRepository.findById(memoryIdUUID).await().indefinitely();
         SystemPrompt systemPrompt = SystemPrompt.builder().message(message.text()).conversation(conversation).build();
         systemPromptRepository.persist(systemPrompt);
     }
@@ -141,9 +142,9 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
             }
             for (Message message : listofUserInput) {
                 listOfMessages.add(new UserMessage(message.getMessage()));
-                Answer answer = answerRepository.findByMessageId(message.getId());
+                String answer = answerRepository.findByMessageId(message.getId()).await().indefinitely().getAnswer();
                 if (answer != null) {
-                    listOfMessages.add(new AiMessage(answer.getAnswer()));
+                    listOfMessages.add(new AiMessage(answer));
                 }
             }
         }

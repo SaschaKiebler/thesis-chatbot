@@ -52,7 +52,7 @@ public class LLMResource {
         Conversation conversation = getConversation(conversationId);
 
         // get the answer from the AI
-        String answer = openAIService.chat(conversation.getId().toString(), message);
+       /* String answer = openAIService.chat(conversation.getId().toString(), message);
 
         if (answer == null) {
             return "Sorry, the service is currently not available. Please try again later.";
@@ -62,14 +62,15 @@ public class LLMResource {
         if (messageFromDb == null) {
             return "Something went wrong. No message found. Please try again later";
         }
-        Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
+        Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer).await().indefinitely();
 
         if (safedAnswer == null) {
             return "Something went wrong. No Answer found. Please try again later";
         }
 
         return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build();
-
+*/
+        return "test";
     }
 
     @POST
@@ -96,7 +97,7 @@ public class LLMResource {
 
     private Conversation getConversation(String conversationId) {
         if (conversationId != null && !conversationId.isEmpty()) {
-            return conversationRepository.findById(UUID.fromString(conversationId));
+            return conversationRepository.findById(UUID.fromString(conversationId)).await().indefinitely();
         } else {
             Conversation conversation = new Conversation();
             conversationRepository.persist(conversation);
