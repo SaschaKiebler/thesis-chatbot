@@ -118,7 +118,7 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     }
 
     private Message getLastMessage(UUID memoryIdUUID) {
-        List<Message> messages = messageRepository.findByConversationId(memoryIdUUID);
+        List<Message> messages = messageRepository.findByConversationId(memoryIdUUID).await().indefinitely();
         try {
             return messages.get(messages.size() - 1);
         } catch (IndexOutOfBoundsException e) {
@@ -131,9 +131,9 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     private List<ChatMessage> getListOfMessages(UUID memoryId) {
         List<ChatMessage> listOfMessages = new ArrayList<>();
         // get all messages from the database that where inputs from the user with the conversation id
-        List<Message> listofUserInput = messageRepository.findByConversationId(memoryId);
+        List<Message> listofUserInput = messageRepository.findByConversationId(memoryId).await().indefinitely();
         // get the system prompt for the conversation id (not the prettiest solution but somehow the prompt has to get into the list of messages)
-        SystemPrompt systemPrompt = systemPromptRepository.findByConversationId(memoryId);
+        SystemPrompt systemPrompt = systemPromptRepository.findByConversationId(memoryId).await().indefinitely();
 
         // check if its a new conversation, if not, add the system prompt to the list of messages with all answers from the ai
         if (!listofUserInput.isEmpty()) {
@@ -142,9 +142,9 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
             }
             for (Message message : listofUserInput) {
                 listOfMessages.add(new UserMessage(message.getMessage()));
-                String answer = answerRepository.findByMessageId(message.getId()).await().indefinitely().getAnswer();
+                Answer answer = answerRepository.findByMessageId(message.getId()).await().indefinitely();
                 if (answer != null) {
-                    listOfMessages.add(new AiMessage(answer));
+                    listOfMessages.add(new AiMessage(answer.getAnswer()));
                 }
             }
         }

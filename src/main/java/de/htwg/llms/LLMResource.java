@@ -7,7 +7,9 @@ import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
 import io.quarkiverse.langchain4j.ModelName;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.vertx.http.runtime.devmode.Json;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -41,36 +43,35 @@ public class LLMResource {
     @POST
     @Path("/commercial")
     @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public String sendRequestCommercial(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId) {
+    @WithTransaction
+    public Uni<String> sendRequestCommercial(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId) {
         // test for null or empty input
         if (message == null || message.isEmpty()) {
-            return "Please provide a message";
+            return Uni.createFrom().item("Please provide a message");
         }
 
         // Set the conversation to provide a memory id for the chat
         Conversation conversation = getConversation(conversationId);
 
         // get the answer from the AI
-       /* String answer = openAIService.chat(conversation.getId().toString(), message);
+        String answer = openAIService.chat(conversation.getId().toString(), message);
 
         if (answer == null) {
-            return "Sorry, the service is currently not available. Please try again later.";
+            return Uni.createFrom().item("Sorry, the service is currently not available. Please try again later.");
         }
         // get answerId from the db
-        Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
+        Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message).await().indefinitely().get(0);
         if (messageFromDb == null) {
-            return "Something went wrong. No message found. Please try again later";
+            return Uni.createFrom().item("Something went wrong. No message found. Please try again later");
         }
         Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer).await().indefinitely();
 
         if (safedAnswer == null) {
-            return "Something went wrong. No Answer found. Please try again later";
+            return Uni.createFrom().item("Something went wrong. No Answer found. Please try again later");
         }
 
-        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build();
-*/
-        return "test";
+        return Uni.createFrom().item(Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build());
+
     }
 
     @POST

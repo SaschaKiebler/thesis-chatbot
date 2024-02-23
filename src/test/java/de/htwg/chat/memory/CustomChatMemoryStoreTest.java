@@ -1,5 +1,6 @@
 package de.htwg.chat.memory;
 
+import de.htwg.chat.entities.Answer;
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.entities.Message;
 import de.htwg.chat.entities.SystemPrompt;
@@ -12,6 +13,7 @@ import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,9 +61,9 @@ class CustomChatMemoryStoreTest {
         Conversation conversation = new Conversation();
         conversation.setId(java.util.UUID.randomUUID());
 
-        doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
-        when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of());
+        when(conversationRepository.persist(conversation)).thenReturn(Uni.createFrom().item(conversation));
+        when(conversationRepository.findById(conversation.getId())).thenReturn(Uni.createFrom().item(conversation));
+        when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(Uni.createFrom().item(List.of()));
 
         customChatMemoryStore.updateMessages(conversation.getId().toString(), List.of());
 
@@ -73,9 +75,11 @@ class CustomChatMemoryStoreTest {
         Conversation conversation = new Conversation();
         conversation.setId(java.util.UUID.randomUUID());
 
-        doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
-        when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of(new Message.MessageBuilder().message("test").conversation(conversation).build()));
+        when(conversationRepository.persist(conversation)).thenReturn(Uni.createFrom().item(conversation));
+        when(conversationRepository.findById(conversation.getId())).thenReturn(Uni.createFrom().item(conversation));
+        when(messageRepository.findByConversationId(any(UUID.class)))
+                .thenReturn(Uni.createFrom()
+                        .item(List.of(new Message.MessageBuilder().message("test").conversation(conversation).build())));
 
         customChatMemoryStore.updateMessages(conversation.getId().toString(), List.of(new UserMessage("test,test")));
         verify(messageRepository, times(1)).persist(any(Message.class));
@@ -88,9 +92,9 @@ class CustomChatMemoryStoreTest {
         Conversation conversation = new Conversation();
         conversation.setId(java.util.UUID.randomUUID());
 
-        doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
-        when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of());
+        when(conversationRepository.persist(conversation)).thenReturn(Uni.createFrom().item(conversation));
+        when(conversationRepository.findById(conversation.getId())).thenReturn(Uni.createFrom().item(conversation));
+        when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(Uni.createFrom().item(List.of()));
 
         customChatMemoryStore.updateMessages(conversation.getId().toString(), List.of(new UserMessage("test,test")));
         verify(messageRepository, times(1)).persist(any(Message.class));
@@ -103,11 +107,12 @@ class CustomChatMemoryStoreTest {
         Conversation conversation = new Conversation();
         conversation.setId(java.util.UUID.randomUUID());
 
-        doNothing().when(conversationRepository).persist(conversation);
-        when(conversationRepository.findById(conversation.getId()).await().indefinitely()).thenReturn(conversation);
-        when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(List.of(
-                new Message.MessageBuilder().message("test").conversation(conversation).build()));
-        when(systemPromptRepository.findByConversationId(any(UUID.class))).thenReturn(new SystemPrompt("test"));
+        when(conversationRepository.persist(conversation)).thenReturn(Uni.createFrom().item(conversation));
+        when(conversationRepository.findById(conversation.getId())).thenReturn(Uni.createFrom().item(conversation));
+        when(messageRepository.findByConversationId(any(UUID.class))).thenReturn(Uni.createFrom().item(List.of(
+                new Message.MessageBuilder().message("test").conversation(conversation).build())));
+        when(systemPromptRepository.findByConversationId(any(UUID.class))).thenReturn(Uni.createFrom().item(new SystemPrompt("test")));
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(Uni.createFrom().item(Answer.builder().answer("test").build()));
 
         customChatMemoryStore.updateMessages(conversation.getId().toString(), List.of(new UserMessage("test,test")));
         verify(messageRepository, times(1)).persist(any(Message.class));

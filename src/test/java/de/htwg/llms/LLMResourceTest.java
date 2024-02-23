@@ -13,6 +13,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -50,14 +51,10 @@ class LLMResourceTest {
         Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
 
         when(conversationRepository.findById(any(UUID.class)).await().indefinitely()).thenReturn(conversation);
-        when(openAIService.chat(anyString(),eq("test"))).thenReturn(new TokenStream() {
-            @Override
-            public OnCompleteOrOnError onNext(Consumer<String> consumer) {
-                return null;
-            }
-        });
-        when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString())).thenReturn(message);
-        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),eq("test"))).thenReturn(answer);
+        when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        List<Message> messages = List.of(message);
+        when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString()).await().indefinitely()).thenReturn(messages);
+        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),eq("test")).await().indefinitely()).thenReturn(answer);
 
         doNothing().when(conversationRepository).persist(any(Conversation.class));
         doNothing().when(messageRepository).persist(any(Message.class));

@@ -1,7 +1,10 @@
 package de.htwg.chat.repositories;
 
 import de.htwg.chat.entities.Message;
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
+
+import io.quarkus.hibernate.reactive.panache.PanacheRepository;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.Comparator;
@@ -12,19 +15,18 @@ import java.util.UUID;
 public class MessageRepository implements PanacheRepository<Message> {
 
 
-    public Message findById(UUID id) {
+    public Uni<Message> findById(UUID id) {
         return find("id", id).firstResult();
     }
 
-    public List<Message> findByConversationId(UUID id) {
-        List<Message> messages = find("conversation.id", id).list();
-        messages.sort(Comparator.comparing(Message::getDate));
+    public Uni<List<Message>> findByConversationId(UUID id) {
+
         return find("conversation.id", id).list();
     }
 
-    public Message findByConversationIdAndMessage(UUID conversationId, String message) {
+    public Uni<List<Message>> findByConversationIdAndMessage(UUID conversationId, String message) {
         //latest message (last result)
-        return find("conversation.id = ?1 and message like '"+ message +"%'", conversationId).list().get(listAll().size()-1);
+        return find("conversation.id = ?1 and message like '"+ message +"%'", conversationId).list();
     }
 
 
