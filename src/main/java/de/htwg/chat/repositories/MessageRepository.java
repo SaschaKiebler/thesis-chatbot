@@ -24,7 +24,11 @@ public class MessageRepository implements PanacheRepository<Message> {
 
     public Message findByConversationIdAndMessage(UUID conversationId, String message) {
         //latest message (last result)
-        return find("conversation.id = ?1 and message like '"+ message +"%'", conversationId).list().get(listAll().size()-1);
+        List<Message> messages = find("conversation.id = ?1 and message like '"+ message +"%'", conversationId).list();
+        if (messages.isEmpty())
+            return null;
+
+        return messages.get(messages.size()-1);
     }
 
 
