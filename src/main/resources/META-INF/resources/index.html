@@ -9,17 +9,18 @@
 </head>
 <body>
 <div class="chat-container">
-    <div class="conversation-container">
-        <div class="tool-container">
-            <button class="tool">Clear</button>
+    <div class="tool-container">
+        <button class="tool">Clear</button>
 
-        </div>
+    </div>
+    <div class="conversation-container" id="scroller">
+
         <div class="conversation">
             <div class="ai-message message">
                     <div class="icon"></div>
                         <div class="message-content">
                             <div class="name">Bot</div>
-                            <p>Hello! I am a chatbot. How can I help you today?</p>
+                            <p>Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein? </p>
                         </div>
                 </div>
             <div class="user-message message">
@@ -47,18 +48,23 @@
                     </div>
                     <div class="message-content">
                         <div class="name">Bot</div>
-                        <p>The university offers corses about all kinds of stuff</p>
+                        <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
+                        <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
+                        <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
+                        <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
+
                     </div>
                 </div>
             </div>
             <div class="rating-hint">
-                <p>Which one do you like more? Click on the prefered answer</p>
+                <p>Welche Antwort gefällt dir besser? Clicke auf deine bevorzugte Antwort</p>
             </div>
         </div>
+        <div id="anchor"></div>
     </div>
     <div class="input-container">
         <input type="text" id="input" class="input" placeholder="Type a message...">
-        <button id="send" class="send">Send</button>
+        <button id="send" class="send"><img src="pictures/send.svg"></button>
     </div>
 </div>
 </body>

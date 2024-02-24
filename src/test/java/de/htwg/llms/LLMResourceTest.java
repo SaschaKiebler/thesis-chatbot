@@ -6,6 +6,8 @@ import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.entities.Message;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
+import de.htwg.llms.services.OpenAIService;
+import de.htwg.llms.services.TogetherAIService;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

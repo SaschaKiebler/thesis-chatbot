@@ -28,7 +28,6 @@ body{
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  background-color: #fff;
   border-bottom: 1px solid #e6e6e6;
 }
 
@@ -36,16 +35,18 @@ body{
   flex: 1;
   overflow-y: auto;
   padding: 10px;
+
 }
 
 .input-container{
   display: flex;
   padding: 10px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.84);
   border-top: 1px solid #e6e6e6;
 }
 
 .input-container input{
+  font-size: 16px;
   flex: 1;
   padding: 10px;
   border: 1px solid #e6e6e6;
@@ -56,12 +57,21 @@ body{
 .input-container button{
   padding: 10px;
   margin-left: 10px;
-  border: none;
+  border: solid 1px #e6e6e6;
   border-radius: 5px;
-  background-color: #4CAF50;
-  color: #fff;
+  background-color: rgba(0, 81, 255, 0.61);
+  color: #3f3f3f;
   cursor: pointer;
   outline: none;
+}
+
+.input-container button img{
+  width: 20px;
+  height: 20px;
+}
+
+.input-container button:hover{
+  background-color: rgba(0, 81, 255, 0.81);
 }
 
 .tool-container button{
@@ -129,4 +139,13 @@ body{
   font-weight: bold;
   margin-top: 5px;
   margin-left: 5px;
+}
+
+#scroller * {
+  overflow-anchor: none;
+}
+
+#anchor {
+  overflow-anchor: auto;
+  height: 1px;
 }

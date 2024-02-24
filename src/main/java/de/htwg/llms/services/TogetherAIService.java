@@ -1,4 +1,4 @@
-package de.htwg.llms;
+package de.htwg.llms.services;
 
 import de.htwg.rag.DocumentRetriever;
 import dev.langchain4j.service.MemoryId;

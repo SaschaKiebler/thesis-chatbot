@@ -1,33 +1,8 @@
 package de.htwg.llms.streaming;
 
-import de.htwg.chat.entities.Conversation;
-import de.htwg.chat.memory.CustomMemoryProvider;
-import de.htwg.chat.repositories.ConversationRepository;
-import de.htwg.llms.OpenAIService;
-import de.htwg.rag.DocumentRetriever;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
-import dev.langchain4j.service.AiServices;
-import dev.langchain4j.service.TokenStream;
-import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
-import io.smallrye.mutiny.subscription.Cancellable;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.sse.Sse;
-import jakarta.ws.rs.sse.SseEventSink;
-import org.jboss.resteasy.reactive.RestStreamElementType;
-import org.yaml.snakeyaml.emitter.Emitter;
-
-import java.io.OutputStreamWriter;
-import java.util.UUID;
 
 import static dev.langchain4j.data.message.AiMessage.aiMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
