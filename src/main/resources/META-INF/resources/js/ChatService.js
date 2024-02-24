@@ -8,11 +8,11 @@ class ChatService {
 
     addMessage(message) {
         this.messages.push(message);
+        this.addMessagesToUI()
     }
 
     async getAnswer(requestText) {
         this.addMessage(new Message(null, requestText, "user"));
-        this.addMessagesToUI();
 
         try {
             const response = await fetch(
@@ -29,7 +29,6 @@ class ChatService {
                 const data = JSON.parse(text); // Try parsing as JSON
                 this.addMessage(new Message(data.answerId, data.answer, "ai"));
                 this.conversationId = data.conversationId;
-                this.addMessagesToUI();
             } catch (parseError) {
                 console.error('Error parsing JSON:', parseError);
             }
