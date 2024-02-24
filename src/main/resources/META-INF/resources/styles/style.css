@@ -84,13 +84,13 @@ body{
   outline: none;
 }
 
-.conversation{
+#conversation{
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
 
-.conversation .message{
+#conversation .message{
   padding: 5px;
   border-radius: 5px;
   display: flex;

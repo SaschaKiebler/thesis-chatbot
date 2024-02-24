@@ -6,16 +6,20 @@
 
     <link rel="stylesheet" href="./styles/style.css">
 
+    <script src="js/Message.js"></script>
+    <script src="js/ChatService.js"></script>
+    <script src="js/UIService.js"></script>
+
 </head>
 <body>
 <div class="chat-container">
     <div class="tool-container">
-        <button class="tool">Clear</button>
+        <button class="tool" id="clear">Clear</button>
 
     </div>
     <div class="conversation-container" id="scroller">
 
-        <div class="conversation">
+        <div id="conversation">
             <div class="ai-message message">
                     <div class="icon"></div>
                         <div class="message-content">
@@ -49,9 +53,6 @@
                     <div class="message-content">
                         <div class="name">Bot</div>
                         <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
-                        <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
-                        <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
-                        <p>Gesundheitsinformatik bezieht sich auf die Anwendung von Informationstechnologie im Gesundheitswesen, um die Effizienz, Qualität und Sicherheit der Gesundheitsversorgung zu verbessern. Dies umfasst die Verwendung von elektronischen Gesundheitsakten, Gesundheitsinformationsaustausch, Telemedizin, Gesundheits-Apps und anderen digitalen Tools, um Gesundheitsdaten zu verwalten, zu analysieren und auszutauschen. Die Gesundheitsinformatik spielt eine wichtige Rolle bei der Unterstützung von klinischen Entscheidungen, der Verbesserung der Patientensicherheit, der Effizienz von Gesundheitseinrichtungen und der Förderung der Forschung im Gesundheitswesen.</p>
 
                     </div>
                 </div>
@@ -64,8 +65,33 @@
     </div>
     <div class="input-container">
         <input type="text" id="input" class="input" placeholder="Type a message...">
-        <button id="send" class="send"><img src="pictures/send.svg"></button>
+        <button id="send" class="send"><img src="pictures/send.svg" onclick=""></button>
     </div>
 </div>
 </body>
+<script>
+    const chatService = new ChatService();
+
+    const input = document.getElementById('input');
+    const send = document.getElementById('send');
+    const clear = document.getElementById('clear');
+
+    send.addEventListener('click', function() {
+        chatService.getAnswer(input.value);
+        input.value = '';
+    });
+
+    input.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            chatService.getAnswer(input.value);
+            input.value = '';
+        }
+    });
+
+    clear.addEventListener('click', function() {
+        chatService.clearMessages();
+    });
+
+
+</script>
 </html>
