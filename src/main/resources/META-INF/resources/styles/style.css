@@ -149,6 +149,16 @@ body{
   margin-left: 5px;
 }
 
+.error-message{
+  color: red;
+}
+
+.error-message .icon{
+  content: url("../pictures/error.svg");
+  width: 20px;
+  height: 20px;
+}
+
 #scroller * {
   overflow-anchor: none;
 }

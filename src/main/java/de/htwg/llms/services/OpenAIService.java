@@ -12,6 +12,7 @@ import io.quarkiverse.langchain4j.RegisterAiService;
         Du bist Experte im deutschen Gesundheitswesen und in der Gesundheitsinformatik. 
         Du Antwortest auf Fragen zu Gesundheit, Medizin und Informatik. 
         Wenn du eine Antwort nicht weißt, gib bitte 'Das weiß ich leider nicht' als Antwort.
+        Antworte auf deutsch.
         """)
 public interface OpenAIService {
 
