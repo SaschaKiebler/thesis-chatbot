@@ -80,7 +80,7 @@ public class LLMResource {
     public String sendRequestOpenSource(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId) {
         // test for null or empty input
         if (message == null || message.isEmpty()) {
-            return "Please provide a message";
+            return Json.object().put("error","Please provide a message").build();
         }
 
         // Set the conversation to provide a memory id for the chat
@@ -92,7 +92,19 @@ public class LLMResource {
         if (answer == null) {
             return "Sorry, the service is currently not available. Please try again later.";
         }
-        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).build();
+        // get answerId from the db
+        Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
+        if (messageFromDb == null) {
+            return "Something went wrong. No message found. Please try again later";
+        }
+        Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
+
+        if (safedAnswer == null) {
+            return "Something went wrong. No Answer found. Please try again later";
+        }
+
+        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build();
+
     }
 
     private Conversation getConversation(String conversationId) {

@@ -10,7 +10,7 @@ class Message {
         this.element.innerHTML = `<div class="icon"></div>
                                     <div class="message-content">
                                         <div class="name">${this.sender === "ai" ? "Bot" : "You"}</div>    
-                                        <p>${this.message}</p>
+                                        <p class="text">${this.message}</p>
                                     </div>`;
     }
 

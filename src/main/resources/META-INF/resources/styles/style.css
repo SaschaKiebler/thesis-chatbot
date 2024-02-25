@@ -119,6 +119,10 @@ body{
   margin-top: 10px;
 }
 
+.hidden{
+  display: none;
+}
+
 .icon-container{
   height: 100%;
 }
@@ -138,6 +142,10 @@ body{
 .name{
   font-weight: bold;
   margin-top: 5px;
+  margin-left: 5px;
+}
+
+.message-content .text{
   margin-left: 5px;
 }
 
