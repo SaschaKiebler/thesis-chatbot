@@ -7,16 +7,16 @@ import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
 import de.htwg.llms.services.OpenAIService;
+import de.htwg.llms.services.OpenAIServiceNoRAG;
 import de.htwg.llms.services.TogetherAIService;
+import de.htwg.llms.services.TogetherAIServiceNoRAG;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.UUID;
 
@@ -24,11 +24,29 @@ import java.util.UUID;
 @ApplicationScoped
 public class LLMResource {
 
+    @ConfigProperty(name = "ai.left-service")
+    String leftServiceName;
+
+    @ConfigProperty(name = "ai.right-service")
+    String rightServiceName;
+
+    @ConfigProperty(name = "ai.left-service.rag")
+    Boolean leftServiceRag;
+
+    @ConfigProperty(name = "ai.right-service.rag")
+    Boolean rightServiceRag;
+
     @Inject
-    OpenAIService openAIService;
+    TogetherAIServiceNoRAG togetherAIServiceNoRAG;
 
     @Inject
     TogetherAIService togetherAIService;
+
+    @Inject
+    OpenAIServiceNoRAG openAIServiceNoRAG;
+
+    @Inject
+    OpenAIService openAIService;
 
     @Inject
     ConversationRepository conversationRepository;
@@ -40,71 +58,35 @@ public class LLMResource {
     MessageRepository messageRepository;
 
     @POST
-    @Path("/commercial")
+    @Path("/{side}Service")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public String sendRequestCommercial(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId) {
-        // test for null or empty input
+    public String sendRequestService(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId, @PathParam("side") String side) {
         if (message == null || message.isEmpty()) {
             return "Please provide a message";
         }
 
-        // Set the conversation to provide a memory id for the chat
         Conversation conversation = getConversation(conversationId);
-
-        // get the answer from the AI
-        String answer = openAIService.chat(conversation.getId().toString(), message);
+        String answer = getAnswer(message, conversation, side);
 
         if (answer == null) {
             return "Sorry, the service is currently not available. Please try again later.";
         }
-        // get answerId from the db
+
         Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
         if (messageFromDb == null) {
             return "Something went wrong. No message found. Please try again later";
         }
-        Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
 
-        if (safedAnswer == null) {
+        Answer savedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
+        if (savedAnswer == null) {
             return "Something went wrong. No Answer found. Please try again later";
         }
 
-        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build();
-
-    }
-
-    @POST
-    @Path("/opensource")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public String sendRequestOpenSource(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId) {
-        // test for null or empty input
-        if (message == null || message.isEmpty()) {
-            return Json.object().put("error","Please provide a message").build();
-        }
-
-        // Set the conversation to provide a memory id for the chat
-        Conversation conversation = getConversation(conversationId);
-
-        // get the answer from the AI
-        String answer = togetherAIService.chat(conversation.getId().toString(), message);
-
-        if (answer == null) {
-            return "Sorry, the service is currently not available. Please try again later.";
-        }
-        // get answerId from the db
-        Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
-        if (messageFromDb == null) {
-            return "Something went wrong. No message found. Please try again later";
-        }
-        Answer safedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
-
-        if (safedAnswer == null) {
-            return "Something went wrong. No Answer found. Please try again later";
-        }
-
-        return Json.object().put("answer",answer).put("conversationId", conversation.getId().toString()).put("answerId",safedAnswer.getId().toString()).build();
-
+        return Json.object().put("answer", answer)
+                .put("conversationId", conversation.getId().toString())
+                .put("answerId", savedAnswer.getId().toString())
+                .build();
     }
 
     private Conversation getConversation(String conversationId) {
@@ -116,5 +98,28 @@ public class LLMResource {
             return conversation;
         }
     }
+
+    private String getAnswer(String message, Conversation conversation, String side) {
+        if (!side.equals("left") && !side.equals("right")) {
+            return null;
+        }
+
+        boolean isLeftSide = side.equals("left");
+        String serviceName = isLeftSide ? leftServiceName : rightServiceName;
+        boolean serviceRag = isLeftSide ? leftServiceRag : rightServiceRag;
+
+        String conversationId = conversation.getId().toString();
+        switch (serviceName) {
+            case "togetherai":
+                return serviceRag ? togetherAIService.chat(conversationId, message)
+                        : togetherAIServiceNoRAG.chat(conversationId, message);
+            case "openai":
+                return serviceRag ? openAIService.chat(conversationId, message)
+                        : openAIServiceNoRAG.chat(conversationId, message);
+            default:
+                return null;
+        }
+    }
+
 
 }

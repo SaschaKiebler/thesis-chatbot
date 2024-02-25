@@ -159,6 +159,18 @@ body{
   height: 20px;
 }
 
+.hint-bottom{
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hint-bottom p{
+  padding: 0;
+    margin: 2px;
+}
+
 #scroller * {
   overflow-anchor: none;
 }
@@ -166,4 +178,10 @@ body{
 #anchor {
   overflow-anchor: auto;
   height: 1px;
+}
+
+@media (max-width: 850px){
+  .chat-container{
+    max-width: 90vw;
+  }
 }

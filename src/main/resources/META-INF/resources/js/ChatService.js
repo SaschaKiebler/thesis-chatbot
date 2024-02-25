@@ -47,8 +47,8 @@ class ChatService {
         this.addMessage(new Message(null, requestText, "user"));
 
         try {
-            const url1 = `/llm/opensource?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`;
-            const url2 = `/llm/commercial?${this.conversationIdright ? `conversationId=${this.conversationIdright}&` : ''}message=${requestText}`;
+            const url1 = `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`;
+            const url2 = `/llm/rightService?${this.conversationIdright ? `conversationId=${this.conversationIdright}&` : ''}message=${requestText}`;
 
             const fetch1 = fetch(url1, { method: 'POST' });
             const fetch2 = fetch(url2, { method: 'POST' });
@@ -69,6 +69,7 @@ class ChatService {
                     const messageRight = new Message(data2.answerId, data2.answer, "ai");
                     this.addMessage(new DualMessage(messageLeft, messageRight));
                     this.addMessage(ratingHint);
+                    ratingHint.setVisible(true);
                 } else {
                     this.addMessage(new ErrorMessage(null, "Sorry, es gab einen Fehler!", "ai"));
                 }
