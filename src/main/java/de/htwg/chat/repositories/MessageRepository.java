@@ -17,9 +17,7 @@ public class MessageRepository implements PanacheRepository<Message> {
     }
 
     public List<Message> findByConversationId(UUID id) {
-        List<Message> messages = find("conversation.id", id).list();
-        messages.sort(Comparator.comparing(Message::getDate));
-        return find("conversation.id", id).list();
+        return find("conversation.id = ?1 order by date asc", id).list();
     }
 
 
@@ -28,7 +26,7 @@ public class MessageRepository implements PanacheRepository<Message> {
         if (messages.isEmpty())
             return null;
 
-        return messages.get(messages.size()-1);
+        return messages.get(0);
     }
 
 

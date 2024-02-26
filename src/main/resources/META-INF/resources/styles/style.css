@@ -109,6 +109,10 @@ body{
   cursor: pointer;
 }
 
+.rating-disabled .message{
+  cursor: default;
+}
+
 .rating-hint{
   font-size: 12px;
   display: flex;
