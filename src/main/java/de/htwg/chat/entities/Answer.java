@@ -39,6 +39,7 @@ public class Answer {
         this.date = answerBuilder.date;
         this.model = answerBuilder.model;
         this.message = answerBuilder.message;
+        this.id = answerBuilder.id;
     }
 
     public UUID getId() {

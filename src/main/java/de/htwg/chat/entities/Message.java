@@ -36,6 +36,7 @@ public class Message {
         this.date = messageBuilder.date;
         this.model = messageBuilder.model;
         this.conversation = messageBuilder.conversation;
+        this.id = messageBuilder.id;
     }
 
     public UUID getId() {

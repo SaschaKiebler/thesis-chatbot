@@ -7,9 +7,12 @@ import de.htwg.chat.entities.Message;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
 import de.htwg.llms.services.OpenAIService;
+import de.htwg.llms.services.OpenAIServiceNoRAG;
 import de.htwg.llms.services.TogetherAIService;
+import de.htwg.llms.services.TogetherAIServiceNoRAG;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 
@@ -31,6 +34,12 @@ class LLMResourceTest {
     TogetherAIService togetherAIService;
 
     @InjectMock
+    OpenAIServiceNoRAG openAIServiceNoRAG;
+
+    @InjectMock
+    TogetherAIServiceNoRAG togetherAIServiceNoRAG;
+
+    @InjectMock
     MessageRepository messageRepository;
 
     @InjectMock
@@ -41,17 +50,23 @@ class LLMResourceTest {
 
 
 
+
     @Test
-    void testSendRequestCommercialForValidStringWithMockedService() {
+    void testSendRequestLeftServiceForValidString() {
         Conversation conversation = new Conversation();
         conversation.setId(UUID.randomUUID());
         Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
         Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
 
         when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+
         when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
+        when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
+
         when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString())).thenReturn(message);
-        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),eq("test"))).thenReturn(answer);
+        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),anyString())).thenReturn(answer);
 
         doNothing().when(conversationRepository).persist(any(Conversation.class));
         doNothing().when(messageRepository).persist(any(Message.class));
@@ -59,69 +74,85 @@ class LLMResourceTest {
 
 
         given()
-                .when().post("/llm/commercial?message=test&conversationId=" + conversation.getId())
+                .when().post("/llm/leftService?message=test&conversationId=" + conversation.getId())
                 .then()
                 .statusCode(200)
                 .body(
-                        is("{\"answer\":\"test\",\"conversationId\":\""
-                                + conversation.getId()
-                                + "\"}"));
+                        is(is("{\"answer\":\"test\",\"conversationId\":\""
+                                        + conversation.getId()
+                                        + "\",\"answerId\":\""
+                                        + answer.getId()
+                                        + "\"}")));
 
     }
 
     @Test
-    void testSendRequestOpenSourceForValidStringWithMockedService() {
+    void testSendRequestRightServiceForValidString() {
         Conversation conversation = new Conversation();
         conversation.setId(UUID.randomUUID());
+        Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
+        Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
 
         when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+
+        when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
         when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
+
+        when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString())).thenReturn(message);
+        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),anyString())).thenReturn(answer);
+
+        doNothing().when(conversationRepository).persist(any(Conversation.class));
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 
+
         given()
-                .when().post("/llm/opensource?message=test&conversationId=" + conversation.getId())
+                .when().post("/llm/rightService?message=test&conversationId=" + conversation.getId())
                 .then()
                 .statusCode(200)
                 .body(
-                        is("{\"answer\":\"test\",\"conversationId\":\""
+                        is(is("{\"answer\":\"test\",\"conversationId\":\""
                                 + conversation.getId()
-                                + "\"}"));
-
+                                + "\",\"answerId\":\""
+                                + answer.getId()
+                                + "\"}")));
 
     }
 
     @Test
-    void testSendRequestOpenSourceForEmptyStringWithMockedService() {
+    void testSendRequestLeftServiceForEmptyString() {
         given()
-                .when().post("/llm/opensource")
+                .when().post("/llm/leftService")
                 .then()
-                .body(is("Please provide a message"));
+                .body(is("{\"error\":\"bitte gebe eine Nachricht ein\"}"));
     }
 
     @Test
-    void testSendRequestCommercialForEmptyStringWithMockedService() {
+    void testSendRequestRightServiceForEmptyString() {
         given()
-                .when().post("/llm/commercial")
+                .when().post("/llm/rightService")
                 .then()
-                .body(is("Please provide a message"));
+                .body(is("{\"error\":\"bitte gebe eine Nachricht ein\"}"));
     }
 
     @Test
-    void testSendRequestCommercialForNullStringWithMockedService() {
+    void testSendRequestLeftServiceForNullStringMessage() {
         given()
-                .when().post("/llm/commercial?message=")
+                .when().post("/llm/leftService?message=")
                 .then()
-                .body(is("Please provide a message"));
+                .body(is("{\"error\":\"bitte gebe eine Nachricht ein\"}"));
     }
 
     @Test
-    void testSendRequestOpenSourceForNullStringWithMockedService() {
+    void testSendRequestRightServiceForNullStringMessage() {
         given()
-                .when().post("/llm/opensource?message=")
+                .when().post("/llm/rightService?message=")
                 .then()
-                .body(is("Please provide a message"));
+                .body(is("{\"error\":\"bitte gebe eine Nachricht ein\"}"));
     }
+
 
 
 }

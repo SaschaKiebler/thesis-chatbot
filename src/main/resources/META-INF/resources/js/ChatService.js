@@ -17,7 +17,7 @@ class ChatService {
 
         try {
             const response = await fetch(
-                `/llm/opensource?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`,
+                `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`,
                 {
                     method: 'POST'
 

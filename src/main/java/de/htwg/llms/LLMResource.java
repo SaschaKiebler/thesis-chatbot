@@ -24,16 +24,16 @@ import java.util.UUID;
 @ApplicationScoped
 public class LLMResource {
 
-    @ConfigProperty(name = "ai.left-service")
+    @ConfigProperty(name = "ai.left-service", defaultValue = "openai")
     String leftServiceName;
 
-    @ConfigProperty(name = "ai.right-service")
+    @ConfigProperty(name = "ai.right-service", defaultValue = "openai")
     String rightServiceName;
 
-    @ConfigProperty(name = "ai.left-service.rag")
+    @ConfigProperty(name = "ai.left-service.rag", defaultValue = "true")
     Boolean leftServiceRag;
 
-    @ConfigProperty(name = "ai.right-service.rag")
+    @ConfigProperty(name = "ai.right-service.rag", defaultValue = "false")
     Boolean rightServiceRag;
 
     @Inject
@@ -63,24 +63,24 @@ public class LLMResource {
     @Transactional
     public String sendRequestService(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId, @PathParam("side") String side) {
         if (message == null || message.isEmpty()) {
-            return "Please provide a message";
+            return Json.object().put("error", "bitte gebe eine Nachricht ein").build();
         }
 
         Conversation conversation = getConversation(conversationId);
-        String answer = getAnswer(message, conversation, side);
+        String answer = getAnswer(message, conversation.getId().toString(), side);
 
         if (answer == null) {
-            return "Sorry, the service is currently not available. Please try again later.";
+            return Json.object().put("error", "etwas ist mit der KI schiefgelaufen versuche es später nochmal...").build();
         }
 
         Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
         if (messageFromDb == null) {
-            return "Something went wrong. No message found. Please try again later";
+            return Json.object().put("error", "etwas ist mit der DB schiefgelaufen versuche es später nochmal...").build();
         }
 
         Answer savedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
         if (savedAnswer == null) {
-            return "Something went wrong. No Answer found. Please try again later";
+            return Json.object().put("error", "etwas ist mit der Antwort-ID schiefgelaufen versuche es später nochmal..." + messageFromDb.getId()).build();
         }
 
         return Json.object().put("answer", answer)
@@ -99,7 +99,7 @@ public class LLMResource {
         }
     }
 
-    private String getAnswer(String message, Conversation conversation, String side) {
+    private String getAnswer(String message, String conversationId, String side) {
         if (!side.equals("left") && !side.equals("right")) {
             return null;
         }
@@ -108,7 +108,6 @@ public class LLMResource {
         String serviceName = isLeftSide ? leftServiceName : rightServiceName;
         boolean serviceRag = isLeftSide ? leftServiceRag : rightServiceRag;
 
-        String conversationId = conversation.getId().toString();
         switch (serviceName) {
             case "togetherai":
                 return serviceRag ? togetherAIService.chat(conversationId, message)
