@@ -100,8 +100,10 @@ class ChatService {
 
     clearMessages() {
         this.messages = [];
-        this.conversationId = null;
+        this.conversationIdleft = null;
+        this.conversationIdright = null;
         this.uiService.clearMessages();
+        document.getElementById("input").disabled = false;
     }
 
 }

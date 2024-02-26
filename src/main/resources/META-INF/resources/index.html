@@ -5,6 +5,7 @@
     <title>thesis-chatbot - 1.0-SNAPSHOT</title>
 
     <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/darkmode.css">
 
     <script src="js/Message.js"></script>
     <script src="js/DualMessage.js"></script>
@@ -19,6 +20,7 @@
 <div class="chat-container">
     <div class="tool-container">
         <button class="tool" id="clear">Clear</button>
+        <button class="tool" id="darkmode"><img src="pictures/darkmode.svg" width="24px" height="20px"></button>
 
     </div>
     <div class="conversation-container" id="scroller">
@@ -51,6 +53,7 @@
     const send = document.getElementById('send');
     const clear = document.getElementById('clear');
     const ratingHint = new RatingHint();
+    const uiService = new UIService();
 
     send.addEventListener('click', function() {
         if (input.value === ''){
@@ -73,6 +76,10 @@
 
     clear.addEventListener('click', function() {
         chatService.clearMessages();
+    });
+
+    document.getElementById('darkmode').addEventListener('click', function() {
+        uiService.toggleDarkMode();
     });
 
 
