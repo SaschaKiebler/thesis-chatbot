@@ -14,16 +14,15 @@ public class AnswerRepository implements PanacheRepository<Answer> {
     }
 
     // find answer by message text and conversation id
-    public Answer findByMessageIdAndAnswerText(UUID messageId, String answerText) {
-        return find("message.id = ?1 and answer = ?2", messageId, answerText).firstResult();
+    public Answer findByMessageIdAndAnswerText(UUID messageId, String answerText, UUID conversationId) {
+        return find("answer = ?2 and message.id = ?1 and message.conversation.id = ?3 ", messageId, answerText, conversationId).firstResult();
     }
 
     public void setPreferred(UUID id, boolean value) {
-
         update("preferred = ?1 where id = ?2", value, id);
     }
 
-    private Answer findById(UUID id) {
+    public Answer findById(UUID id) {
         return find("id", id).firstResult();
     }
 

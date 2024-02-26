@@ -25,14 +25,16 @@ class RatingService {
         }).catch(error => {
             console.error('Error:', error);
         });
-        console.log("Rating sent");
         this.setRatingDisabled();
+        document.getElementById("input").disabled = false;
     }
 
     setRatingDisabled(){
         const messages = document.getElementsByClassName("rating-disabled");
         for (let message of messages) {
-            message.replaceWith(message.cloneNode(true));
+            for (let child of message.children) {
+                child.replaceWith(child.cloneNode(true));
+            }
         }
     }
 

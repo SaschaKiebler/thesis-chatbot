@@ -56,6 +56,7 @@
         if (input.value === ''){
 
         } else{
+            input.disabled = true;
             chatService.getDualAnswer(input.value,ratingHint);
             input.value = '';
         }
@@ -64,6 +65,7 @@
     input.addEventListener('keyup', function(event) {
         if(input.value !== ''){
         if (event.key === 'Enter') {
+            input.disabled = true;
             chatService.getDualAnswer(input.value,ratingHint);
             input.value = '';
         }}

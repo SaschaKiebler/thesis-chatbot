@@ -74,6 +74,7 @@ class ChatService {
                     this.ratingService.addRatingListener();
                 } else {
                     this.addMessage(new ErrorMessage(null, "Sorry, es gab einen Fehler!", "ai"));
+                    document.getElementById("input").disabled = false;
                 }
 
                 this.conversationIdleft = data1.conversationId;
@@ -92,8 +93,6 @@ class ChatService {
     }
 
     addMessagesToUI() {
-        console.log('Adding messages to UI' + this.messages);
-        this.uiService.clearMessages();
         this.messages.forEach(message => {
             this.uiService.addMessage(message);
         });

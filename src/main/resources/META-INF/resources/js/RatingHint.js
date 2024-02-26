@@ -1,6 +1,6 @@
 class RatingHint {
     constructor() {
-        this.hint = 'Welche Antwort gefällt dir besser? Clicke auf deine bevorzugte Antwort';
+        this.hint = 'Welche Antwort gefällt dir besser? Klicke auf deine bevorzugte Antwort';
         this.element = document.createElement('div');
         this.element.className = `rating-hint`;
         this.element.innerHTML = `

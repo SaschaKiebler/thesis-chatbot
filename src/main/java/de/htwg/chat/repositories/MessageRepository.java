@@ -22,9 +22,9 @@ public class MessageRepository implements PanacheRepository<Message> {
         return find("conversation.id", id).list();
     }
 
-    public Message findByConversationIdAndMessage(UUID conversationId, String message) {
-        //latest message (last result)
-        List<Message> messages = find("conversation.id = ?1 and message like '"+ message +"%'", conversationId).list();
+
+    public Message findLatestMessageFromConversation(UUID conversationId) {
+        List<Message> messages = find("conversation.id = ?1 order by date DESC", conversationId).list();
         if (messages.isEmpty())
             return null;
 

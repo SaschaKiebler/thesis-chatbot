@@ -65,8 +65,8 @@ class LLMResourceTest {
         when(togetherAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
         when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
 
-        when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString())).thenReturn(message);
-        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),anyString())).thenReturn(answer);
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
 
         doNothing().when(conversationRepository).persist(any(Conversation.class));
         doNothing().when(messageRepository).persist(any(Message.class));
@@ -100,8 +100,9 @@ class LLMResourceTest {
         when(togetherAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
         when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
 
-        when(messageRepository.findByConversationIdAndMessage(any(UUID.class),anyString())).thenReturn(message);
-        when(answerRepository.findByMessageIdAndAnswerText(any(UUID.class),anyString())).thenReturn(answer);
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
 
         doNothing().when(conversationRepository).persist(any(Conversation.class));
         doNothing().when(messageRepository).persist(any(Message.class));

@@ -59,16 +59,16 @@ public class LLMResource {
         Conversation conversation = getConversation(conversationId,side);
         String answer = getAnswer(message, conversation.getId().toString(), side);
 
-        if (answer == null) {
+        if (answer == null || answer.isEmpty()) {
             return Json.object().put("error", "etwas ist mit der KI schiefgelaufen versuche es später nochmal...").build();
         }
 
-        Message messageFromDb = messageRepository.findByConversationIdAndMessage(conversation.getId(), message);
+        Message messageFromDb = messageRepository.findLatestMessageFromConversation(conversation.getId());
         if (messageFromDb == null) {
             return Json.object().put("error", "etwas ist mit der DB schiefgelaufen versuche es später nochmal...").build();
         }
 
-        Answer savedAnswer = answerRepository.findByMessageIdAndAnswerText(messageFromDb.getId(), answer);
+        Answer savedAnswer = answerRepository.findByMessageId(messageFromDb.getId());
         if (savedAnswer == null) {
             return Json.object().put("error", "etwas ist mit der Antwort-ID schiefgelaufen versuche es später nochmal..." + messageFromDb.getId()).build();
         }
