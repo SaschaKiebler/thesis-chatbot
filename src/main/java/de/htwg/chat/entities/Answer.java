@@ -26,6 +26,7 @@ public class Answer {
     private String model;
 
     private Date date;
+    boolean preferred;
 
     @ManyToOne(targetEntity = Message.class)
     private Message message;
@@ -40,6 +41,7 @@ public class Answer {
         this.model = answerBuilder.model;
         this.message = answerBuilder.message;
         this.id = answerBuilder.id;
+        this.preferred = false;
     }
 
     public UUID getId() {
@@ -72,6 +74,14 @@ public class Answer {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean getPreferred() {
+        return preferred;
+    }
+
+    public void setPreferred(boolean preferred) {
+        this.preferred = preferred;
     }
 
     public Message getMessage() {

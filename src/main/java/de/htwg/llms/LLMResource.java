@@ -26,34 +26,24 @@ public class LLMResource {
 
     @ConfigProperty(name = "ai.left-service", defaultValue = "openai")
     String leftServiceName;
-
     @ConfigProperty(name = "ai.right-service", defaultValue = "openai")
     String rightServiceName;
-
     @ConfigProperty(name = "ai.left-service.rag", defaultValue = "true")
     Boolean leftServiceRag;
-
     @ConfigProperty(name = "ai.right-service.rag", defaultValue = "false")
     Boolean rightServiceRag;
-
     @Inject
     TogetherAIServiceNoRAG togetherAIServiceNoRAG;
-
     @Inject
     TogetherAIService togetherAIService;
-
     @Inject
     OpenAIServiceNoRAG openAIServiceNoRAG;
-
     @Inject
     OpenAIService openAIService;
-
     @Inject
     ConversationRepository conversationRepository;
-
     @Inject
     AnswerRepository answerRepository;
-
     @Inject
     MessageRepository messageRepository;
 
@@ -66,7 +56,7 @@ public class LLMResource {
             return Json.object().put("error", "bitte gebe eine Nachricht ein").build();
         }
 
-        Conversation conversation = getConversation(conversationId);
+        Conversation conversation = getConversation(conversationId,side);
         String answer = getAnswer(message, conversation.getId().toString(), side);
 
         if (answer == null) {
@@ -89,11 +79,12 @@ public class LLMResource {
                 .build();
     }
 
-    private Conversation getConversation(String conversationId) {
+    private Conversation getConversation(String conversationId, String side) {
         if (conversationId != null && !conversationId.isEmpty()) {
             return conversationRepository.findById(UUID.fromString(conversationId));
         } else {
             Conversation conversation = new Conversation();
+            conversation.setRag((side.equals("left") && leftServiceRag) || (!side.equals("left") && rightServiceRag));
             conversationRepository.persist(conversation);
             return conversation;
         }
@@ -108,16 +99,13 @@ public class LLMResource {
         String serviceName = isLeftSide ? leftServiceName : rightServiceName;
         boolean serviceRag = isLeftSide ? leftServiceRag : rightServiceRag;
 
-        switch (serviceName) {
-            case "togetherai":
-                return serviceRag ? togetherAIService.chat(conversationId, message)
-                        : togetherAIServiceNoRAG.chat(conversationId, message);
-            case "openai":
-                return serviceRag ? openAIService.chat(conversationId, message)
-                        : openAIServiceNoRAG.chat(conversationId, message);
-            default:
-                return null;
-        }
+        return switch (serviceName) {
+            case "togetherai" -> serviceRag ? togetherAIService.chat(conversationId, message)
+                    : togetherAIServiceNoRAG.chat(conversationId, message);
+            case "openai" -> serviceRag ? openAIService.chat(conversationId, message)
+                    : openAIServiceNoRAG.chat(conversationId, message);
+            default -> null;
+        };
     }
 
 

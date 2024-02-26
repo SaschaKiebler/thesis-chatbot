@@ -14,6 +14,7 @@ public class Conversation {
     @GeneratedValue(generator = "UUID")
     private UUID id;
     private Date date;
+    private boolean rag;
 
     public Conversation() {
         this.date = new Date();
@@ -30,6 +31,14 @@ public class Conversation {
 
     public Date getDate() {
         return date;
+    }
+
+    public boolean getRag() {
+        return rag;
+    }
+
+    public void setRag(boolean rag) {
+        this.rag = rag;
     }
 
 }

@@ -139,6 +139,10 @@ body{
   height: 20px;
 }
 
+.user-message{
+  margin-top: 5px;
+}
+
 .name{
   font-weight: bold;
   margin-top: 5px;
@@ -169,6 +173,10 @@ body{
 .hint-bottom p{
   padding: 0;
     margin: 2px;
+}
+
+.rating-disabled .rated{
+  border: solid 3px rgba(0, 81, 255, 0.61);
 }
 
 #scroller * {

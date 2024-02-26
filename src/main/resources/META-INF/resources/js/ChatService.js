@@ -5,6 +5,7 @@ class ChatService {
         this.conversationIdleft = null;
         this.conversationIdright = null;
         this.uiService = new UIService();
+        this.ratingService = new RatingService();
     }
 
     addMessage(message) {
@@ -70,6 +71,7 @@ class ChatService {
                     this.addMessage(new DualMessage(messageLeft, messageRight));
                     this.addMessage(ratingHint);
                     ratingHint.setVisible(true);
+                    this.ratingService.addRatingListener();
                 } else {
                     this.addMessage(new ErrorMessage(null, "Sorry, es gab einen Fehler!", "ai"));
                 }
@@ -90,6 +92,8 @@ class ChatService {
     }
 
     addMessagesToUI() {
+        console.log('Adding messages to UI' + this.messages);
+        this.uiService.clearMessages();
         this.messages.forEach(message => {
             this.uiService.addMessage(message);
         });
@@ -100,4 +104,5 @@ class ChatService {
         this.conversationId = null;
         this.uiService.clearMessages();
     }
+
 }
