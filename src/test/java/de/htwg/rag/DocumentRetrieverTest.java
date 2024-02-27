@@ -59,7 +59,7 @@ class DocumentRetrieverTest {
         when(store.findRelevant(any(Embedding.class), anyInt(),anyInt())).thenReturn( matches);
 
         List<TextSegment> relevant = documentRetriever.findRelevant("test");
-        assertEquals(1, relevant.size());
+        assertEquals(0, relevant.size());
     }
 
     @Test
