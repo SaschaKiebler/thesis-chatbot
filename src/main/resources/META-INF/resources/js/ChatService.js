@@ -8,13 +8,16 @@ class ChatService {
         this.ratingService = new RatingService();
     }
 
+    // Diese Methode fügt die Nachricht der Chatliste hinzu und ruft die Methode aMessagesToUI auf
     addMessage(message) {
         this.messages.push(message);
         this.addMessagesToUI()
     }
 
+    // Diese Methode kann verwendet werden, um ohne Rating einen normalen Chat zu starten und spricht den leftService an
     async getAnswer(requestText) {
-        this.addMessage(new Message(null, requestText, "user"));
+        const displayedText = this.encodeHTML(requestText);
+        this.addMessage(new Message(null, displayedText, "user"));
 
         try {
             const response = await fetch(
@@ -33,7 +36,7 @@ class ChatService {
                     this.addMessage(new Message(data.answerId, data.answer, "ai"));
                 }
                 else{
-                    this.addMessage(new Message(null, "Sorry, das verstehe ich nicht!", "ai"));
+                    this.addMessage(new ErrorMessage(null, "Sorry, es gab einen Fehler. Bitte versuche es später nochmal!", "ai"));
                 }
                 this.conversationIdleft = data.conversationId;
             } catch (parseError) {
@@ -44,8 +47,10 @@ class ChatService {
         }
     }
 
+    // Diese Methode spricht zwei Endpunkte gleichzeitig an und fügt die Antworten der Chatliste hinzu. Hier wird auch das Rating-System aktiviert
     async getDualAnswer(requestText, ratingHint) {
-        this.addMessage(new Message(null, requestText, "user"));
+        const displayedText = this.encodeHTML(requestText);
+        this.addMessage(new Message(null, displayedText, "user"));
 
         try {
             const url1 = `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`;
@@ -92,12 +97,14 @@ class ChatService {
         return this.messages;
     }
 
+    // Fügt jede Nachricht der Chatliste der UI hinzu
     addMessagesToUI() {
         this.messages.forEach(message => {
             this.uiService.addMessage(message);
         });
     }
 
+    // Löscht alle Nachrichten aus der Chatliste und der UI und setzt die Konversations-IDs zurück. Ebenso wird das Input-Feld wieder aktiviert
     clearMessages() {
         this.messages = [];
         this.conversationIdleft = null;
@@ -106,4 +113,12 @@ class ChatService {
         document.getElementById("input").disabled = false;
     }
 
+    // Diese Methode überprüft den Input auf HTML-Code und ersetzt ihn durch HTML-Entities um XSS-Angriffe zu verhindern
+    encodeHTML(str){
+        return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
 }

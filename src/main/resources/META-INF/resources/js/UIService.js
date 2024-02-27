@@ -1,19 +1,25 @@
 
+/*
+    Diese Klasse manipuliert die UI.
+ */
 class UIService {
     constructor() {
         this.conversation = document.getElementById('conversation');
-        this.MarkdownParser = new MarkdownParser();
     }
 
+    // Fügt Nachrichten der UI hinzu
     addMessage(message) {
         this.conversation.appendChild(message.element);
     }
 
+    // Entfernt alle Nachrichten aus der UI und fügt eine Begrüßungsnachricht hinzu
     clearMessages() {
         this.conversation.innerHTML = '';
         this.addMessage(new Message(null, "Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?", "ai"));
     }
 
+    // Gibt der UI die Möglichkeit den Dark-Mode zu aktivieren und fügt die CSS Klasse hinzu oder entfernt sie
+    // Sie ändert auch das Bild des Dark-Mode Buttons
     toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         // change image in darkmode button

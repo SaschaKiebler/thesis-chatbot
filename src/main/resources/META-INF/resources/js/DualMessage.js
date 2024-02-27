@@ -1,3 +1,7 @@
+
+/*
+    Klasse um zwei Nachrichten zu einem DualMessage-Objekt zusammenzufassen und in der Chatliste anzuzeigen
+ */
 class DualMessage {
     constructor(messageLeft, messageRight) {
         this.id = messageLeft.id+messageRight.id;

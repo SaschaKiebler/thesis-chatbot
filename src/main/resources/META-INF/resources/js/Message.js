@@ -1,3 +1,8 @@
+
+/*
+    Diese Klasse stellt eine Nachricht dar und formatiert sie für die UI. Je nach Sender wird die Nachricht mit Bot oder You beschriftet
+ */
+
 class Message {
 
     constructor(id, message, sender) {

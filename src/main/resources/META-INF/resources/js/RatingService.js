@@ -1,3 +1,7 @@
+
+/*
+    Diese Klasse ist der Service für das Rating System. Sie fügt den Nachrichten das Rating-System hinzu und sendet die Bewertung an den Server
+ */
 class RatingService {
     constructor() {
         this.messages = [];
