@@ -14,13 +14,18 @@
     <script src="js/ChatService.js"></script>
     <script src="js/UIService.js"></script>
     <script src="js/RatingService.js"></script>
+    <script src="js/MarkdownParser.js"></script>
 
 </head>
 <body>
 <div class="chat-container">
     <div class="tool-container">
         <button class="tool" id="clear">Clear</button>
-        <button class="tool" id="darkmode"><img src="pictures/darkmode.svg" width="24px" height="20px"></button>
+        <div class="tool-text-img-box">
+            <div>Theme:</div>
+            <button class="tool" id="darkmode"><img src="pictures/darkmode.svg" width="24px" height="20px"></button>
+        </div>
+
 
     </div>
     <div class="conversation-container" id="scroller">

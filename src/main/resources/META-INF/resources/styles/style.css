@@ -185,6 +185,12 @@ body{
   border: solid 3px rgba(0, 81, 255, 0.61);
 }
 
+.tool-text-img-box{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
 #scroller * {
   overflow-anchor: none;
 }
@@ -193,6 +199,8 @@ body{
   overflow-anchor: auto;
   height: 1px;
 }
+
+
 
 @media (max-width: 850px){
   .chat-container{

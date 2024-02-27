@@ -2,6 +2,7 @@
 class UIService {
     constructor() {
         this.conversation = document.getElementById('conversation');
+        this.MarkdownParser = new MarkdownParser();
     }
 
     addMessage(message) {
@@ -14,8 +15,9 @@ class UIService {
     }
 
     toggleDarkMode() {
-        const button = document.getElementById('darkmode');
         document.body.classList.toggle('dark-mode');
+        // change image in darkmode button
+        document.getElementById('darkmode').firstChild.src = document.body.classList.contains('dark-mode') ? 'pictures/lightmode.svg' : 'pictures/darkmode.svg';
     }
 
 
