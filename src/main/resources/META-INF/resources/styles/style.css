@@ -201,6 +201,44 @@ body{
 }
 
 
+.popup {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.popup::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.input-container {
+  position: relative;
+}
+
+
 
 @media (max-width: 850px){
   .chat-container{

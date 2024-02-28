@@ -26,6 +26,28 @@ class UIService {
         document.getElementById('darkmode').firstChild.src = document.body.classList.contains('dark-mode') ? 'pictures/lightmode.svg' : 'pictures/darkmode.svg';
     }
 
+    enablePopUp() {
+        document.addEventListener("DOMContentLoaded", function() {
+            const input = document.getElementById("input");
+            const popup = document.getElementById("popup");
+
+            function togglePopup() {
+                if (input.disabled) {
+                    popup.classList.add("show");
+                } else {
+                    popup.classList.remove("show");
+                }
+            }
+
+            // Event listener for mouseenter and mouseleave
+            input.addEventListener("mouseenter", togglePopup);
+            input.addEventListener("mouseleave", function() {
+                popup.classList.remove("show");
+            });
+        });
+
+    }
+
 
 
 
