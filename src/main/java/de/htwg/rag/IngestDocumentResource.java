@@ -5,6 +5,7 @@ import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.POST;
@@ -17,27 +18,36 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-@Path("/ingest")
+@Path("/api/ingest")
 @ApplicationScoped
 public class IngestDocumentResource {
 
     @Inject
     DocumentIngestor documentIngestor;
 
+    @Inject
+    UploadFileRepository uploadFileRepository;
+
     private static final String UPLOAD_DIRECTORY = "resources/pdfs";
 
     @POST
     @Path("/pdf")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Transactional
     public void uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
         try {
             // try to create a new file and safe the pdf to the UPLOAD_DIRECTORY
             String filePath = UPLOAD_DIRECTORY + "/" + name + ".pdf";
             safeFile(filePath, pdfFile.file);
 
+            // create a new UploadedFile and persist it
+            UploadedFile uploadedFile = new UploadedFile(name, filePath);
+            uploadFileRepository.persist(uploadedFile);
+
             // load the document with the documentParser and ingest it as a list,
             // mabye add the possibility to send multiple files at once
             Document document = FileSystemDocumentLoader.loadDocument(filePath, new ApachePdfBoxDocumentParser());
+            document.metadata().add("fileKey", uploadedFile.getId().toString());
             documentIngestor.ingest(List.of(document));
 
         } catch (IOException e) {

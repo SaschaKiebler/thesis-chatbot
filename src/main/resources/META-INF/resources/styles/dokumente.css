@@ -54,3 +54,8 @@ h1 {
     width: 60vw;
 }
 
+.doku-liste-eintrag{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

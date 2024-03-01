@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -14,9 +15,17 @@ public class UploadedFile {
     private UUID id;
     private String name;
     private String path;
+    private Date created;
 
 
     public UploadedFile() {
+        this.created = new Date();
+    }
+
+    public UploadedFile(String name, String path) {
+        this.name = name;
+        this.path = path;
+        this.created = new Date();
     }
 
     public UUID getId() {
@@ -37,5 +46,13 @@ public class UploadedFile {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

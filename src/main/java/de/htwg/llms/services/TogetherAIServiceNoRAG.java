@@ -4,17 +4,15 @@ import de.htwg.rag.DocumentRetriever;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.V;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
 @RegisterAiService(modelName = "opensource")
-@SystemMessage("""
-            Du bist Experte im deutschen Gesundheitswesen und in der Gesundheitsinformatik. 
-            Du Antwortest auf Fragen zu Gesundheit, Medizin und Informatik.
-            Wenn du eine Antwort nicht weißt, gib bitte 'Das weiß ich leider nicht' als Antwort.
-            Antworte auf deutsch.
-            """)
-public interface TogetherAIServiceNoRAG {
 
-        String chat(@MemoryId String conversationId, @UserMessage String message);
+public interface TogetherAIServiceNoRAG {
+        @SystemMessage("""
+        {{prompt}}
+            """)
+        String chat(@MemoryId String conversationId, @UserMessage String message, @V("prompt") String prompt);
 
 }

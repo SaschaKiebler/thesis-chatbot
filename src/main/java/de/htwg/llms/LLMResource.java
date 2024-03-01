@@ -32,6 +32,10 @@ public class LLMResource {
     Boolean leftServiceRag;
     @ConfigProperty(name = "ai.right-service.rag", defaultValue = "false")
     Boolean rightServiceRag;
+
+    @ConfigProperty(name = "ai.prompt")
+    String prompt;
+
     @Inject
     TogetherAIServiceNoRAG togetherAIServiceNoRAG;
     @Inject
@@ -100,10 +104,10 @@ public class LLMResource {
         boolean serviceRag = isLeftSide ? leftServiceRag : rightServiceRag;
 
         return switch (serviceName) {
-            case "togetherai" -> serviceRag ? togetherAIService.chat(conversationId, message)
-                    : togetherAIServiceNoRAG.chat(conversationId, message);
-            case "openai" -> serviceRag ? openAIService.chat(conversationId, message)
-                    : openAIServiceNoRAG.chat(conversationId, message);
+            case "togetherai" -> serviceRag ? togetherAIService.chat(conversationId, message, prompt)
+                    : togetherAIServiceNoRAG.chat(conversationId, message, prompt);
+            case "openai" -> serviceRag ? openAIService.chat(conversationId, message,prompt)
+                    : openAIServiceNoRAG.chat(conversationId, message, prompt);
             default -> null;
         };
     }

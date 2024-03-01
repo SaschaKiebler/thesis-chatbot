@@ -24,7 +24,7 @@ class RatingService {
         message.parentElement.classList.add("rating-disabled");
 
         console.log("Sending rating for message " + message.id);
-        await fetch('/answer/preffered?id=' + message.id + '&value=true', {
+        await fetch('/api/answer/preffered?id=' + message.id + '&value=true', {
             method: 'PUT',
         }).catch(error => {
             console.error('Error:', error);

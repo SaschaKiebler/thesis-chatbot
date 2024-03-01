@@ -10,7 +10,7 @@ import jakarta.ws.rs.QueryParam;
 
 import java.util.UUID;
 
-@Path("/answer")
+@Path("/api/answer")
 @ApplicationScoped
 public class AnswerResource {
 
