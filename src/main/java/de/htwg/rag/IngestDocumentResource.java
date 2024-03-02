@@ -16,6 +16,10 @@ import org.jboss.resteasy.reactive.PartType;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Path("/api/ingest")
@@ -37,16 +41,16 @@ public class IngestDocumentResource {
     public void uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
         try {
             // try to create a new file and safe the pdf to the UPLOAD_DIRECTORY
-            String filePath = UPLOAD_DIRECTORY + "/" + name + ".pdf";
-            safeFile(filePath, pdfFile.file);
+            String filePath = UPLOAD_DIRECTORY + "/" + name;
+            String path = safeFile(filePath, pdfFile.file);
 
             // create a new UploadedFile and persist it
-            UploadedFile uploadedFile = new UploadedFile(name, filePath);
+            UploadedFile uploadedFile = new UploadedFile(name, path);
             uploadFileRepository.persist(uploadedFile);
 
             // load the document with the documentParser and ingest it as a list,
             // mabye add the possibility to send multiple files at once
-            Document document = FileSystemDocumentLoader.loadDocument(filePath, new ApachePdfBoxDocumentParser());
+            Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
             document.metadata().add("fileKey", uploadedFile.getId().toString());
             documentIngestor.ingest(List.of(document));
 
@@ -55,13 +59,18 @@ public class IngestDocumentResource {
         }
     }
 
-    public void safeFile(String filePath, byte[] file) throws IOException {
-        File newFile = new File(filePath);
+    // adds date to filename to make it unique and safes it in the file system
+    public String safeFile(String filePath, byte[] file) throws IOException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String formattedDate = formatter.format(new Date());
+        String path = filePath + formattedDate + ".pdf";
+        File newFile = new File(path);
         newFile.getParentFile().mkdirs();
         newFile.createNewFile();
         FileOutputStream fileOutputStream = new FileOutputStream(newFile);
         fileOutputStream.write(file);
         fileOutputStream.close();
+        return path;
     }
 
     public static class PdfFile {

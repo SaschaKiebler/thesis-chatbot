@@ -6,6 +6,8 @@
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/dokumente.css">
+
+    <script src="js/DocumentService.js" ></script>
 </head>
 <body>
 <h1>Dokumente für die Wissensdatenbank</h1>
@@ -22,71 +24,6 @@
     </div>
     <ul class="doku-liste">
 
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-            <div>01.01.2021</div>
-            <div class="delete-button">X</div>
-        </li>
-
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-        <li class="doku-liste-eintrag">
-            <a href="dokumente/Thesis_Bot_Expose.pdf" target="_blank">Expose</a>
-        </li>
-
     </ul>
 
 </div>
@@ -100,37 +37,21 @@
 <script>
 
 
-
+    const documentService = new DocumentService();
     window.onload = async function () {
-        await fetch('/api/files/all', {
+        const response = await fetch('/api/files/all', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => response.json())
-            .then(data => {
-                console.log(data);
-                data.forEach((file) => {
-                    let li = document.createElement('li');
-                    li.className = 'doku-liste-eintrag';
-                    li.id = file.id;
-                    let a = document.createElement('a');
-                    a.href = '/api/files/' + file.id;
-                    a.target = '_blank';
-                    a.innerText = file.name;
-                    li.appendChild(a);
-                    let div = document.createElement('div');
-                    Date.prototype.toDateInputValue = (function() {
-                        var local = new Date(this);
-                        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-                        return local.toJSON().slice(0,10);
-                    });
-                    file.created = new Date(file.created).toDateInputValue();
-                    div.innerText = file.created;
-                    li.appendChild(div);
-                    document.querySelector('.doku-liste').appendChild(li);
-                });
-            });
+        });
+        const data = await response.json();
+        console.log(data);
+        data.forEach((file) => {
+            const li = documentService.createListItem(file);
+            document.querySelector('.doku-liste').appendChild(li);
+        });
     }
+
 </script>
 </html>

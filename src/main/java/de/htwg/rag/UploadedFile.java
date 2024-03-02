@@ -1,5 +1,6 @@
 package de.htwg.rag;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -8,7 +9,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-public class UploadedFile {
+public class UploadedFile extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(generator = "UUID")
