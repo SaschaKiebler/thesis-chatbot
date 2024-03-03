@@ -15,11 +15,11 @@
     <div class="tool-container">
         <div class="tool-text-img-box">
             <div>Hinzufügen:</div>
-            <button class="tool" id="add-document"><img src="pictures/file-plus.svg" width="25px" height="20px"></button>
+            <button class="tool" id="add-document"><img src="pictures/file-plus.svg" width="25px" height="20px" alt="file with plus symbol"></button>
         </div>
         <div class="tool-text-img-box">
             <div>Zum Chat:</div>
-            <button onclick="window.location.href='/'" class="tool" id="navigate-chat"><img src="pictures/back-symbol.svg" width="25px" height="20px"></button>
+            <button onclick="window.location.href='/'" class="tool" id="navigate-chat"><img src="pictures/back-symbol.svg" width="25px" height="20px" alt="exit symbol"></button>
         </div>
     </div>
     <ul class="doku-liste">
@@ -33,7 +33,11 @@
     <div>
         <button id="close-add-docu-container">X</button>
     </div>
-    <div class="name-input-container"><input type="text" id="docu-name" placeholder="Hier Dokumentenname eingeben"><p>.pdf</p></div>
+    <div class="name-input-container">
+        <label for="docu-name">Name:</label>
+        <input type="text" id="docu-name" placeholder="Hier Dokumentenname eingeben">
+        <p>.pdf</p>
+    </div>
     <div id="drop-zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
         <p>Datei hier ablegen</p>
     </div>
@@ -67,6 +71,16 @@
             }
         }
     }
+    dropZone.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf';
+        input.click();
+        input.addEventListener('change', () => {
+            uploadedFile = input.files[0];
+            dropZone.innerHTML = `<p>${input.files[0].name}</p>`;
+        });
+    });
     |}
 
     function dragOverHandler(ev) {

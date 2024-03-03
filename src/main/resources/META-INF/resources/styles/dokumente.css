@@ -41,10 +41,23 @@ h1 {
     color: #000;
 }
 
-.doku-liste li:hover {
+.doku-liste li a:hover {
     text-decoration: underline;
+}
+
+.doku-liste li:hover {
     background-color: #f0f0f0;
 }
+
+.doku-liste-eintrag .delete-button {
+    background-color: rgba(48, 140, 190, 0.62);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
 
 #add-document {
     padding-right: 5px;
@@ -70,6 +83,7 @@ h1 {
     background-color: white;
     padding: 20px;
     border: 1px solid #ccc;
+    border-radius: 5px;
     box-shadow: 0 0 10px 0 #ccc;
     display: none;
     padding-top: 40px;
@@ -83,6 +97,7 @@ h1 {
     display: inline-block;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    border-radius: 5px;
 }
 
 .name-input-container {
@@ -100,18 +115,20 @@ h1 {
     justify-content: center;
     align-items: center;
     margin: 10px 0;
+    cursor: pointer;
 }
 
 .add-docu-container button {
     padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: rgba(48, 140, 190, 0.62);
+    color: #000000;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .add-docu-container button:hover {
-    background-color: #45a049;
+    background-color: rgba(0, 81, 255, 0.61);
 }
 
 #close-add-docu-container {

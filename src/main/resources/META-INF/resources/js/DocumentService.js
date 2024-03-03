@@ -17,7 +17,7 @@ class DocumentService {
 
         const button = document.createElement('button');
         button.className = 'delete-button';
-        button.innerText = 'X';
+        button.innerText = 'löschen';
         button.onclick = async () => {
             await this.deleteFile(file.id);
         };
