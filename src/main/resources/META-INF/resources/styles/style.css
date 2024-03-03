@@ -10,6 +10,16 @@ body{
   height: 100vh;
   flex-direction: column;
   transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+.message-content{
+  word-wrap: break-word;
+    max-width: 100%;
 
 }
 
@@ -101,7 +111,7 @@ body{
 
 .duo-message{
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 3px;
 }
 
@@ -242,6 +252,13 @@ body{
 
 @media (max-width: 850px){
   .chat-container{
-    max-width: 90vw;
+    max-width: 99vw;
+  }
+
+}
+
+@media (max-width: 400px){
+  .duo-message .ai-message .icon{
+    display: none;
   }
 }
