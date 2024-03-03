@@ -39,4 +39,33 @@ class DocumentService {
         console.log(response);
         document.getElementById(fileId).remove();
     }
+
+    async getDocumentsFromDBAndShowThemInUI () {
+        const response = await fetch('/api/files/all', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+        data.forEach((file) => {
+            const li = this.createListItem(file);
+            document.querySelector('.doku-liste').appendChild(li);
+        });
+    }
+
+    async addDocumentToDB (docName, file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('name', docName);
+        const response = await fetch('/api/ingest/pdf', {
+            method: 'POST',
+            body: formData
+        });
+        console.log(response);
+        document.querySelector('.doku-liste').innerHTML = '';
+        await this.getDocumentsFromDBAndShowThemInUI();
+    }
+
 }

@@ -11,6 +11,7 @@ import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.MultipartForm;
 import org.jboss.resteasy.reactive.PartType;
 import java.io.File;
@@ -38,7 +39,7 @@ public class IngestDocumentResource {
     @Path("/pdf")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Transactional
-    public void uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
+    public Response uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
         try {
             // try to create a new file and safe the pdf to the UPLOAD_DIRECTORY
             String filePath = UPLOAD_DIRECTORY + "/" + name;
@@ -53,6 +54,7 @@ public class IngestDocumentResource {
             Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
             document.metadata().add("fileKey", uploadedFile.getId().toString());
             documentIngestor.ingest(List.of(document));
+            return Response.ok().build();
 
         } catch (IOException e) {
             throw new RuntimeException("Error saving file", e);

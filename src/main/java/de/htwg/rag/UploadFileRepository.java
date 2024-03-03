@@ -17,7 +17,7 @@ public class UploadFileRepository implements PanacheRepositoryBase<UploadedFile,
     public boolean deleteById(UUID id) {
         try{
         UploadedFile file = UploadedFile.findById(id);
-        Files.delete(Path.of(file.getPath()));
+        Files.deleteIfExists(Path.of(file.getPath()));
         file.delete();
         return true;
         } catch (IOException e) {

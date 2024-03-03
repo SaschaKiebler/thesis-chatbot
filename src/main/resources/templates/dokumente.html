@@ -27,9 +27,17 @@
     </ul>
 
 </div>
+
+
 <div class="add-docu-container">
-    <input type="text" id="docu-name" >
-    <input type="file" >
+    <div>
+        <button id="close-add-docu-container">X</button>
+    </div>
+    <div class="name-input-container"><input type="text" id="docu-name" placeholder="Hier Dokumentenname eingeben"><p>.pdf</p></div>
+    <div id="drop-zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
+        <p>Datei hier ablegen</p>
+    </div>
+    <button id="add-docu-button">Hinzufügen</button>
 </div>
 
 
@@ -38,20 +46,53 @@
 
 
     const documentService = new DocumentService();
-    window.onload = async function () {
-        const response = await fetch('/api/files/all', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+    window.onload = () => documentService.getDocumentsFromDBAndShowThemInUI();
+    let uploadedFile = null;
+    const dropZone = document.getElementById('drop-zone');
+    {|
+    function dropHandler(ev) {
+        ev.preventDefault();
+        if (ev.dataTransfer.items) {
+            for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+                if (ev.dataTransfer.items[i].kind === 'file') {
+                    let file = ev.dataTransfer.items[i].getAsFile();
+                    uploadedFile = file;
+                    dropZone.innerHTML = `<p>${file.name}</p>`;
+                }
             }
-        });
-        const data = await response.json();
-        console.log(data);
-        data.forEach((file) => {
-            const li = documentService.createListItem(file);
-            document.querySelector('.doku-liste').appendChild(li);
-        });
+        } else {
+            for (let i = 0; i < ev.dataTransfer.files.length; i++) {
+                uploadedFile = ev.dataTransfer.files[i];
+                dropZone.innerHTML = `<p>${ev.dataTransfer.files[i].name}</p>`;
+            }
+        }
     }
+    |}
+
+    function dragOverHandler(ev) {
+        ev.preventDefault();
+    }
+
+    document.getElementById('add-docu-button').addEventListener('click', () => {
+        const docuName = document.getElementById('docu-name').value;
+        if (docuName === '' || uploadedFile === null) {
+            alert('Bitte Dokumentenname und Datei angeben');
+            return;
+        }
+        documentService.addDocumentToDB(docuName, uploadedFile);
+        document.getElementById('docu-name').value = '';
+        dropZone.innerHTML = `<p>Datei hier ablegen</p>`;
+        uploadedFile = null;
+        document.querySelector('.add-docu-container').style.display = 'none';
+    });
+
+    document.getElementById('add-document').addEventListener('click', () => {
+        document.querySelector('.add-docu-container').style.display = 'block';
+    });
+
+    document.getElementById('close-add-docu-container').addEventListener('click', () => {
+        document.querySelector('.add-docu-container').style.display = 'none';
+    });
 
 </script>
 </html>
