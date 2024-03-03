@@ -60,10 +60,10 @@ class LLMResourceTest {
 
         when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
 
-        when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
-        when(openAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
-        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
-        when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        when(openAIService.chat(anyString(),eq("test"),anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(),eq("test"), anyString())).thenReturn("test");
 
         when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
         when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
@@ -95,10 +95,10 @@ class LLMResourceTest {
 
         when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
 
-        when(openAIService.chat(anyString(),eq("test"))).thenReturn("test");
-        when(openAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
-        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"))).thenReturn("test");
-        when(togetherAIService.chat(anyString(),eq("test"))).thenReturn("test");
+        when(openAIService.chat(anyString(),eq("test"),anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(),eq("test"), anyString())).thenReturn("test");
 
         when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
 

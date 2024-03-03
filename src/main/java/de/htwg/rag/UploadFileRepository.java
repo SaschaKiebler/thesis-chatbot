@@ -29,4 +29,8 @@ public class UploadFileRepository implements PanacheRepositoryBase<UploadedFile,
         return UploadedFile.listAll();
     }
 
+    public UploadedFile findByName(String name) {
+        return UploadedFile.find("name", name).firstResult();
+    }
+
 }

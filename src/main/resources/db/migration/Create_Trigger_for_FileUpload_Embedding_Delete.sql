@@ -5,13 +5,11 @@
 CREATE FUNCTION delete_embeddings_with_file() RETURNS trigger
     LANGUAGE plpgsql
 AS
-$$
-BEGIN
-DELETE FROM embeddings
-WHERE metadata ->> 'fileKey' = concat(OLD.id,'');
-RETURN OLD;
-END;
-$$;
+'BEGIN
+    DELETE FROM embeddings
+    WHERE metadata ->> ''fileKey'' = concat(OLD.id, '''');
+    RETURN OLD;
+END;';
 
 CREATE TRIGGER trigger_delete_embeddings_with_file
     BEFORE DELETE

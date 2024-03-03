@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,10 +41,14 @@ public class IngestDocumentResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Transactional
     public Response uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
+        if (isFileEmpty(pdfFile)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("file is required").build();
+        }
+        String path = "";
         try {
             // try to create a new file and safe the pdf to the UPLOAD_DIRECTORY
             String filePath = UPLOAD_DIRECTORY + "/" + name;
-            String path = safeFile(filePath, pdfFile.file);
+            path = safeFile(filePath, pdfFile.file);
 
             // create a new UploadedFile and persist it
             UploadedFile uploadedFile = new UploadedFile(name, path);
@@ -56,19 +61,22 @@ public class IngestDocumentResource {
             documentIngestor.ingest(List.of(document));
             return Response.ok().build();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+            try {
+                Files.deleteIfExists(java.nio.file.Path.of(path));
+            } catch (IOException ex) {
+                System.err.println("Error deleting file after exception");
+            }
             throw new RuntimeException("Error saving file", e);
         }
     }
 
     // adds date to filename to make it unique and safes it in the file system
-    public String safeFile(String filePath, byte[] file) throws IOException {
+    private String safeFile(String filePath, byte[] file) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String formattedDate = formatter.format(new Date());
         String path = filePath + formattedDate + ".pdf";
         File newFile = new File(path);
-        newFile.getParentFile().mkdirs();
-        newFile.createNewFile();
         FileOutputStream fileOutputStream = new FileOutputStream(newFile);
         fileOutputStream.write(file);
         fileOutputStream.close();
@@ -79,5 +87,9 @@ public class IngestDocumentResource {
         @FormParam("file")
         @PartType(MediaType.APPLICATION_OCTET_STREAM)
         public byte[] file;
+    }
+
+    private boolean isFileEmpty(PdfFile file) {
+        return file.file == null || file.file.length == 0;
     }
 }
