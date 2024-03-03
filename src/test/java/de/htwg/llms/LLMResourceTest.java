@@ -12,7 +12,6 @@ import de.htwg.llms.services.TogetherAIService;
 import de.htwg.llms.services.TogetherAIServiceNoRAG;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 
@@ -152,6 +151,132 @@ class LLMResourceTest {
                 .when().post("/llm/rightService?message=")
                 .then()
                 .body(is("{\"error\":\"bitte gebe eine Nachricht ein\"}"));
+    }
+
+    @Test
+    void testSendRequestLeftServiceForAiNotResponding() {
+        Conversation conversation = new Conversation();
+        conversation.setId(UUID.randomUUID());
+        Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
+        Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
+
+        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+
+            when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
+
+            when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+
+        doNothing().when(conversationRepository).persist(any(Conversation.class));
+        doNothing().when(messageRepository).persist(any(Message.class));
+        doNothing().when(answerRepository).persist(any(Answer.class));
+
+        when(openAIService.chat(anyString(),eq("test"),anyString())).thenReturn("");
+        when(openAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("");
+        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("");
+        when(togetherAIService.chat(anyString(),eq("test"), anyString())).thenReturn("");
+        given()
+                .when().post("/llm/leftService?message=test&conversationId=" + conversation.getId())
+                .then()
+                .body(is("{\"error\":\"etwas ist mit der KI schiefgelaufen versuche es später nochmal...\"}"));
+    }
+
+    @Test
+    void testSendRequestRightServiceForAiNotResponding() {
+        Conversation conversation = new Conversation();
+        conversation.setId(UUID.randomUUID());
+        Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
+        Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
+
+        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+
+        doNothing().when(conversationRepository).persist(any(Conversation.class));
+        doNothing().when(messageRepository).persist(any(Message.class));
+        doNothing().when(answerRepository).persist(any(Answer.class));
+
+        when(openAIService.chat(anyString(), eq("test"), anyString())).thenReturn("");
+        when(openAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("");
+        when(togetherAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("");
+        when(togetherAIService.chat(anyString(), eq("test"), anyString())).thenReturn("");
+
+        given()
+                .when().post("/llm/rightService?message=test&conversationId=" + conversation.getId())
+                .then()
+                .body(is("{\"error\":\"etwas ist mit der KI schiefgelaufen versuche es später nochmal...\"}"));
+
+    }
+
+    @Test
+    void testSendRequestLeftServiceForDbNotResponding() {
+        Conversation conversation = new Conversation();
+        conversation.setId(UUID.randomUUID());
+        Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
+        Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
+
+        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(null);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(null);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+
+        doNothing().when(conversationRepository).persist(any(Conversation.class));
+        doNothing().when(messageRepository).persist(any(Message.class));
+        doNothing().when(answerRepository).persist(any(Answer.class));
+
+        when(openAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+
+        given()
+                .when().post("/llm/leftService?message=test&conversationId=" + conversation.getId())
+                .then()
+                .body(is("{\"error\":\"etwas ist mit der DB schiefgelaufen versuche es später nochmal...\"}"));
+
+    }
+
+    @Test
+    void testSendRequestRightServiceForDbNotResponding() {
+        Conversation conversation = new Conversation();
+        conversation.setId(UUID.randomUUID());
+        Message message = Message.builder().message("test").conversation(conversation).id(UUID.randomUUID()).build();
+        Answer answer = Answer.builder().answer("test").message(message).id(UUID.randomUUID()).build();
+
+        when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
+
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(null);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+        when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(null);
+
+        when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
+
+        doNothing().when(conversationRepository).persist(any(Conversation.class));
+        doNothing().when(messageRepository).persist(any(Message.class));
+        doNothing().when(answerRepository).persist(any(Answer.class));
+
+        when(openAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+
+        given()
+                .when().post("/llm/rightService?message=test&conversationId=" + conversation.getId())
+                .then()
+                .body(is("{\"error\":\"etwas ist mit der DB schiefgelaufen versuche es später nochmal...\"}"));
+
     }
 
 
