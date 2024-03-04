@@ -1,5 +1,6 @@
 package de.htwg.rag;
 
+import de.htwg.rag.dataTools.Summarizer;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.segment.TextSegment;
@@ -23,6 +24,9 @@ class DocumentIngestorTest {
 
     @InjectMock
     PgVectorEmbeddingStore store;
+
+    @InjectMock
+    Summarizer summarizer;
 
 
     DocumentIngestor documentIngestor;
@@ -58,6 +62,7 @@ class DocumentIngestorTest {
         List<Document> documents = Arrays.asList(document1, document2, document3);
 
         when(store.addAll(anyList(), eq(textSegments))).thenReturn(List.of("test","test","test"));
+        when(summarizer.summarize(anyString())).thenReturn("This is a test document");
 
         assertDoesNotThrow(() -> {
             documentIngestor.ingest(documents);
@@ -71,6 +76,7 @@ class DocumentIngestorTest {
     void testIngestForListOfOneDocument() {
         List<Document> documents = Arrays.asList(document1);
         List<TextSegment> textSegments = Arrays.asList(new TextSegment("This is a test document", Metadata.metadata("index",0)));
+        when(summarizer.summarize(anyString())).thenReturn("test");
 
         when(store.addAll(anyList(), eq(textSegments))).thenReturn(List.of("test"));
 

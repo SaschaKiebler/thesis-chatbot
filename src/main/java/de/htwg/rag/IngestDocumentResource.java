@@ -64,8 +64,7 @@ public class IngestDocumentResource {
             UploadedFile uploadedFile = new UploadedFile(name, path);
             uploadFileRepository.persist(uploadedFile);
 
-            // load the document with the documentParser and ingest it as a list,
-            // mabye add the possibility to send multiple files at once
+            // load the document with the documentParser and add the fileKey to the metadata
             Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
             document.metadata().add("fileKey", uploadedFile.getId().toString());
 
