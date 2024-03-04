@@ -17,4 +17,3 @@ CREATE TRIGGER trigger_delete_embeddings_with_file
     FOR EACH ROW
     EXECUTE PROCEDURE delete_embeddings_with_file();
 
-ALTER FUNCTION delete_embeddings_with_file() OWNER TO gibler;

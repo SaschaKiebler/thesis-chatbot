@@ -42,6 +42,7 @@ public class IngestDocumentResource {
     @Transactional
     public Response uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
         if (isFileEmpty(pdfFile)) {
+            System.err.println("Uploaded File is empty");
             return Response.status(Response.Status.BAD_REQUEST).entity("file is required").build();
         }
         String path = "";
@@ -59,6 +60,7 @@ public class IngestDocumentResource {
             Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
             document.metadata().add("fileKey", uploadedFile.getId().toString());
             documentIngestor.ingest(List.of(document));
+            System.out.println("Ingested file with id: " + uploadedFile.getId() + " at " + LocalDateTime.now());
             return Response.ok().build();
 
         } catch (Exception e) {
@@ -67,6 +69,7 @@ public class IngestDocumentResource {
             } catch (IOException ex) {
                 System.err.println("Error deleting file after exception");
             }
+            System.err.println("Error ingesting file: " + e);
             throw new RuntimeException("Error saving file", e);
         }
     }
@@ -77,6 +80,9 @@ public class IngestDocumentResource {
         String formattedDate = formatter.format(new Date());
         String path = filePath + formattedDate + ".pdf";
         File newFile = new File(path);
+        // important to create the parent directories if they don't exist
+        newFile.getParentFile().mkdirs();
+        newFile.createNewFile();
         FileOutputStream fileOutputStream = new FileOutputStream(newFile);
         fileOutputStream.write(file);
         fileOutputStream.close();

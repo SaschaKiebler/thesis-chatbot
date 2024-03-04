@@ -25,5 +25,8 @@ public class AnswerResource {
             answerRepository.setPreferred(UUID.fromString(id), true);
             System.out.println("Set preferred to true on answer with id: " + id);
         }
+        else {
+            System.out.println("Something went wrong with rating for answer with id: " + id);
+        }
     }
 }

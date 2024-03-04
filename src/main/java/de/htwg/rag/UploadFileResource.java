@@ -29,6 +29,7 @@ public class UploadFileResource {
     @Transactional
     public Response deleteFile(@PathParam("id") UUID id) {
         try {
+            System.out.println("Deleting file with id: " + id);
             uploadFileRepository.deleteById(id);
             return Response.ok().build();
         } catch (Exception e) {

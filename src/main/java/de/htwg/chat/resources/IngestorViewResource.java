@@ -9,6 +9,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+import java.util.Date;
+
 @Path("/dokumente")
 @ApplicationScoped
 public class IngestorViewResource {
@@ -20,6 +22,7 @@ public class IngestorViewResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getDokumente() {
+        System.out.println("/dokumente abgerufen am: " + new Date());
         return dokumente.data("title", "dokumente");
     }
 }
