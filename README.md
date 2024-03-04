@@ -82,3 +82,5 @@ Easily start your Reactive RESTful Web Services
 Create your web page using Quarkus RESTEasy Reactive & Qute
 
 [Related guide section...](https://quarkus.io/guides/qute#type-safe-templates)
+
+[![wakatime](https://wakatime.com/badge/user/f12d7008-b5f7-4ed1-ad2f-bdb12a3489db/project/018d8dab-b5b3-4169-bf68-6c31f52a7247.svg)](https://wakatime.com/badge/user/f12d7008-b5f7-4ed1-ad2f-bdb12a3489db/project/018d8dab-b5b3-4169-bf68-6c31f52a7247)
