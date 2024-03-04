@@ -1,8 +1,14 @@
 package de.htwg.rag;
 
+import de.htwg.rag.dataTools.Summarizer;
+import de.htwg.rag.dataTools.TextSummarizerService;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.service.AiServices;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -19,7 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +39,9 @@ public class IngestDocumentResource {
 
     @Inject
     UploadFileRepository uploadFileRepository;
+
+    @Inject
+    Summarizer summarizer;
 
     private static final String UPLOAD_DIRECTORY = "resources/pdfs";
 
@@ -59,8 +68,13 @@ public class IngestDocumentResource {
             // mabye add the possibility to send multiple files at once
             Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
             document.metadata().add("fileKey", uploadedFile.getId().toString());
+
+            // Summarize the text and ingest it
+            String sumtext = summarizer.summarize(document.text());
+            document = Document.document(sumtext, document.metadata());
+
             documentIngestor.ingest(List.of(document));
-            System.out.println("Ingested file with id: " + uploadedFile.getId() + " at " + LocalDateTime.now());
+            System.out.println("Ingested file with id: " + uploadedFile.getId() + " at " + new Date());
             return Response.ok().build();
 
         } catch (Exception e) {

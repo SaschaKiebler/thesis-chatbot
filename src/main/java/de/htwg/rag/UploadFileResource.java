@@ -6,7 +6,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
-
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +29,7 @@ public class UploadFileResource {
     @Transactional
     public Response deleteFile(@PathParam("id") UUID id) {
         try {
-            System.out.println("Deleting file with id: " + id);
+            System.out.println("Deleting file with id: " + id + " from database at: " + new Date());
             uploadFileRepository.deleteById(id);
             return Response.ok().build();
         } catch (Exception e) {
