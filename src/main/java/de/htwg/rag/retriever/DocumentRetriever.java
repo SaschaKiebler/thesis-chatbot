@@ -10,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 
 @ApplicationScoped
+@Deprecated
 public class DocumentRetriever implements Retriever<TextSegment> {
     private final EmbeddingStoreRetriever retriever;
 
