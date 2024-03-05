@@ -1,6 +1,7 @@
 package de.htwg.rag.retriever;
 
 import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
+import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
@@ -33,7 +34,17 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
                 .logRequests(true)
                 .logResponses(true)
                 .build();
-        QueryTransformer queryTransformer = new CompressingQueryTransformer(chatModel);
+        QueryTransformer queryTransformer = CompressingQueryTransformer.builder()
+                .chatLanguageModel(chatModel)
+                .promptTemplate(PromptTemplate.from("Lese und verstehe das Gespräch zwischen dem Benutzer und dem KI. Analysiere dann die neue Anfrage des Benutzers. Identifiziere alle relevanten Details, Begriffe und den Kontext sowohl aus dem Gespräch als auch aus der neuen Anfrage. Formuliere diese Anfrage in ein klares, prägnantes und in sich geschlossenes Format um, das für die Informationssuche geeignet ist.\n" +
+                        "\n" +
+                        "Gespräch:\n" +
+                        "{{chatMemory}}\n" +
+                        "\n" +
+                        "Benutzeranfrage: {{query}}\n" +
+                        "\n" +
+                        "Es ist sehr wichtig, dass du nur die umformulierte Anfrage und nichts anderes bereitstellst! Füge einer Anfrage nichts voran!"))
+                .build();
 
         // ContentInjector to give metadata with the retrieved documents
         ContentInjector contentInjector = DefaultContentInjector.builder()
