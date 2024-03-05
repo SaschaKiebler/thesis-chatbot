@@ -54,6 +54,9 @@
 </div>
 </body>
 <script>
+
+
+
     const chatService = new ChatService();
 
     const input = document.getElementById('input');
@@ -61,6 +64,10 @@
     const clear = document.getElementById('clear');
     const ratingHint = new RatingHint();
     const uiService = new UIService();
+
+    window.onload = function() {
+        uiService.loadDarkMode();
+    };
 
     send.addEventListener('click', function() {
         if (input.value === ''){
@@ -87,6 +94,8 @@
 
     document.getElementById('darkmode').addEventListener('click', function() {
         uiService.toggleDarkMode();
+        //save darkmode state
+        uiService.saveDarkMode();
     });
 
     uiService.enablePopUp();

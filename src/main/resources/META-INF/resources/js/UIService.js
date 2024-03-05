@@ -48,6 +48,20 @@ class UIService {
 
     }
 
+    saveDarkMode() {
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('dark-mode', 'true');
+        } else {
+            localStorage.setItem('dark-mode', 'false');
+        }
+    }
+
+    loadDarkMode() {
+        if (localStorage.getItem('dark-mode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    }
+
 
 
 

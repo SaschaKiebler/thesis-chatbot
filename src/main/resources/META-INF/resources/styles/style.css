@@ -255,6 +255,12 @@ body{
     max-width: 99vw;
   }
 
+  body{
+    overflow: auto;
+    margin-bottom: 50px;
+    height: calc(100vh - 50px);
+  }
+
 }
 
 @media (max-width: 400px){

@@ -25,7 +25,7 @@ public class DocumentIngestor {
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .embeddingStore(store)
                 .embeddingModel(embeddingModel)
-                .documentSplitter(recursive(500, 0))
+                .documentSplitter(recursive(300, 20))
                 .build();
         if (documents.isEmpty()) {
             throw new IllegalArgumentException("No documents to ingest");
