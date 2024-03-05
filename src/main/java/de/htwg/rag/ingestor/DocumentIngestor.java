@@ -1,4 +1,4 @@
-package de.htwg.rag;
+package de.htwg.rag.ingestor;
 
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;

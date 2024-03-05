@@ -1,14 +1,12 @@
-package de.htwg.rag;
+package de.htwg.rag.ingestor.resources;
 
 import de.htwg.rag.dataTools.Summarizer;
-import de.htwg.rag.dataTools.TextSummarizerService;
+import de.htwg.rag.ingestor.DocumentIngestor;
+import de.htwg.rag.ingestor.UploadFileRepository;
+import de.htwg.rag.ingestor.UploadedFile;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.service.AiServices;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -25,8 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 

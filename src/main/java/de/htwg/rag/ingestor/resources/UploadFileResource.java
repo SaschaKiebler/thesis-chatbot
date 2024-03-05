@@ -1,5 +1,7 @@
-package de.htwg.rag;
+package de.htwg.rag.ingestor.resources;
 
+import de.htwg.rag.ingestor.UploadFileRepository;
+import de.htwg.rag.ingestor.UploadedFile;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;

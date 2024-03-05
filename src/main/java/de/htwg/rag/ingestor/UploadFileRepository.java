@@ -1,4 +1,4 @@
-package de.htwg.rag;
+package de.htwg.rag.ingestor;
 
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;

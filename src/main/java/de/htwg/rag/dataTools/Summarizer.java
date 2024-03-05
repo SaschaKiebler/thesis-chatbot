@@ -14,6 +14,9 @@ import java.util.List;
 public class Summarizer {
 
     public String summarize(String text) {
+        if (text == null || text.isEmpty()) {
+            throw new IllegalArgumentException("Text is empty or null");
+        }
         // Summarize the text and ingest it
         // Use of the @RegisterAiService annotation is not possible on TextSummarizer because no option to say chatMemory = null
         ChatLanguageModel model = OpenAiChatModel.builder()

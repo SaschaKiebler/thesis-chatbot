@@ -1,6 +1,7 @@
-package de.htwg.rag;
+package de.htwg.rag.ingestor;
 
 import de.htwg.rag.dataTools.Summarizer;
+import de.htwg.rag.ingestor.DocumentIngestor;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.segment.TextSegment;

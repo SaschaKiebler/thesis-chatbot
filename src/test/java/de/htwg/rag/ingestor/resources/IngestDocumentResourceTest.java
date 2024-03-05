@@ -1,18 +1,17 @@
-package de.htwg.rag;
+package de.htwg.rag.ingestor.resources;
 
+import de.htwg.rag.dataTools.Summarizer;
+import de.htwg.rag.ingestor.DocumentIngestor;
+import de.htwg.rag.ingestor.UploadFileRepository;
+import de.htwg.rag.ingestor.UploadedFile;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -27,12 +26,16 @@ class IngestDocumentResourceTest {
     @Inject
     UploadFileRepository uploadFileRepository;
 
+    @Inject
+    Summarizer summarizer;
+
 
     @Test
     @TestTransaction
     void testUploadPdfForValidInput() {
         doNothing().when(documentIngestor).ingest(anyList());
         String randowmName = UUID.randomUUID().toString();
+        when(summarizer.summarize(anyString())).thenReturn("summary");
        given()
                 .when().formParam("name",randowmName).multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
                 .post("/api/ingest/pdf")
@@ -55,6 +58,7 @@ class IngestDocumentResourceTest {
     @TestTransaction
     void testUploadPdfForExceptionFromDocumentIngestor() {
         doThrow(new RuntimeException("Error saving file")).when(documentIngestor).ingest(anyList());
+        when(summarizer.summarize(anyString())).thenReturn("summary");
         given()
                 .when().formParam("name","test").multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
                 .post("/api/ingest/pdf")
@@ -76,6 +80,18 @@ class IngestDocumentResourceTest {
                 .statusCode(400);
 
         verify(documentIngestor, times(0)).ingest(anyList());
+    }
+
+    @Test
+    void testUploadPdfForFileWithoutText() {
+        File fileWithoutText = new File("src/test/resources/pdfs/PDFWithoutText.pdf");
+
+        given()
+                .when().formParam("name","test").multiPart("file", fileWithoutText)
+                .post("/api/ingest/pdf")
+                .then()
+                .statusCode(500);
+
     }
 
 }

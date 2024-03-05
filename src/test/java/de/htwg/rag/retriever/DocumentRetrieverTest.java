@@ -1,16 +1,13 @@
-package de.htwg.rag;
+package de.htwg.rag.retriever;
 
-import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
 import dev.langchain4j.model.output.Response;
-import dev.langchain4j.retriever.EmbeddingStoreRetriever;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.persistence.Embedded;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +36,7 @@ class DocumentRetrieverTest {
 
     @Test
     void testFindRelevantForInputTestReturnNoMatches() {
-        Response response = Response.from(Embedding.from(new float[]{0.1f, 0.2f, 0.3f}));
+        Response<Embedding> response = Response.from(Embedding.from(new float[]{0.1f, 0.2f, 0.3f}));
         Embedding embeddedText = (Embedding) response.content();
 
         when(model.embed("test")).thenReturn(response);
@@ -51,7 +48,7 @@ class DocumentRetrieverTest {
 
     @Test
     void testFindRelevantForInputTestReturnOneMatch() {
-        Response response = Response.from(Embedding.from(new float[]{0.1f, 0.2f, 0.3f}));
+        Response<Embedding> response = Response.from(Embedding.from(new float[]{0.1f, 0.2f, 0.3f}));
         Embedding embeddedText = (Embedding) response.content();
         List<EmbeddingMatch<TextSegment>> matches = List.of(mock(EmbeddingMatch.class));
 

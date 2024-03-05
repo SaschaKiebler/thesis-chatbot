@@ -1,6 +1,6 @@
 package de.htwg.llms.services;
 
-import de.htwg.rag.DocumentRetriever;
+import de.htwg.rag.retriever.DocumentRetriever;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
