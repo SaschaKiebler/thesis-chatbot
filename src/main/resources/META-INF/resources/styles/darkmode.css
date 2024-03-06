@@ -1,15 +1,21 @@
 :root{
-    --dark-bg: #333;
+    --dark-bg: #2f2f2f;
+    --black: #1c1c1c;
     --dark-color: #fff;
     --dark-border-shadow-hover-active: rgba(0, 81, 255, 0.61);
-    --dark-button-bg-input-container-button-bg-rated-border: rgba(48, 140, 190, 0.62);
+    --dark-second: rgba(48, 140, 190, 0.62);
     --dark-button-color-input-container-button-color: #3f3f3f;
     --dark-code: #282828;
 }
 
+
 .dark-mode{
-    background-color: var(--dark-bg);
+    background-color: var(--black);
     color: var(--dark-color);
+}
+
+.dark-mode .chat-container{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.42);
 }
 
 .dark-mode .input-container input, .dark-mode .tool-container button, .dark-mode .chat-container, .dark-mode .conversation-container, .dark-mode .message, .dark-mode .input-container, .dark-mode .input-container button{
@@ -19,7 +25,7 @@
 }
 
 .dark-mode .input-container button, .dark-mode .rated{
-    border-color: var(--dark-button-bg-input-container-button-bg-rated-border);
+    border-color: var(--dark-second);
     transition: all 0.3s ease;
 }
 
@@ -29,46 +35,57 @@
 }
 
 .dark-mode .input-container input{
-    background-color: #333;
+    background-color: var(--dark-bg);
     color: #fff;
 }
 
 
 .dark-mode .tool-container button{
     color: #fff;
-    background-color: rgba(48, 140, 190, 0.62);
+    background-color: var(--dark-second);
 }
 
 .dark-mode .chat-container{
-    background-color: #333;
+    background-color: var(--dark-bg);
     border: none;
 }
 
 .dark-mode .conversation-container{
-    background-color: #333;
+    background-color: var(--dark-bg);
 }
 
 .dark-mode .message{
-    background-color: #333;
+    background-color: var(--dark-bg);
     color: #fff;
 }
 
 .dark-mode .input-container{
-    background-color: #333;
+    background-color: var(--dark-bg);
 
 }
 
 .dark-mode .input-container button{
     color: #3f3f3f;
     border: none;
-    background-color: rgba(48, 140, 190, 0.62);
+    background-color: var(--dark-second);
 }
 
 .dark-mode .rated{
-    border-color: rgba(48, 140, 190, 0.62);
+    border-color: var(--dark-second);
+}
+
+.dark-mode .rating-hint{
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.78);
 }
 
 
 .dark-mode .code {
     background-color: var(--dark-code);
+}
+
+.dark-mode .user-message .icon{
+    content: url("../pictures/User_Logo_white.svg");
+    width: 20px;
+    height: 20px;
 }
