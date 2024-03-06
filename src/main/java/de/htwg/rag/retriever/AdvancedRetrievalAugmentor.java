@@ -11,7 +11,6 @@ import dev.langchain4j.rag.content.injector.DefaultContentInjector;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.rag.query.transformer.QueryTransformer;
-import io.github.cdimascio.dotenv.Dotenv;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import jakarta.inject.Singleton;
 
@@ -24,12 +23,15 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
 
     private final RetrievalAugmentor augmentor;
 
+    // uses the PgVectorEmbeddingStore and the AllMiniLmL6V2QuantizedEmbeddingModel.
+    // The Store is a extension of the normal PostgresDB and the model is running locally.
     public AdvancedRetrievalAugmentor(PgVectorEmbeddingStore store, AllMiniLmL6V2QuantizedEmbeddingModel model) {
 
         // chatmodel just for the query transformer, can be any model,
         // all it does is compress the input query's to one so that the retrieval is more accurate
+        // and logic from the chat-history gets taken into account
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                .apiKey(Dotenv.load().get("OPENAI_API_KEY"))
+                .apiKey(System.getenv("OPENAI_APIKEY"))
                 .modelName("gpt-3.5-turbo")
                 .logRequests(true)
                 .logResponses(true)
@@ -51,10 +53,12 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
                 .metadataKeysToInclude(asList("file_name", "index"))
                 .build();
 
+        // The normal Retriever to get the Documents from the store.
         EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(model)
                 .embeddingStore(store)
                 .maxResults(3)
+                .minScore(0.7)
                 .build();
 
 

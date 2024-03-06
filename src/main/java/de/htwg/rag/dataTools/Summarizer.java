@@ -3,7 +3,6 @@ package de.htwg.rag.dataTools;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class Summarizer {
         // Summarize the text and ingest it
         // Use of the @RegisterAiService annotation is not possible on TextSummarizer because no option to say chatMemory = null
         ChatLanguageModel model = OpenAiChatModel.builder()
-                .apiKey(Dotenv.load().get("OPENAI_API_KEY"))
+                .apiKey(System.getenv("OPENAI_APIKEY"))
                 .modelName("gpt-3.5-turbo")
                 .logRequests(true)
                 .logResponses(true)

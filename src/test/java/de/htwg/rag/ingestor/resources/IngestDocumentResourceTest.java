@@ -26,7 +26,7 @@ class IngestDocumentResourceTest {
     @Inject
     UploadFileRepository uploadFileRepository;
 
-    @Inject
+    @InjectMock
     Summarizer summarizer;
 
 
