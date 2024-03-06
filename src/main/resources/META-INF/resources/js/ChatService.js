@@ -21,10 +21,10 @@ class ChatService {
 
         try {
             const response = await fetch(
-                `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`,
+                `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}` : ''}`,
                 {
-                    method: 'POST'
-
+                    method: 'POST',
+                    body: JSON.stringify({ message: requestText }),
                 });
 
             const text = await response.text(); // Get the response as text
@@ -49,16 +49,15 @@ class ChatService {
 
     // Diese Methode spricht zwei Endpunkte gleichzeitig an und fügt die Antworten der Chatliste hinzu. Hier wird auch das Rating-System aktiviert
     async getDualAnswer(requestText, ratingHint) {
-        const displayedText = this.encodeHTML(requestText);
-        this.addMessage(new Message(null, displayedText, "user"));
+        this.addMessage(new Message(null, requestText, "user"));
         this.addMessage(new LoadingMessage());
 
         try {
-            const url1 = `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`;
-            const url2 = `/llm/rightService?${this.conversationIdright ? `conversationId=${this.conversationIdright}&` : ''}message=${requestText}`;
+            const url1 = `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}` : ''}`;
+            const url2 = `/llm/rightService?${this.conversationIdright ? `conversationId=${this.conversationIdright}` : ''}`;
 
-            const fetch1 = fetch(url1, { method: 'POST' });
-            const fetch2 = fetch(url2, { method: 'POST' });
+            const fetch1 = fetch(url1, { method: 'POST', body: JSON.stringify({ message: requestText })});
+            const fetch2 = fetch(url2, { method: 'POST', body: JSON.stringify({ message: requestText })});
 
             const [response1, response2] = await Promise.all([fetch1, fetch2]);
 
@@ -124,6 +123,7 @@ class ChatService {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
+            .replace(/'/g, '&#39;')
+            .replace(/`/g, '&#96;');
     }
 }

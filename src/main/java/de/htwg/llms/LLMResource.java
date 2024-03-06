@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.UUID;
 
@@ -55,7 +56,7 @@ public class LLMResource {
     @Path("/{side}Service")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public String sendRequestService(@QueryParam("message") String message, @QueryParam("conversationId") String conversationId, @PathParam("side") String side) {
+    public String sendRequestService(@RequestBody(ref = "message") String message, @QueryParam("conversationId") String conversationId, @PathParam("side") String side) {
         if (message == null || message.isEmpty()) {
             return Json.object().put("error", "bitte gebe eine Nachricht ein").build();
         }

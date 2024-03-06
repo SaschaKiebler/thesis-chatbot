@@ -70,12 +70,22 @@
         uiService.loadDarkMode();
     };
 
+    function sanitizeString(str) {
+        return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+            .replace(/`/g, "&#96;");
+    }
+
     send.addEventListener('click', function() {
         if (input.value === ''){
 
         } else{
             input.disabled = true;
-            chatService.getDualAnswer(input.value,ratingHint);
+            let inputText = sanitizeString(input.value);
+            chatService.getDualAnswer(inputText,ratingHint);
             input.value = '';
         }
     });
@@ -84,7 +94,8 @@
         if(input.value !== ''){
         if (event.key === 'Enter') {
             input.disabled = true;
-            chatService.getDualAnswer(input.value,ratingHint);
+            let inputText = sanitizeString(input.value);
+            chatService.getDualAnswer(inputText,ratingHint);
             input.value = '';
         }}
     });

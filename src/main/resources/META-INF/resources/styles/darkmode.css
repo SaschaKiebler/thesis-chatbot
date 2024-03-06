@@ -4,6 +4,7 @@
     --dark-border-shadow-hover-active: rgba(0, 81, 255, 0.61);
     --dark-button-bg-input-container-button-bg-rated-border: rgba(48, 140, 190, 0.62);
     --dark-button-color-input-container-button-color: #3f3f3f;
+    --dark-code: #282828;
 }
 
 .dark-mode{
@@ -65,4 +66,9 @@
 
 .dark-mode .rated{
     border-color: rgba(48, 140, 190, 0.62);
+}
+
+
+.dark-mode .code {
+    background-color: var(--dark-code);
 }

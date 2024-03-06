@@ -14,6 +14,7 @@ class MarkdownParser {
         html = this.convertItalic(html);
         html = this.convertUnderline(html);
         html = this.convertCode(html);
+        html = this.convertInlineCode(html);
         html = this.convertLink(html);
         html = this.convertOrderedList(html);
         html = this.convertUnorderedList(html);
@@ -35,9 +36,14 @@ class MarkdownParser {
         return html.replace(/__(.*?)__/g, '<u>$1</u>');
     }
 
-    // wandelt `code` in <code>code</code> um
+    // wandelt ```code``` in <div class="code"><pre><code>code</code></pre></div> um
     convertCode(html) {
-        return html.replace(/`(.*?)`/g, '<code>$1</code>');
+        return html.replace(/`{3}(.*)\n([\s\S]*)\n`{3}/gim, '<div class="code"><pre><code class="$1">$2</code></pre></div>');
+    }
+
+    // wandelt `code` in <code>code</code> um
+    convertInlineCode(html) {
+        return html.replace(/`(.[^`]*)`/g, '<code>$1</code>');
     }
 
     // wandelt [link](url) in <a href="url">link</a> um

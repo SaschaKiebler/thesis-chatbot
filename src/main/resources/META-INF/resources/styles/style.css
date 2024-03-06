@@ -19,7 +19,7 @@ body{
 
 .message-content{
   word-wrap: break-word;
-    max-width: 100%;
+    max-width: 95%;
 
 }
 
@@ -248,6 +248,20 @@ body{
   position: relative;
 }
 
+code {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.code {
+  display: block;
+  background-color: #f1efef;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow-x: scroll;
+  max-width: 95%;
+}
+
 
 
 @media (max-width: 850px){
@@ -329,3 +343,6 @@ body{
     box-shadow: 9991px -16px 0 0 var(--load-color), 9991px 0 0 0 var(--load-color), 10007px 0 0 0 var(--load-color);
   }
 }
+
+
+
