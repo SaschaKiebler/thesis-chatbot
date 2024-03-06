@@ -12,6 +12,7 @@ import de.htwg.llms.services.TogetherAIService;
 import de.htwg.llms.services.TogetherAIServiceNoRAG;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 
 
@@ -59,10 +60,10 @@ class LLMResourceTest {
 
         when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
 
-        when(openAIService.chat(anyString(),eq("test"),anyString())).thenReturn("test");
-        when(openAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
-        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
-        when(togetherAIService.chat(anyString(),eq("test"), anyString())).thenReturn("test");
+        when(openAIService.chat(anyString(),anyString(),anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(),anyString(), anyString())).thenReturn("test");
 
         when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
         when(answerRepository.findByMessageId(any(UUID.class))).thenReturn(answer);
@@ -72,8 +73,8 @@ class LLMResourceTest {
         doNothing().when(answerRepository).persist(any(Answer.class));
 
 
-        given()
-                .when().post("/llm/leftService?message=test&conversationId=" + conversation.getId())
+        given().contentType(ContentType.JSON).body("{\"message\":\"test\"}")
+                .when().post("/llm/leftService?conversationId=" + conversation.getId())
                 .then()
                 .statusCode(200)
                 .body(
@@ -94,10 +95,10 @@ class LLMResourceTest {
 
         when(conversationRepository.findById(any(UUID.class))).thenReturn(conversation);
 
-        when(openAIService.chat(anyString(),eq("test"),anyString())).thenReturn("test");
-        when(openAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
-        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("test");
-        when(togetherAIService.chat(anyString(),eq("test"), anyString())).thenReturn("test");
+        when(openAIService.chat(anyString(),anyString(),anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(),anyString(), anyString())).thenReturn("test");
 
         when(messageRepository.findLatestMessageFromConversation(any(UUID.class))).thenReturn(message);
 
@@ -108,8 +109,8 @@ class LLMResourceTest {
         doNothing().when(answerRepository).persist(any(Answer.class));
 
 
-        given()
-                .when().post("/llm/rightService?message=test&conversationId=" + conversation.getId())
+        given().contentType(ContentType.JSON).body("{\"message\":\"test\"}")
+                .when().post("/llm/rightService?conversationId=" + conversation.getId())
                 .then()
                 .statusCode(200)
                 .body(
@@ -173,12 +174,12 @@ class LLMResourceTest {
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 
-        when(openAIService.chat(anyString(),eq("test"),anyString())).thenReturn("");
-        when(openAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("");
-        when(togetherAIServiceNoRAG.chat(anyString(),eq("test"), anyString())).thenReturn("");
-        when(togetherAIService.chat(anyString(),eq("test"), anyString())).thenReturn("");
-        given()
-                .when().post("/llm/leftService?message=test&conversationId=" + conversation.getId())
+        when(openAIService.chat(anyString(),anyString(),anyString())).thenReturn("");
+        when(openAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("");
+        when(togetherAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("");
+        when(togetherAIService.chat(anyString(),anyString(), anyString())).thenReturn("");
+        given().contentType(ContentType.JSON).body("{\"message\":\"test\"}")
+                .when().post("/llm/leftService?conversationId=" + conversation.getId())
                 .then()
                 .body(is("{\"error\":\"etwas ist mit der KI schiefgelaufen versuche es später nochmal...\"}"));
     }
@@ -203,12 +204,12 @@ class LLMResourceTest {
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 
-        when(openAIService.chat(anyString(), eq("test"), anyString())).thenReturn("");
-        when(openAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("");
-        when(togetherAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("");
-        when(togetherAIService.chat(anyString(), eq("test"), anyString())).thenReturn("");
+        when(openAIService.chat(anyString(),anyString(),anyString())).thenReturn("");
+        when(openAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("");
+        when(togetherAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("");
+        when(togetherAIService.chat(anyString(),anyString(), anyString())).thenReturn("");
 
-        given()
+        given().contentType(ContentType.JSON).body("{\"message\":\"test\"}")
                 .when().post("/llm/rightService?message=test&conversationId=" + conversation.getId())
                 .then()
                 .body(is("{\"error\":\"etwas ist mit der KI schiefgelaufen versuche es später nochmal...\"}"));
@@ -235,13 +236,13 @@ class LLMResourceTest {
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 
-        when(openAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
-        when(openAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
-        when(togetherAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
-        when(togetherAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(openAIService.chat(anyString(),anyString(),anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(),anyString(), anyString())).thenReturn("test");
 
-        given()
-                .when().post("/llm/leftService?message=test&conversationId=" + conversation.getId())
+        given().contentType(ContentType.JSON).body("{\"message\":\"test\"}")
+                .when().post("/llm/leftService?conversationId=" + conversation.getId())
                 .then()
                 .body(is("{\"error\":\"etwas ist mit der DB schiefgelaufen versuche es später nochmal...\"}"));
 
@@ -267,12 +268,12 @@ class LLMResourceTest {
         doNothing().when(messageRepository).persist(any(Message.class));
         doNothing().when(answerRepository).persist(any(Answer.class));
 
-        when(openAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
-        when(openAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
-        when(togetherAIServiceNoRAG.chat(anyString(), eq("test"), anyString())).thenReturn("test");
-        when(togetherAIService.chat(anyString(), eq("test"), anyString())).thenReturn("test");
+        when(openAIService.chat(anyString(),anyString(),anyString())).thenReturn("test");
+        when(openAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIServiceNoRAG.chat(anyString(),anyString(), anyString())).thenReturn("test");
+        when(togetherAIService.chat(anyString(),anyString(), anyString())).thenReturn("test");
 
-        given()
+        given().contentType(ContentType.JSON).body("{\"message\":\"test\"}")
                 .when().post("/llm/rightService?message=test&conversationId=" + conversation.getId())
                 .then()
                 .body(is("{\"error\":\"etwas ist mit der DB schiefgelaufen versuche es später nochmal...\"}"));
