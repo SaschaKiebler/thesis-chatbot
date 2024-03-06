@@ -51,6 +51,7 @@ class ChatService {
     async getDualAnswer(requestText, ratingHint) {
         const displayedText = this.encodeHTML(requestText);
         this.addMessage(new Message(null, displayedText, "user"));
+        this.addMessage(new LoadingMessage());
 
         try {
             const url1 = `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}&` : ''}message=${requestText}`;
@@ -71,6 +72,8 @@ class ChatService {
                 const data2 = JSON.parse(text2);
 
                 if (data1.answer && data2.answer) {
+                    this.messages.pop();
+                    document.getElementById("loading-message").remove();
                     const messageLeft = new Message(data1.answerId, data1.answer, "ai");
                     const messageRight = new Message(data2.answerId, data2.answer, "ai");
                     this.addMessage(new DualMessage(messageLeft, messageRight));
@@ -78,6 +81,8 @@ class ChatService {
                     ratingHint.setVisible(true);
                     this.ratingService.addRatingListener();
                 } else {
+                    this.messages.pop();
+                    document.getElementById("loading-message").remove();
                     this.addMessage(new ErrorMessage(null, "Sorry, es gab einen Fehler!", "ai"));
                     document.getElementById("input").disabled = false;
                 }
