@@ -56,4 +56,44 @@ public class UploadedFile extends PanacheEntityBase {
     public void setCreated(Date created) {
         this.created = created;
     }
+
+    public static UploadedFileBuilder builder() {
+        return new UploadedFileBuilder();
+    }
+
+    public static class UploadedFileBuilder {
+        private UUID id;
+        private String name;
+        private String path;
+        private Date created;
+
+        public UploadedFileBuilder id(UUID id) {
+            this.id = id;
+            return this;
+        }
+
+        public UploadedFileBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public UploadedFileBuilder path(String path) {
+            this.path = path;
+            return this;
+        }
+
+        public UploadedFileBuilder created(Date created) {
+            this.created = created;
+            return this;
+        }
+
+        public UploadedFile build() {
+            UploadedFile uploadedFile = new UploadedFile();
+            uploadedFile.id = this.id;
+            uploadedFile.name = this.name;
+            uploadedFile.path = this.path;
+            uploadedFile.created = this.created;
+            return uploadedFile;
+        }
+    }
 }

@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -22,8 +23,8 @@ public class UploadFileResource {
     @Path("/all")
     @Produces("application/json")
     @GET
-    public List<UploadedFile> getAllFiles() {
-        return uploadFileRepository.listAll();
+    public Response getAllFiles() {
+        return Response.ok(uploadFileRepository.listAll()).build();
     }
 
     @DELETE
@@ -35,7 +36,24 @@ public class UploadFileResource {
             uploadFileRepository.deleteById(id);
             return Response.ok().build();
         } catch (Exception e) {
-            throw new RuntimeException("Error deleting file", e);
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces("application/pdf")
+    public Response downloadFile(@PathParam("id") UUID id) {
+        UploadedFile file = uploadFileRepository.findById(id);
+        if (file == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        File f = new File(file.getPath());
+        System.out.println("Downloading file with id: " + id + " from database at: " + new Date());
+        if (!f.exists()) {
+            System.out.println("File not found");
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(f).header( "inline" ,"attachment; filename=" + file.getName()).build();
     }
 }
