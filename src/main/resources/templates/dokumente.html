@@ -37,7 +37,7 @@
     </div>
     <div class="name-input-container">
         <label for="docu-name">Name:</label>
-        <input type="text" id="docu-name" placeholder="Hier Dokumentenname eingeben">
+        <input type="text" id="docu-name" placeholder="Hier Dokumentenname eingeben" >
         <p>.pdf</p>
     </div>
     <div id="drop-zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
@@ -55,6 +55,7 @@
     window.onload = () => documentService.getDocumentsFromDBAndShowThemInUI();
     let uploadedFile = null;
     const dropZone = document.getElementById('drop-zone');
+    const inputText = document.getElementById('docu-name');
     {|
     function dropHandler(ev) {
         ev.preventDefault();
@@ -64,12 +65,14 @@
                     let file = ev.dataTransfer.items[i].getAsFile();
                     uploadedFile = file;
                     dropZone.innerHTML = `<p>${file.name}</p>`;
+                    inputText.value = file.name.split('.pdf')[0];
                 }
             }
         } else {
             for (let i = 0; i < ev.dataTransfer.files.length; i++) {
                 uploadedFile = ev.dataTransfer.files[i];
                 dropZone.innerHTML = `<p>${ev.dataTransfer.files[i].name}</p>`;
+                inputText.value = ev.dataTransfer.files[i].name.split('.pdf')[0];
             }
         }
     }
@@ -81,6 +84,7 @@
         input.addEventListener('change', () => {
             uploadedFile = input.files[0];
             dropZone.innerHTML = `<p>${input.files[0].name}</p>`;
+            inputText.value = input.files[0].name.split('.pdf')[0];
         });
     });
     |}
