@@ -20,10 +20,14 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
         
-    - name: Maven package
+    - name: Clear Maven Cache
       run: |
-          chmod +x ./mvnw
-          ./mvnw -Dmaven.test.skip package
+        rm -rf ~/.m2
+    
+    - name: Maven package with logging
+      run: |
+        chmod +x ./mvnw
+        ./mvnw -e -X -Dmaven.test.skip package
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
