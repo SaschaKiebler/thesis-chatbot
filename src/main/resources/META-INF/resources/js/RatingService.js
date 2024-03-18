@@ -7,8 +7,8 @@ class RatingService {
         this.messages = [];
     }
 
-    addRatingListener() {
-        this.messages = document.getElementsByClassName("ai-message");
+    addRatingListener(dualMessage) {
+        this.messages = document.getElementById(dualMessage.id).children;
         for (let message of this.messages) {
             if (message.id) {
                 message.addEventListener('click', (event) => {

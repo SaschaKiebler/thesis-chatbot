@@ -75,10 +75,11 @@ class ChatService {
                     document.getElementById("loading-message").remove();
                     const messageLeft = new Message(data1.answerId, data1.answer, "ai");
                     const messageRight = new Message(data2.answerId, data2.answer, "ai");
-                    this.addMessage(new DualMessage(messageLeft, messageRight));
+                    const dualMessage = new DualMessage(messageLeft, messageRight);
+                    this.addMessage(dualMessage);
                     this.addMessage(ratingHint);
                     ratingHint.setVisible(true);
-                    this.ratingService.addRatingListener();
+                    this.ratingService.addRatingListener(dualMessage);
                 } else {
                     this.messages.pop();
                     document.getElementById("loading-message").remove();
