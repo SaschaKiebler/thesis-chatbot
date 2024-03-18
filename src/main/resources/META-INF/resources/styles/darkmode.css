@@ -47,7 +47,7 @@
 
 .dark-mode .chat-container{
     background-color: var(--dark-bg);
-    border: none;
+    border: 1px hidden;
 }
 
 .dark-mode .conversation-container{
