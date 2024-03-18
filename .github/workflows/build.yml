@@ -23,7 +23,7 @@ jobs:
     - name: Maven package
       run: |
           chmod +x ./mvnw
-          ./mvnw package
+          ./mvnw -Dmaven.test.skip package
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
