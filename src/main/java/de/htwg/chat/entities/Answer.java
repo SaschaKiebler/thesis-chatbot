@@ -23,10 +23,10 @@ public class Answer {
 
     @Column(length = 3000)
     private String answer;
-    private String model;
-
     private Date date;
     boolean preferred;
+
+    String cause;
 
     @ManyToOne(targetEntity = Message.class)
     private Message message;
@@ -38,10 +38,10 @@ public class Answer {
     private Answer(AnswerBuilder answerBuilder){
         this.answer = answerBuilder.answer;
         this.date = answerBuilder.date;
-        this.model = answerBuilder.model;
         this.message = answerBuilder.message;
         this.id = answerBuilder.id;
         this.preferred = false;
+        this.cause = "";
     }
 
     public UUID getId() {
@@ -60,14 +60,6 @@ public class Answer {
         this.answer = answer;
     }
 
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -82,6 +74,14 @@ public class Answer {
 
     public void setPreferred(boolean preferred) {
         this.preferred = preferred;
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public void setCause(String cause) {
+        this.cause = cause;
     }
 
     public Message getMessage() {
@@ -99,7 +99,6 @@ public class Answer {
         private UUID id;
         private String answer;
         private Date date;
-        private String model;
         private Message message;
 
         public AnswerBuilder() {
@@ -118,11 +117,6 @@ public class Answer {
 
         public AnswerBuilder date(Date date){
             this.date = date;
-            return this;
-        }
-
-        public AnswerBuilder model(String model){
-            this.model = model;
             return this;
         }
 

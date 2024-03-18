@@ -90,6 +90,11 @@ public class LLMResource {
         } else {
             Conversation conversation = new Conversation();
             conversation.setRag((side.equals("left") && leftServiceRag) || (!side.equals("left") && rightServiceRag));
+            if (side.equals("left")) {
+                conversation.setServiceName(leftServiceName);
+            } else {
+                conversation.setServiceName(rightServiceName);
+            }
             conversationRepository.persist(conversation);
             return conversation;
         }

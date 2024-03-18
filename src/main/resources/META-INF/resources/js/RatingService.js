@@ -30,7 +30,7 @@ class RatingService {
             console.error('Error:', error);
         });
         this.setRatingDisabled();
-        document.getElementById("input").disabled = false;
+        this.addExtendedRating(message);
     }
 
     setRatingDisabled(){
@@ -40,6 +40,11 @@ class RatingService {
                 child.replaceWith(child.cloneNode(true));
             }
         }
+    }
+
+    addExtendedRating(message){
+        const ratingExtended = new RatingExtended(message.id);
+        document.getElementById(message.id).parentElement.after(ratingExtended.element);
     }
 
 }

@@ -26,4 +26,7 @@ public class AnswerRepository implements PanacheRepository<Answer> {
         return find("id", id).firstResult();
     }
 
+    public void setPreferredCause(UUID uuid, String value) {
+        update("cause = ?1 where id = ?2", value, uuid);
+    }
 }

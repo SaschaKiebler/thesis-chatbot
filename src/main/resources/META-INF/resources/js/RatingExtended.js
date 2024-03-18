@@ -4,17 +4,21 @@ class RatingExtended{
         this.element = document.createElement('div');
         this.element.className = `rating-extended`;
         this.element.innerHTML = `
-                                    <div class="radio-rating">
-                                        <p>Anhand welches Kriteriums bevorzugst du diese Antwort?</p>
-                                        <label for="Inhaltlich">Inhaltlich</label>
-                                        <input type="radio" name="Inhaltlich" id="inhaltlich" onclick="this.sendRating('inhaltlich')">
-                                        <label for="Sprachlich">Sprachlich</label>
-                                        <input type="radio" name="Sprachlich" id="sprachlich" onclick="this.sendRating('sprachlich')">
-                                        <label for="Sonstiges">Sonstiges</label>
-                                        <input type="radio" name="Sonstiges" id="sonstiges" onclick="this.sendRating('sonstiges')">
-                                    </div>
-                                `;
-        
+            <div class="radio-rating">
+                <p>Anhand welches Kriteriums bevorzugst du diese Antwort?</p>
+                <label for="inhaltlich">Inhaltlich</label>
+                <input type="radio" name="rating" id="inhaltlich">
+                <label for="sprachlich">Sprachlich</label>
+                <input type="radio" name="rating" id="sprachlich">
+                <label for="sonstiges">Sonstiges</label>
+                <input type="radio" name="rating" id="sonstiges">
+            </div>
+        `;
+
+        // Adding event listeners
+        this.element.querySelectorAll('input[type=radio]').forEach(input => {
+            input.addEventListener('click', () => this.sendRating(input.id));
+        });
     }
 
     sendRating(rating) {
@@ -24,5 +28,8 @@ class RatingExtended{
         }).catch(error => {
             console.error('Error:', error);
         });
+
+        this.element.remove();
+        document.getElementById("input").disabled = false;
     }
 }

@@ -38,7 +38,6 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     @Inject
     SystemPromptRepository systemPromptRepository;
 
-    private Modeltype modelType;
 
 
     @Override
@@ -82,12 +81,8 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
     }
 
     private void persistUserMessage(UUID memoryIdUUID, ChatMessage message) {
-        if (modelType == null) {
-         setModelType(Modeltype.COMMERCIAL);
-        }
         Message msg = Message.builder()
                 .message(message.text())
-                .model(modelType.toString())
                 .conversation(conversationRepository.findById(memoryIdUUID))
                 .build();
         messageRepository.persist(msg);
@@ -95,13 +90,9 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
 
 
     private void persistAiMessage(UUID memoryIdUUID, ChatMessage message) {
-        if(modelType == null) {
-            setModelType(Modeltype.COMMERCIAL);
-        }
         Message lastMessage = getLastMessage(memoryIdUUID);
         Answer answer = Answer.builder()
                 .answer(message.text())
-                .model(modelType.toString())
                 .message(lastMessage)
                 .build();
         answerRepository.persist(answer);
@@ -153,7 +144,4 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         // stays empty because there is no use-case doing deletes on the db from here
     }
 
-    public void setModelType(Modeltype modelType) {
-        this.modelType = modelType;
-    }
 }

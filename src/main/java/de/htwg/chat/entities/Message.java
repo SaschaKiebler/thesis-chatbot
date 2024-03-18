@@ -23,7 +23,6 @@ public class Message {
     @Column(length = 3000)
     private String message;
     private Date date;
-    private String model;
 
     @ManyToOne(targetEntity = Conversation.class)
     private Conversation conversation;
@@ -34,7 +33,6 @@ public class Message {
     private Message(MessageBuilder messageBuilder){
         this.message = messageBuilder.message;
         this.date = messageBuilder.date;
-        this.model = messageBuilder.model;
         this.conversation = messageBuilder.conversation;
         this.id = messageBuilder.id;
     }
@@ -63,14 +61,6 @@ public class Message {
         this.date = date;
     }
 
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public Conversation getConversation() {
         return conversation;
     }
@@ -88,7 +78,6 @@ public class Message {
 
         private UUID id;
         private Date date;
-        private String model;
         private Conversation conversation;
 
         public MessageBuilder() {
@@ -108,11 +97,6 @@ public class Message {
 
         public MessageBuilder date(Date date){
             this.date = date;
-            return this;
-        }
-
-        public MessageBuilder model(String model){
-            this.model = model;
             return this;
         }
 

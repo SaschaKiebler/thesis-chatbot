@@ -29,4 +29,18 @@ public class AnswerResource {
             System.out.println("Something went wrong with rating for answer with id: " + id);
         }
     }
+
+    @PUT
+    @Path("/preffered/cause")
+    @Transactional
+    public void putCause(@QueryParam("value") String value, @QueryParam("id") String id) {
+        try {
+            answerRepository.setPreferredCause(UUID.fromString(id), value);
+            System.out.println("Set preferred cause to "+ value +" on answer with id: " + id);
+        }
+        catch (Exception e) {
+            System.out.println("Something went wrong with setting preferred cause for answer with id: " + id);
+        }
+
+    }
 }

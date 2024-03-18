@@ -15,6 +15,7 @@ public class Conversation {
     private UUID id;
     private Date date;
     private boolean rag;
+    private String serviceName;
 
     public Conversation() {
         this.date = new Date();
@@ -39,6 +40,14 @@ public class Conversation {
 
     public void setRag(boolean rag) {
         this.rag = rag;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
 }
