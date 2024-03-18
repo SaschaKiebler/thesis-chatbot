@@ -21,12 +21,12 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     - name: Maven package with logging
-      with:
-        distribution: 'corretto'
-        java-version: '17'
       run: |
         chmod +x ./mvnw
         ./mvnw -Dmaven.test.skip package
+      with:
+        distribution: 'corretto'
+        java-version: '17'
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
