@@ -1,5 +1,6 @@
 package de.htwg.rag.retriever;
 
+import dev.langchain4j.model.cohere.CohereScoringModel;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.scoring.ScoringModel;
@@ -60,11 +61,19 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
                 .promptTemplate(PromptTemplate.from("{{userMessage}}\n\nAnswer using the following information and add any helpful links to the end of your answer:\n{{contents}}"))
                 .build();
 
+        // ScoringModel to rank the retrieved documents (not in use bc of a bug in langchain4j)
+        ScoringModel scoringModel = CohereScoringModel.withApiKey(Dotenv.load().get("COHERE_API_KEY"));
+        ContentAggregator contentAggregator = ReRankingContentAggregator.builder()
+                .scoringModel(scoringModel)
+                .minScore(0.8)
+                .build();
+
+
         // The normal Retriever to get the Documents from the store.
         EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(model)
                 .embeddingStore(store)
-                .maxResults(5)
+                .maxResults(7)
                 .minScore(0.75)
                 .build();
 
