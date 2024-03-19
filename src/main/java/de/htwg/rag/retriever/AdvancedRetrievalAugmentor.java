@@ -50,7 +50,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
 
         // ContentInjector to give metadata with the retrieved documents
         ContentInjector contentInjector = DefaultContentInjector.builder()
-                .metadataKeysToInclude(asList("file_name", "index"))
+                .metadataKeysToInclude(asList("link"))
                 .build();
 
         // The normal Retriever to get the Documents from the store.

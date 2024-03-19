@@ -7,6 +7,7 @@ import de.htwg.rag.ingestor.UploadedFile;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser;
+import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -45,6 +46,7 @@ public class IngestDocumentResource {
     @Path("/pdf")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Transactional
+    @TransactionConfiguration(timeout = 300)
     public Response uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
         if (isFileEmpty(pdfFile)) {
             System.err.println("Uploaded File is empty");
@@ -62,7 +64,7 @@ public class IngestDocumentResource {
 
             // load the document with the documentParser and add the fileKey to the metadata
             Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
-            document.metadata().add("fileKey", uploadedFile.getId().toString());
+            document.metadata().add("link","/api/files/" + uploadedFile.getId().toString());
 
             // Summarize the text and ingest it
             String sumtext = summarizer.summarize(document.text());
