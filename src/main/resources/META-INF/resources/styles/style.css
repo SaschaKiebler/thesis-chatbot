@@ -267,17 +267,24 @@ code {
   max-width: 95%;
 }
 
+.radio-rating{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+}
+
 
 
 @media (max-width: 850px){
   .chat-container{
-    max-width: 99vw;
+    max-width: 100vw;
   }
 
   body{
-    overflow: auto;
-    margin-bottom: 50px;
-    height: calc(100vh - 50px);
+    height: 100%;
+    position: fixed;
   }
 
 }

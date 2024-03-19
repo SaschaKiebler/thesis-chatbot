@@ -6,12 +6,18 @@ class RatingExtended{
         this.element.innerHTML = `
             <div class="radio-rating">
                 <p>Anhand welches Kriteriums bevorzugst du diese Antwort?</p>
+                <div>
                 <label for="inhaltlich">Inhaltlich</label>
                 <input type="radio" name="rating" id="inhaltlich">
+                </div>
+                <div>
                 <label for="sprachlich">Sprachlich</label>
                 <input type="radio" name="rating" id="sprachlich">
+                </div>
+                <div>
                 <label for="sonstiges">Sonstiges</label>
                 <input type="radio" name="rating" id="sonstiges">
+                </div>
             </div>
         `;
 
@@ -31,5 +37,6 @@ class RatingExtended{
 
         this.element.remove();
         document.getElementById("input").disabled = false;
+        document.getElementById("input").focus();
     }
 }
