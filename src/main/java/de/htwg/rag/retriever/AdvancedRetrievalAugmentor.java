@@ -37,7 +37,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
         // all it does is compress the input query's to one so that the retrieval is more accurate
         // and logic from the chat-history gets taken into account
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
-                .apiKey(Dotenv.load().get("TOGETHERAI_API_KEY"))
+                .apiKey(System.getenv("TOGETHERAI_API_KEY"))
                 .baseUrl("https://api.together.xyz")
                 .modelName("openchat/openchat-3.5-1210")
                 .logRequests(true)
@@ -62,7 +62,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
                 .build();
 
         // ScoringModel to rank the retrieved documents (not in use bc of a bug in langchain4j)
-        ScoringModel scoringModel = CohereScoringModel.withApiKey(Dotenv.load().get("COHERE_API_KEY"));
+        ScoringModel scoringModel = CohereScoringModel.withApiKey(System.getenv("COHERE_API_KEY"));
         ContentAggregator contentAggregator = ReRankingContentAggregator.builder()
                 .scoringModel(scoringModel)
                 .minScore(0.8)
