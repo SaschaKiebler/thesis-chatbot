@@ -19,8 +19,6 @@ import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import jakarta.inject.Singleton;
 
 
-import dev.langchain4j.model.cohere.CohereScoringModel;
-
 import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
