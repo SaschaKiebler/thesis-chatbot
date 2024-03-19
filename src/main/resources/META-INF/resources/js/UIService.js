@@ -22,10 +22,10 @@ class UIService {
     // Sie ändert auch das Bild des Dark-Mode Buttons
     toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
-        // change image in darkmode button
         document.getElementById('darkmode').firstChild.src = document.body.classList.contains('dark-mode') ? 'pictures/lightmode.svg' : 'pictures/darkmode.svg';
     }
 
+    // Aktiviert den Pop-Up Text, wenn das Input-Feld deaktiviert ist
     enablePopUp() {
         document.addEventListener("DOMContentLoaded", function() {
             const input = document.getElementById("input");
@@ -39,7 +39,7 @@ class UIService {
                 }
             }
 
-            // Event listener for mouseenter and mouseleave
+            // Event listener für mouseenter und mouseleave um das Pop-Up zu aktivieren/deaktivieren
             input.addEventListener("mouseenter", togglePopup);
             input.addEventListener("mouseleave", function() {
                 popup.classList.remove("show");
@@ -48,6 +48,7 @@ class UIService {
 
     }
 
+    // Speichert den Dark-Mode in den Local Storage auf Client
     saveDarkMode() {
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('dark-mode', 'true');
@@ -56,6 +57,7 @@ class UIService {
         }
     }
 
+    // Lädt den Dark-Mode aus dem Local Storage beim Laden der Seite
     loadDarkMode() {
         if (localStorage.getItem('dark-mode') === 'true') {
             document.body.classList.add('dark-mode');

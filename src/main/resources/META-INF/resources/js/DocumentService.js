@@ -1,5 +1,6 @@
 class DocumentService {
 
+    // Methode zum Hinzufügen eines Dokuments zur Liste in der UI
     createListItem(file) {
         const li = document.createElement('li');
         li.className = 'doku-liste-eintrag';
@@ -26,12 +27,14 @@ class DocumentService {
         return li;
     }
 
+    // Methode zum Formatieren des Datums
     formatDate(dateString) {
         const date = new Date(dateString);
         date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
         return date.toJSON().slice(0,10);
     }
 
+    // Methode zum Löschen eines Dokuments aus der Datenbank und der UI mit der ID
     async deleteFile(fileId) {
         const response = await fetch('/api/files/' + fileId, {
             method: 'DELETE'
@@ -40,6 +43,7 @@ class DocumentService {
         document.getElementById(fileId).remove();
     }
 
+    // Methode zum Abrufen der Dokumente aus der Datenbank und Anzeigen in der UI
     async getDocumentsFromDBAndShowThemInUI () {
         const response = await fetch('/api/files/all', {
             method: 'GET',
@@ -55,6 +59,7 @@ class DocumentService {
         });
     }
 
+    // Methode zum Hinzufügen eines Dokuments, Ladesymbol fehlt noch da upload länger gehen kann
     async addDocumentToDB (docName, file) {
         const formData = new FormData();
         formData.append('file', file);

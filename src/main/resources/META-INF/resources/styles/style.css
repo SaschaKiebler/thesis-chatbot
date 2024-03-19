@@ -267,12 +267,57 @@ code {
   max-width: 95%;
 }
 
+.rating-extended{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+}
+
 .radio-rating{
+  background-color: rgba(204, 204, 204, 0.82);
+    padding: 10px;
+    border-radius: 5px;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 5px;
+}
+
+.radio-button{
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid currentColor;
+  border-radius: 50%;
+}
+
+#suggestions{
+  display: grid;
+    grid-template-columns: calc(50% - 2.5px) calc(50% - 2.5px);
+    gap: 5px;
+    margin-top: 5px;
+    padding: 5px;
+  margin-inline: 5px;
+}
+
+.suggestion{
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: #cccccc 0.5px solid;
+}
+
+.suggestion:hover{
+  background-color: rgb(241, 239, 239);
 }
 
 
@@ -292,6 +337,10 @@ code {
 @media (max-width: 400px){
   .duo-message .ai-message .icon{
     display: none;
+  }
+
+  #suggestions{
+    word-break: break-all;
   }
 }
 

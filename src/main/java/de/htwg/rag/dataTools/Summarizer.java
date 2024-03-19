@@ -13,6 +13,9 @@ import java.util.List;
 @ApplicationScoped
 public class Summarizer {
 
+    /*
+    *  Zerkleinert den Text in Blöcke von jeweils 30 Zeilen und fasst diese zusammen. Gibt den zusammengefassten Text zurück.
+    */
     public String summarize(String text) {
         if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException("Text is empty or null");

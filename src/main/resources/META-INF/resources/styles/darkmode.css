@@ -89,3 +89,13 @@
     width: 20px;
     height: 20px;
 }
+
+.dark-mode .radio-rating{
+    color: #fff;
+    background-color: var(--black);
+}
+
+.dark-mode .suggestion{
+    background-color: var(--dark-bg);
+    color: #fff;
+}

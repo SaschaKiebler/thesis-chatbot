@@ -47,6 +47,12 @@
         </div>
         <div id="anchor"></div>
     </div>
+    <div id="suggestions">
+        <div class="suggestion" id="suggestion1">Was ist Gesundheitsinformatik?</div>
+        <div class="suggestion" id="suggestion2">Was ist Telemedizin?</div>
+        <div class="suggestion" id="suggestion3">Wie funktioniert das deutsche Gesundheitswesen?</div>
+        <div class="suggestion" id="suggestion4">Was ist die Krankenhausreform 2023?</div>
+    </div>
     <div class="input-container">
         <label for="input"></label>
         <input type="text" id="input" class="input" placeholder="Type a message...">
@@ -74,6 +80,7 @@
         uiService.loadDarkMode();
     };
 
+    // Verhindert XSS
     function sanitizeString(str) {
         return str.replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
@@ -83,6 +90,7 @@
             .replace(/`/g, "&#96;");
     }
 
+    // Eventlistener für das Absenden einer Nachricht bei Click auf Button
     send.addEventListener('click', function() {
         if (input.value === ''){
 
@@ -94,6 +102,7 @@
         }
     });
 
+    // Eventlistener für das Absenden einer Nachricht bei Enter
     input.addEventListener('keyup', function(event) {
         if(input.value !== ''){
         if (event.key === 'Enter') {
@@ -104,18 +113,30 @@
         }}
     });
 
+    // Eventlistener für das Löschen des Chats
     clear.addEventListener('click', function() {
         chatService.clearMessages();
+        document.getElementById('suggestions').style.display = 'grid';
     });
 
+    // Eventlistener für das Wechseln des Themes
     document.getElementById('darkmode').addEventListener('click', function() {
         uiService.toggleDarkMode();
-        //save darkmode state
         uiService.saveDarkMode();
     });
 
     uiService.enablePopUp();
 
+    // Eventlistener für die Vorschläge
+    const suggestions = document.getElementsByClassName('suggestion');
+    for (const suggestion of suggestions) {
+        suggestion.addEventListener('click', function() {
+            input.disabled = true;
+            chatService.getDualAnswer(suggestion.textContent,ratingHint);
+            document.getElementById('input').value = '';
+            document.getElementById('suggestions').style.display = 'none';
+        });
+    }
 
 
 

@@ -8,7 +8,7 @@ class ChatService {
         this.ratingService = new RatingService();
     }
 
-    // Diese Methode fügt die Nachricht der Chatliste hinzu und ruft die Methode aMessagesToUI auf
+    // Diese Methode fügt die Nachricht der Chatliste hinzu und ruft die Methode addMessagesToUI auf
     addMessage(message) {
         this.messages.push(message);
         this.addMessagesToUI()
@@ -27,11 +27,11 @@ class ChatService {
                     body: JSON.stringify({ message: requestText }),
                 });
 
-            const text = await response.text(); // Get the response as text
+            const text = await response.text();
             console.log('Raw response:', text);
 
             try {
-                const data = JSON.parse(text); // Try parsing as JSON
+                const data = JSON.parse(text);
                 if (data.answer){
                     this.addMessage(new Message(data.answerId, data.answer, "ai"));
                 }

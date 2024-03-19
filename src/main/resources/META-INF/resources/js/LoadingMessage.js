@@ -1,3 +1,6 @@
+/*
+* Klasse um Antwortgenerierung dynamischer zu machen
+* */
 class LoadingMessage extends Message{
     constructor() {
         super("loading-message", "", "ai");

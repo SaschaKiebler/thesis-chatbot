@@ -1,3 +1,6 @@
+/*
+    * Diese Klasse erweitert das Rating-System um die Möglichkeit, die bevorzugte Bewertung zu spezifizieren.
+*/
 class RatingExtended{
     constructor(id) {
         this.id = id;
@@ -8,20 +11,19 @@ class RatingExtended{
                 <p>Anhand welches Kriteriums bevorzugst du diese Antwort?</p>
                 <div>
                 <label for="inhaltlich">Inhaltlich</label>
-                <input type="radio" name="rating" id="inhaltlich">
+                <input class="radio-button" type="radio" name="rating" id="inhaltlich">
                 </div>
                 <div>
                 <label for="sprachlich">Sprachlich</label>
-                <input type="radio" name="rating" id="sprachlich">
+                <input class="radio-button" type="radio" name="rating" id="sprachlich">
                 </div>
                 <div>
                 <label for="sonstiges">Sonstiges</label>
-                <input type="radio" name="rating" id="sonstiges">
+                <input class="radio-button" type="radio" name="rating" id="sonstiges">
                 </div>
             </div>
         `;
 
-        // Adding event listeners
         this.element.querySelectorAll('input[type=radio]').forEach(input => {
             input.addEventListener('click', () => this.sendRating(input.id));
         });
@@ -35,6 +37,7 @@ class RatingExtended{
             console.error('Error:', error);
         });
 
+        // Löscht die Rating-UI, aktiviert das Input-Feld und setzt den Cursor auf das Input-Feld
         this.element.remove();
         document.getElementById("input").disabled = false;
         document.getElementById("input").focus();
