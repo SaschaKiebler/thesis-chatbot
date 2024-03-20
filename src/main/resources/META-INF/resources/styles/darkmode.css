@@ -3,7 +3,7 @@
     --black: #1c1c1c;
     --dark-color: #fff;
     --dark-border-shadow-hover-active: rgba(0, 81, 255, 0.61);
-    --dark-second: rgba(48, 140, 190, 0.62);
+    --dark-second: #4A90E2;
     --dark-button-color-input-container-button-color: #3f3f3f;
     --dark-code: #282828;
 }
@@ -61,7 +61,7 @@
 
 .dark-mode .input-container{
     background-color: var(--dark-bg);
-
+    border-color: var(--dark-bg);
 }
 
 .dark-mode .input-container button{

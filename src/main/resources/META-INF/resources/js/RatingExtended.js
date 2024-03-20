@@ -18,6 +18,10 @@ class RatingExtended{
                 <input class="radio-button" type="radio" name="rating" id="sprachlich">
                 </div>
                 <div>
+                <label for="laenge">Antwortlänge</label>
+                <input class="radio-button" type="radio" name="rating" id="laenge">
+                </div>
+                <div>
                 <label for="sonstiges">Sonstiges</label>
                 <input class="radio-button" type="radio" name="rating" id="sonstiges">
                 </div>

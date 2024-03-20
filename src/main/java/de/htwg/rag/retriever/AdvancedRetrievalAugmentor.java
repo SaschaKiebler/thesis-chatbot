@@ -58,15 +58,15 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
         // ContentInjector to give metadata with the retrieved documents
         ContentInjector contentInjector = DefaultContentInjector.builder()
                 .metadataKeysToInclude(asList("link"))
-                .promptTemplate(PromptTemplate.from("{{userMessage}}\n\nAnswer using the following information and add any helpful links to the end of your answer:\n{{contents}}"))
+                .promptTemplate(PromptTemplate.from("{{userMessage}}\n\nAnswer using the following information and add a useful link to the information to the end of your answer:\n{{contents}}"))
                 .build();
 
         // ScoringModel to rank the retrieved documents (not in use bc of a bug in langchain4j)
-        ScoringModel scoringModel = CohereScoringModel.withApiKey(System.getenv("COHERE_API_KEY"));
-        ContentAggregator contentAggregator = ReRankingContentAggregator.builder()
-                .scoringModel(scoringModel)
-                .minScore(0.8)
-                .build();
+//        ScoringModel scoringModel = CohereScoringModel.withApiKey(System.getenv("COHERE_API_KEY"));
+//        ContentAggregator contentAggregator = ReRankingContentAggregator.builder()
+//                .scoringModel(scoringModel)
+//                .minScore(0.8)
+//                .build();
 
 
         // The normal Retriever to get the Documents from the store.

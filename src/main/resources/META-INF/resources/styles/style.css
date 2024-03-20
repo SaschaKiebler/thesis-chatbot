@@ -1,7 +1,8 @@
 :root{
-  --highlight-color: rgba(48, 140, 190, 0.62);
+  --highlight-color: #4A90E2;
   --load-color: rgb(0, 123, 255);
   --light-bg: #f2f2f2;
+  --white-bg: #fff;
 }
 
 body{
@@ -34,7 +35,7 @@ body{
   height: 100%;
   width: 100%;
     max-width: 60vw;
-  background-color: var(--light-bg);
+  background-color: var(--white-bg);
   border: 1px solid #e6e6e6;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -76,7 +77,7 @@ body{
   margin-left: 10px;
   border: solid 1px #e6e6e6;
   border-radius: 5px;
-  background-color: rgba(0, 81, 255, 0.61);
+  background-color: var(--highlight-color);
   color: #3f3f3f;
   cursor: pointer;
   outline: none;
@@ -96,7 +97,6 @@ body{
   border: none;
   border-radius: 90px;
   background-color: var(--highlight-color);
-  color: #fff;
   cursor: pointer;
   outline: none;
 }
@@ -197,7 +197,7 @@ body{
 }
 
 .rating-disabled .rated{
-  border: solid 3px rgba(0, 81, 255, 0.61);
+  border: solid 3px var(--highlight-color);
 }
 
 .tool-text-img-box{

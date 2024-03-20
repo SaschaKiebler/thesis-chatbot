@@ -1,6 +1,4 @@
 
-version: "3.8"
-
 services:
   quarkus-service:
     image: "saschakiebler/thesis-chatbot"
@@ -11,6 +9,7 @@ services:
       - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://quarkus-db:5432/thesis-db
       - OPENAI_APIKEY=${OPENAI_APIKEY}
       - TOGETHERAI_API_KEY=${TOGETHERAI_API_KEY}
+      - COHERE_API_KEY=${COHERE_API_KEY}
     volumes:
       - pdf_storage:/resources/pdfs
     ports:
@@ -19,10 +18,15 @@ services:
       - quarkus-db
     networks:
       - quarkus
+      - nginx
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
   quarkus-db:
     image: "pgvector/pgvector:pg14"
     container_name: "quarkus-db"
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -33,9 +37,14 @@ services:
       - "5431:5432"
     networks:
       - quarkus
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
 
 networks:
   quarkus:
+  nginx:
+    name: nginxproxymanager_default
+    external: true
 
 
 volumes:
