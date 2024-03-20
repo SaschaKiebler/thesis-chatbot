@@ -96,6 +96,7 @@
 
         } else{
             input.disabled = true;
+            document.getElementById('suggestions').style.display = 'none';
             let inputText = sanitizeString(input.value);
             chatService.getDualAnswer(inputText,ratingHint);
             input.value = '';
@@ -107,6 +108,7 @@
         if(input.value !== ''){
         if (event.key === 'Enter') {
             input.disabled = true;
+            document.getElementById('suggestions').style.display = 'none';
             let inputText = sanitizeString(input.value);
             chatService.getDualAnswer(inputText,ratingHint);
             input.value = '';
