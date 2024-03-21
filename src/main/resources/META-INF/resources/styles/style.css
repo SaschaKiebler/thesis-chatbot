@@ -81,6 +81,7 @@ body{
   color: #3f3f3f;
   cursor: pointer;
   outline: none;
+    transition: all 0.3s ease;
 }
 
 .input-container button img{
@@ -94,11 +95,16 @@ body{
 
 .tool-container button{
   padding: 7px;
-  border: none;
   border-radius: 90px;
   background-color: var(--highlight-color);
   cursor: pointer;
   outline: none;
+    transition: all 0.3s ease;
+  border: var(--highlight-color) 2px solid;
+}
+
+.tool-container button:hover{
+  border: #002244 2px solid;
 }
 
 #conversation{
@@ -314,6 +320,7 @@ code {
   border-radius: 10px;
   cursor: pointer;
   border: #cccccc 0.5px solid;
+    transition: all 0.3s ease;
 }
 
 .suggestion:hover{

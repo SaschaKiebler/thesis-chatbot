@@ -98,9 +98,19 @@
 .dark-mode .suggestion{
     background-color: var(--dark-bg);
     color: #fff;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .suggestion:hover{
+    background-color: #555555;
+    color: #fff;
 }
 
 a{
-    color: #376ab9;
+    color: var(--dark-second);
 
+}
+
+.dark-mode .tool-container button:hover{
+    border: #7eb8f5 2px solid;
 }
