@@ -68,6 +68,10 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
 //                .minScore(0.8)
 //                .build();
 
+        // In den Retriever kann man auch einen filter einbauen der nach metadaten filtert also z.B.
+        // wenn bei Dokument als Metadaten steht Fach xy, könnte man in der Oberfläche ein Auswahlmenü
+        // einbauen.
+        // siehe https://github.com/langchain4j/langchain4j-examples/blob/main/rag-examples/src/main/java/_06_Metadata_Filtering.java
 
         // The normal Retriever to get the Documents from the store.
         EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()

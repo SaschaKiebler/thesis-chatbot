@@ -5,7 +5,10 @@ import de.htwg.rag.ingestor.DocumentIngestor;
 import de.htwg.rag.ingestor.UploadFileRepository;
 import de.htwg.rag.ingestor.UploadedFile;
 import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.DocumentLoader;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
+import dev.langchain4j.data.document.loader.UrlDocumentLoader;
+import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.parser.apache.pdfbox.ApachePdfBoxDocumentParser;
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -109,5 +112,21 @@ public class IngestDocumentResource {
 
     private boolean isFileEmpty(PdfFile file) {
         return file.file == null || file.file.length == 0;
+    }
+
+    @POST
+    @Path("/url")
+    public Response ingestUrl(@FormParam("url") String url) {
+        try {
+            Document document = UrlDocumentLoader.load(url, new TextDocumentParser());
+            // remove the html tags from the text
+            document = Document.document(document.text().replaceAll("<[^>]*>", ""), document.metadata());
+            documentIngestor.ingest(List.of(document));
+            System.out.println("Ingested url: " + url + " at " + new Date());
+            return Response.ok().build();
+        } catch (Exception e) {
+            System.err.println("Error ingesting url: " + e);
+            return Response.status(Response.Status.BAD_REQUEST).entity("Error ingesting url").build();
+        }
     }
 }
