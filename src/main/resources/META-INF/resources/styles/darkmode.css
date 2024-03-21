@@ -18,7 +18,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.42);
 }
 
-.dark-mode .input-container input, .dark-mode .tool-container button, .dark-mode .chat-container, .dark-mode .conversation-container, .dark-mode .message, .dark-mode .input-container, .dark-mode .input-container button{
+.dark-mode .input-container .input, .dark-mode .tool-container button, .dark-mode .chat-container, .dark-mode .conversation-container, .dark-mode .message, .dark-mode .input-container, .dark-mode .input-container button{
     background-color: var(--dark-bg);
     color: var(--dark-color);
     transition: all 0.3s ease;
@@ -34,7 +34,7 @@
     color: var(--dark-button-color-input-container-button-color);
 }
 
-.dark-mode .input-container input{
+.dark-mode .input-container .input{
     background-color: var(--dark-bg);
     color: #fff;
 }

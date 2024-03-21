@@ -48,14 +48,14 @@
         <div id="anchor"></div>
     </div>
     <div id="suggestions">
-        <div class="suggestion" id="suggestion1">Was ist Gesundheitsinformatik?</div>
+        <div class="suggestion" id="suggestion1">Erkläre kurz was Gesundheitsinformatik ist, welche Vorteile ein Studium in dem Bereich hat und wo man es studieren kann.</div>
         <div class="suggestion" id="suggestion2">Welche Aufgaben haben Zentriolen und welche Aufgaben haben die Mikrotubuli im Rahmen der Mitose und Meiose der menschlichen Zelle?</div>
         <div class="suggestion" id="suggestion3">Wie funktioniert das deutsche Gesundheitswesen?</div>
         <div class="suggestion" id="suggestion4">Was ist die Krankenhausreform 2023?</div>
     </div>
     <div class="input-container">
         <label for="input"></label>
-        <input type="text" id="input" class="input" placeholder="Type a message...">
+        <textarea rows="1" id="input" class="input" placeholder="Frage mich etwas..."></textarea>
         <div class="popup" id="popup">Bitte gebe eine Bewertung ab!</div>
         <button id="send" class="send"><img src="pictures/send.svg" alt="absenden"></button>
     </div>
@@ -100,18 +100,24 @@
             let inputText = sanitizeString(input.value);
             chatService.getDualAnswer(inputText,ratingHint);
             input.value = '';
+            document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
         }
     });
 
     // Eventlistener für das Absenden einer Nachricht bei Enter
     input.addEventListener('keyup', function(event) {
         if(input.value !== ''){
-        if (event.key === 'Enter') {
+            if(event.key === 'Enter' && event.shiftKey){
+                input.value += '\n';
+            }
+        else if (event.key === 'Enter' && !event.shiftKey) {
             input.disabled = true;
             document.getElementById('suggestions').style.display = 'none';
             let inputText = sanitizeString(input.value);
             chatService.getDualAnswer(inputText,ratingHint);
             input.value = '';
+            input.style.height = 'auto';
+            document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
         }}
     });
 
@@ -140,6 +146,12 @@
         });
     }
 
+    // Eventlistener für das automatische Anpassen des Inputfeldes
+    input.addEventListener('input', function() {
+        input.style.height = 'auto';
+        input.style.height = (input.scrollHeight) + 'px';
+        input.style.maxHeight = '300px';
+    });
 
 
 </script>

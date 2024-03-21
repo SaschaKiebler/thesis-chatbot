@@ -45,6 +45,7 @@ class RatingService {
     addExtendedRating(message){
         const ratingExtended = new RatingExtended(message.id);
         document.getElementById(message.id).parentElement.after(ratingExtended.element);
+        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
     }
 
 }

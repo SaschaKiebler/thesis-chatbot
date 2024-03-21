@@ -63,13 +63,15 @@ body{
   border-top: 1px solid #e6e6e6;
 }
 
-.input-container input{
+.input-container .input{
   font-size: 16px;
+  font-family: Arial, sans-serif;
   flex: 1;
   padding: 10px;
   border: 1px solid #e6e6e6;
   border-radius: 5px;
   outline: none;
+  resize: none;
 }
 
 .input-container button{
