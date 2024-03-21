@@ -178,6 +178,7 @@ body{
 
 .message-content .text{
   margin-left: 5px;
+  line-height: 1.75rem;
 }
 
 .error-message{
