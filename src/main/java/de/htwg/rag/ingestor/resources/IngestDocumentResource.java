@@ -1,6 +1,7 @@
 package de.htwg.rag.ingestor.resources;
 
 import de.htwg.rag.dataTools.Summarizer;
+import de.htwg.rag.dataTools.WebsiteTextExtractor;
 import de.htwg.rag.ingestor.DocumentIngestor;
 import de.htwg.rag.ingestor.UploadFileRepository;
 import de.htwg.rag.ingestor.UploadedFile;
@@ -42,6 +43,9 @@ public class IngestDocumentResource {
 
     @Inject
     Summarizer summarizer;
+
+    @Inject
+    WebsiteTextExtractor websiteTextExtractor;
 
     private static final String UPLOAD_DIRECTORY = "resources/pdfs";
 
@@ -116,12 +120,19 @@ public class IngestDocumentResource {
 
     @POST
     @Path("/url")
-    public Response ingestUrl(@FormParam("url") String url) {
+    @Transactional
+    @TransactionConfiguration(timeout = 3000)
+    public Response ingestUrl(@FormParam("url") String url, @FormParam("name") String name){
         try {
             Document document = UrlDocumentLoader.load(url, new TextDocumentParser());
             // remove the html tags from the text
             document = Document.document(document.text().replaceAll("<[^>]*>", ""), document.metadata());
+            // clean the text from special characters and js
+            String text = websiteTextExtractor.extractText(document.text());
+            document = Document.document(text, document.metadata());
             documentIngestor.ingest(List.of(document));
+            UploadedFile uploadedFile = new UploadedFile(name, url);
+            uploadFileRepository.persist(uploadedFile);
             System.out.println("Ingested url: " + url + " at " + new Date());
             return Response.ok().build();
         } catch (Exception e) {
