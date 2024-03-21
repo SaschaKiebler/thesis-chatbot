@@ -21,7 +21,7 @@ public class Answer {
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
-    @Column(length = 3000)
+    @Column(length = 30000)
     private String answer;
     private Date date;
     boolean preferred;

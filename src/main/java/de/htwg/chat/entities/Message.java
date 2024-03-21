@@ -20,7 +20,7 @@ public class Message {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
-    @Column(length = 3000)
+    @Column(length = 30000)
     private String message;
     private Date date;
 

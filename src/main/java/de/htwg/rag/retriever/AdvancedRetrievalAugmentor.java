@@ -58,7 +58,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
         // ContentInjector to give metadata with the retrieved documents
         ContentInjector contentInjector = DefaultContentInjector.builder()
                 .metadataKeysToInclude(asList("link"))
-                .promptTemplate(PromptTemplate.from("{{userMessage}}\n\nAnswer using the following information and add a useful link to the information to the end of your answer:\n{{contents}}"))
+                .promptTemplate(PromptTemplate.from("{{userMessage}}\n\nAntworte unter Verwendung der folgenden Informationen und füge unter deiner Antwort einen nützlichen Link zu den Informationen hinzu:\n{{contents}}"))
                 .build();
 
         // ScoringModel to rank the retrieved documents (not in use bc of a bug in langchain4j)

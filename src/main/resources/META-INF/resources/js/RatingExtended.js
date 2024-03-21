@@ -7,8 +7,9 @@ class RatingExtended{
         this.element = document.createElement('div');
         this.element.className = `rating-extended`;
         this.element.innerHTML = `
-            <div class="radio-rating">
+            <div class="radio-rating-container">
                 <p>Anhand welches Kriteriums bevorzugst du diese Antwort?</p>
+                <div class="radio-rating">
                 <div>
                 <label for="inhaltlich">Inhaltlich</label>
                 <input class="radio-button" type="radio" name="rating" id="inhaltlich">
@@ -24,6 +25,7 @@ class RatingExtended{
                 <div>
                 <label for="sonstiges">Sonstiges</label>
                 <input class="radio-button" type="radio" name="rating" id="sonstiges">
+                </div>
                 </div>
             </div>
         `;

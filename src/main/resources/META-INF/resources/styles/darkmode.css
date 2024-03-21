@@ -1,5 +1,5 @@
 :root{
-    --dark-bg: #2f2f2f;
+    --dark-bg: #111111;
     --black: #1c1c1c;
     --dark-color: #fff;
     --dark-border-shadow-hover-active: rgba(0, 81, 255, 0.61);
@@ -90,7 +90,7 @@
     height: 20px;
 }
 
-.dark-mode .radio-rating{
+.dark-mode .radio-rating-container{
     color: #fff;
     background-color: var(--black);
 }

@@ -280,16 +280,24 @@ code {
   margin-top: 5px;
 }
 
-.radio-rating{
-  background-color: rgba(204, 204, 204, 0.82);
-    padding: 10px;
-    border-radius: 5px;
+.radio-rating-container{
+  border: #555555 1px solid;
+  border-radius: 5px;
+  padding: 10px;
   width: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 5px;
+}
+
+.radio-rating{
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+    flex-direction: column;
+
 }
 
 .radio-button{
