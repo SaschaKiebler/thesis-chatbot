@@ -183,6 +183,14 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <!-- Konfigurieren Sie hier Ihre JavaDoc-Optionen -->
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <profiles>
