@@ -8,7 +8,6 @@ import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
 import de.htwg.chat.repositories.SystemPromptRepository;
-import de.htwg.llms.Modeltype;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
@@ -22,6 +21,11 @@ import java.util.List;
 import java.util.UUID;
 
 
+/**
+ * This class is a custom implementation of the ChatMemoryStore interface.
+ * It is used to store the messages in a database.
+ * It uses MessageRepository, AnswerRepository, ConversationRepository and SystemPromptRepository to persist the messages in the database.
+ */
 @ApplicationScoped
 public class CustomChatMemoryStore implements ChatMemoryStore {
 
@@ -40,6 +44,14 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
 
 
 
+    /**
+     * This method is used to get the messages from the database.
+     * It uses the conversation id.
+     * It returns a list of ChatMessages.
+     *
+     * @param memoryId the conversation id
+     * @return a list of ChatMessages
+     */
     @Override
     public List<ChatMessage> getMessages(Object memoryId) {
 
@@ -56,6 +68,14 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         return messages;
     }
 
+    /**
+     * This method is used to update the messages in the database.
+     * It uses the conversation id and the list of ChatMessages.
+     * It persists the messages in the database.
+     *
+     * @param memoryId the conversation id
+     * @param messages a list of ChatMessages
+     */
     @Override
     public void updateMessages(Object memoryId, List<ChatMessage> messages) {
         if (memoryId.equals("default")) {
@@ -70,6 +90,12 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         }
     }
 
+    /**
+     * This method calls the persist method for the different types of messages.
+     *
+     * @param memoryIdUUID the conversation id
+     * @param message a ChatMessage
+     */
     private void persistMessage(UUID memoryIdUUID, ChatMessage message) {
         if (message instanceof UserMessage) {
             persistUserMessage(memoryIdUUID, message);
@@ -80,6 +106,12 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         }
     }
 
+    /**
+     * This method is used to persist a user message in the database.
+     *
+     * @param memoryIdUUID the conversation id
+     * @param message a ChatMessage
+     */
     private void persistUserMessage(UUID memoryIdUUID, ChatMessage message) {
         Message msg = Message.builder()
                 .message(message.text())
@@ -88,7 +120,12 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         messageRepository.persist(msg);
     }
 
-
+    /**
+     * This method is used to persist an ai message in the database.
+     *
+     * @param memoryIdUUID the conversation id
+     * @param message a ChatMessage
+     */
     private void persistAiMessage(UUID memoryIdUUID, ChatMessage message) {
         Message lastMessage = getLastMessage(memoryIdUUID);
         Answer answer = Answer.builder()
@@ -98,13 +135,24 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
         answerRepository.persist(answer);
     }
 
-
+    /**
+     * This method is used to persist a system message in the database.
+     *
+     * @param memoryIdUUID the conversation id
+     * @param message a ChatMessage
+     */
     private void persistSystemMessage(UUID memoryIdUUID, ChatMessage message) {
         Conversation conversation = conversationRepository.findById(memoryIdUUID);
         SystemPrompt systemPrompt = SystemPrompt.builder().message(message.text()).conversation(conversation).build();
         systemPromptRepository.persist(systemPrompt);
     }
 
+    /**
+     * This method is used to get the latest message from the Conversation.
+     *
+     * @param memoryIdUUID the conversation id
+     * @return the last message
+     */
     private Message getLastMessage(UUID memoryIdUUID) {
         List<Message> messages = messageRepository.findByConversationId(memoryIdUUID);
         try {
@@ -115,7 +163,12 @@ public class CustomChatMemoryStore implements ChatMemoryStore {
 
     }
 
-
+    /**
+     * This method is used to get all messages from a conversation.
+     *
+     * @param memoryId the conversation id
+     * @return a list of ChatMessages
+     */
     private List<ChatMessage> getListOfMessages(UUID memoryId) {
         List<ChatMessage> listOfMessages = new ArrayList<>();
         // get all messages from the database that where inputs from the user with the conversation id

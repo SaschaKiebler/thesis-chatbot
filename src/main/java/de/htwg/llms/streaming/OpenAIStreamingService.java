@@ -7,7 +7,9 @@ import jakarta.ws.rs.Path;
 import static dev.langchain4j.data.message.AiMessage.aiMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
 
-
+/**
+ * This class was a test to implement the streaming service but doesn't work in any way.
+ */
 @Path("restApi")
 @ApplicationScoped
 public class OpenAIStreamingService {

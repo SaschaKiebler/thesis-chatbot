@@ -24,6 +24,10 @@ import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;
 
+/**
+ * This class is the advanced RetrievalAugmentor.
+ * It is used to augment the retrieval process with more advanced features like compressing the query and injecting metadata.
+ */
 @Singleton
 public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> {
 

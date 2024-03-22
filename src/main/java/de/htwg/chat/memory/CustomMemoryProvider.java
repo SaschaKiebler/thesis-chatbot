@@ -1,14 +1,17 @@
 package de.htwg.chat.memory;
 
-import de.htwg.llms.Modeltype;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
 
 import java.util.function.Supplier;
 
+/**
+ * This class is a custom implementation of the ChatMemoryProvider interface.
+ * It is used to provide a custom ChatMemoryProvider.
+ * It uses the CustomChatMemoryStore to store the messages in a database.
+ */
 @ApplicationScoped
 public class CustomMemoryProvider implements Supplier<ChatMemoryProvider> {
 

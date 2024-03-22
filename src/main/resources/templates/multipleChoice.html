@@ -42,15 +42,24 @@
 <script>
 
     const uiService = new UIService();
+    const input = document.getElementById('input');
 
     window.onload = function() {
         uiService.loadDarkMode();
     };
 
-    // Eventlistener für das Wechseln des Themes
+    // EventListener für das Wechseln des Themes
     document.getElementById('darkmode').addEventListener('click', function() {
         uiService.toggleDarkMode();
         uiService.saveDarkMode();
     });
+
+    // EventListener für das automatische Anpassen des Inputfeldes
+    input.addEventListener('input', function() {
+        input.style.height = 'auto';
+        input.style.height = (input.scrollHeight) + 'px';
+        input.style.maxHeight = '300px';
+    });
+
 </script>
 </html>

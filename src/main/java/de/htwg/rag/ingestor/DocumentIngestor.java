@@ -11,6 +11,10 @@ import java.util.List;
 
 import static dev.langchain4j.data.document.splitter.DocumentSplitters.recursive;
 
+/**
+ * This class is the Ingestor for Documents.
+ * It ingests Documents into the Vectorstore.
+ */
 @ApplicationScoped
 public class DocumentIngestor {
     @Inject
@@ -19,8 +23,10 @@ public class DocumentIngestor {
     @Inject
     AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel;
 
-    // creates the Ingestor and ingests the documents into the store.
-    // Maybe adapt the overlapSize or change the Documentsplitter for better performance
+    /**
+     * This method ingests a list of Documents into the Vectorstore.
+     * @param documents The list of Documents to ingest.
+     */
     public void ingest(List<Document> documents) {
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .embeddingStore(store)

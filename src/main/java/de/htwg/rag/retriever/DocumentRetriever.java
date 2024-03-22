@@ -9,6 +9,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
 
+/**
+ * This class is the Retriever for Documents.
+ * It retrieves Documents from the Vectorstore.
+ * @deprecated This class is deprecated because the newer versions of langchain4j have a different way of retrieving documents.
+
+ */
 @ApplicationScoped
 @Deprecated
 public class DocumentRetriever implements Retriever<TextSegment> {

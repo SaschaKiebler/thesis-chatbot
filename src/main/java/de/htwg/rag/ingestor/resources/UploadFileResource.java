@@ -13,6 +13,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class is the Resource for the Upload of Files.
+ */
 @ApplicationScoped
 @Path("/api/files")
 public class UploadFileResource {
@@ -20,6 +23,11 @@ public class UploadFileResource {
     @Inject
     UploadFileRepository uploadFileRepository;
 
+    /**
+     * This method is called when a GET request is sent to /all.
+     * It returns all files in the database.
+     * @return All files in the database.
+     */
     @Path("/all")
     @Produces("application/json")
     @GET
@@ -27,6 +35,11 @@ public class UploadFileResource {
         return Response.ok(uploadFileRepository.listAll()).build();
     }
 
+    /**
+     * This method deletes files by id from the database.
+     * @param id The id of the file to delete.
+     * @return A response.
+     */
     @DELETE
     @Path("/{id}")
     @Transactional
@@ -40,6 +53,12 @@ public class UploadFileResource {
         }
     }
 
+    /**
+     * This method is called when a GET request is sent to /{id}.
+     * It downloads a file by id from the database.
+     * @param id The id of the file to download.
+     * @return The file to download.
+     */
     @GET
     @Path("/{id}")
     @Produces("application/pdf")

@@ -11,12 +11,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is used to summarize a text with an LLM into a list.
+ */
 @ApplicationScoped
 public class Summarizer {
 
-    /*
-    *  Zerkleinert den Text in Blöcke von jeweils 30 Zeilen und fasst diese zusammen. Gibt den zusammengefassten Text zurück.
-    */
+    /**
+     * This method is used to summarize a text with an LLM.
+     * It returns the summarized text.
+     *
+     * @param text the text to summarize
+     * @return the summarized text
+     */
     public String summarize(String text) {
         if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException("Text is empty or null");

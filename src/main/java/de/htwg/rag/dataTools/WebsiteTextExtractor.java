@@ -7,9 +7,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.time.Duration;
 
+/**
+ * This class is used to extract text from a website served as a String with an LLM.
+ */
 @ApplicationScoped
 public class WebsiteTextExtractor {
 
+    /**
+     * This method is used to extract text from a website with an LLM.
+     * It returns the extracted text.
+     *
+     * @param website the website to extract text from
+     * @return the extracted text
+     */
     public String extractText(String website) {
         if (website == null || website.isEmpty()) {
             throw new IllegalArgumentException("Text is empty or null");

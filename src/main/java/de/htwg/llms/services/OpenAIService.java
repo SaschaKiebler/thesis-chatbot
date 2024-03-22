@@ -7,10 +7,20 @@ import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
-
+/**
+ * This interface represents the commercial AI service and uses the AdvancedRetrievalAugmentor for retrieval augmentation
+ */
 @RegisterAiService(modelName = "commercial", retrievalAugmentor = AdvancedRetrievalAugmentor.class)
 
 public interface OpenAIService {
+    /**
+     * This method is called when a user sends a message to the AI.
+     * It returns the response of the AI.
+     * @param conversationId The id of the conversation.
+     * @param message The message of the user.
+     * @param prompt The SystemMessage for the LLM.
+     * @return The response of the AI.
+     */
     @SystemMessage("""
         {{prompt}}
         """)

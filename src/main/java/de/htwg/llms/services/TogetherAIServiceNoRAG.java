@@ -6,9 +6,20 @@ import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
+/**
+ * This interface represents the AI service for the opensource configuration without retrieval augmentation
+ */
 @RegisterAiService(modelName = "opensource")
 
 public interface TogetherAIServiceNoRAG {
+        /**
+         * This method is called when a user sends a message to the AI.
+         * It returns the response of the AI.
+         *
+         * @param conversationId The id of the conversation.
+         * @param message The message of the user.
+         * @param prompt The SystemMessage for the llm.
+         */
         @SystemMessage("""
         {{prompt}}
             """)

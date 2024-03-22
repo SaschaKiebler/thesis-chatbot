@@ -8,6 +8,9 @@ import jakarta.persistence.Id;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * This class represents an uploaded file.
+ */
 @Entity
 public class UploadedFile extends PanacheEntityBase {
 

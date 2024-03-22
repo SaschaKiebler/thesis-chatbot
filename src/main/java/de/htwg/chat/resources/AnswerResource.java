@@ -10,6 +10,11 @@ import jakarta.ws.rs.QueryParam;
 
 import java.util.UUID;
 
+/**
+ * This class is the Resource for the Answer entity.
+ * It has Endpoints for the Rating and the Cause.
+ * It uses the AnswerRepository to access the database.
+ */
 @Path("/api/answer")
 @ApplicationScoped
 public class AnswerResource {
@@ -17,6 +22,12 @@ public class AnswerResource {
     @Inject
     AnswerRepository answerRepository;
 
+    /**
+     * This method is called when a PUT request is sent to /api/answer/preffered.
+     * It sets the preferred value of an answer to true if the value==true.
+     * @param value The value of the preferred field.
+     * @param id The id of the answer.
+     */
     @PUT
     @Path("/preffered")
     @Transactional
@@ -30,6 +41,12 @@ public class AnswerResource {
         }
     }
 
+    /**
+     * This method is called when a PUT request is sent to /api/answer/preffered/cause.
+     * It sets the cause of why an answer is preferred.
+     * @param value The value of the preferred cause field.
+     * @param id The id of the answer.
+     */
     @PUT
     @Path("/preffered/cause")
     @Transactional

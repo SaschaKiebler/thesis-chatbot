@@ -6,7 +6,6 @@ import de.htwg.rag.ingestor.DocumentIngestor;
 import de.htwg.rag.ingestor.UploadFileRepository;
 import de.htwg.rag.ingestor.UploadedFile;
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentLoader;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.loader.UrlDocumentLoader;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
@@ -31,6 +30,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This class is the Resource for the Ingestion of Documents.
+ * It serves the Ingestion of Documents via POST requests.
+ * It can ingest PDFs and URLs.
+ */
 @Path("/api/ingest")
 @ApplicationScoped
 public class IngestDocumentResource {
@@ -49,6 +53,13 @@ public class IngestDocumentResource {
 
     private static final String UPLOAD_DIRECTORY = "resources/pdfs";
 
+    /**
+     * This method is called when a POST request is sent to /pdf.
+     * It ingests a PDF file.
+     * @param pdfFile the PDF file to ingest
+     * @param name the name of the PDF file
+     * @return a Response
+     */
     @POST
     @Path("/pdf")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -93,7 +104,14 @@ public class IngestDocumentResource {
         }
     }
 
-    // adds date to filename to make it unique and safes it in the file system
+    /**
+     * This method is used to save a file to the file system.
+     * It returns the path of the saved file.
+     *
+     * @param filePath the path to save the file
+     * @param file the file to save
+     * @return the path of the saved file
+     */
     private String safeFile(String filePath, byte[] file) throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String formattedDate = formatter.format(new Date());
@@ -108,16 +126,33 @@ public class IngestDocumentResource {
         return path;
     }
 
+    /**
+     * This class is used to represent a PDF file.
+     */
     public static class PdfFile {
         @FormParam("file")
         @PartType(MediaType.APPLICATION_OCTET_STREAM)
         public byte[] file;
     }
 
+    /**
+     * This method is used to check if a file is empty.
+     * It returns true if the file is empty.
+     *
+     * @param file the file to check
+     * @return true if the file is empty
+     */
     private boolean isFileEmpty(PdfFile file) {
         return file.file == null || file.file.length == 0;
     }
 
+    /**
+     * This method is called when a POST request is sent to /url.
+     * It ingests a URL.
+     * @param url the URL to ingest
+     * @param name the name of the URL
+     * @return a Response
+     */
     @POST
     @Path("/url")
     @Transactional

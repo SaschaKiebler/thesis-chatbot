@@ -21,6 +21,12 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.UUID;
 
+/**
+ * This class is the Resource for the LLM.
+ * It serves the LLM-Answers for the Chat-UI.
+ * It can be configured with the variables ai.left-service, ai.right-service, ai.left-service.rag, ai.right-service.rag and ai.prompt.
+ *
+ */
 @Path("/llm")
 @ApplicationScoped
 public class LLMResource {
@@ -52,6 +58,14 @@ public class LLMResource {
     @Inject
     MessageRepository messageRepository;
 
+    /**
+     * This method is called when a POST request is sent to /llm/{side}Service.
+     * It sends a message to the LLM and returns the answer.
+     * @param message The message to send to the LLM.
+     * @param conversationId The id of the conversation.
+     * @param side The configuration-side from the application.properties.
+     * @return The answer from the LLM.
+     */
     @POST
     @Path("/{side}Service")
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,6 +98,13 @@ public class LLMResource {
                 .build();
     }
 
+    /**
+     * This method gets the conversation from the database or creates a new one.
+     * @param conversationId The id of the conversation.
+     *                       If it is null or empty a new conversation is created.
+     * @param side The configuration-side from the application.properties.
+     *             It is used to set the service-name and the RAG.
+     */
     private Conversation getConversation(String conversationId, String side) {
         if (conversationId != null && !conversationId.isEmpty()) {
             return conversationRepository.findById(UUID.fromString(conversationId));
@@ -100,6 +121,14 @@ public class LLMResource {
         }
     }
 
+    /**
+     * This method gets the answer from the LLM and chooses the Service that was configured.
+     * @param message The message to send to the LLM.
+     * @param conversationId The id of the conversation.
+     * @param side The configuration-side from the application.properties.
+     *             It is used to set the service-name and the RAG.
+     * @return The answer from the LLM.
+     */
     private String getAnswer(String message, String conversationId, String side) {
         if (!side.equals("left") && !side.equals("right")) {
             return null;
