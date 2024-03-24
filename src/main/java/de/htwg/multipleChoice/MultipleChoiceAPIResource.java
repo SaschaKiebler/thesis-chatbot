@@ -33,6 +33,7 @@ public class MultipleChoiceAPIResource {
     public String getMultipleChoice(@FormParam("id") String id) {
         Conversation conversation = new Conversation();
         conversationRepository.persist(conversation);
+
         return multipleChoiceAIService.getQuestion(id, conversation.getId().toString());
     }
 }

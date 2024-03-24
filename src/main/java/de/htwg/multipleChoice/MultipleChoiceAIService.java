@@ -16,7 +16,9 @@ public interface MultipleChoiceAIService {
 
     @SystemMessage(
             """
-                    Du bist ein Quizmaster. Der Nutzer gibt an,  zu welchem Script er getestet werden möchte. Erzeuge eine Frage mit 3 Antwortmöglichkeiten zu dem Skript.
+                    Du bist ein Quizmaster. Der Nutzer gibt an,  zu welchem Script er getestet werden möchte.
+                    Erzeuge eine Frage mit 3 Antwortmöglichkeiten zu dem Skript.
+                    Sende die erzeugte Frage danach im richtigen Format an den User.
                     """
     )
     String getQuestion(@UserMessage String scriptId, @MemoryId String memoryId);
