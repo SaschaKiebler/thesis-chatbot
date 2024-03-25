@@ -1,158 +1,87 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>thesis-chatbot</title>
-
-    <link rel="icon" type="image/x-icon" href="/pictures/Chatbot_Logo.webp">
-
-    <link rel="stylesheet" href="./styles/style.css">
-    <link rel="stylesheet" href="./styles/darkmode.css">
-
-    <script src="js/chat/Message.js"></script>
-    <script src="js/chat/DualMessage.js"></script>
-    <script src="js/chat/ErrorMessage.js"></script>
-    <script src="js/chat/LoadingMessage.js"></script>
-    <script src="js/chat/RatingHint.js"></script>
-    <script src="js/chat/ChatService.js"></script>
-    <script src="js/chat/UIService.js"></script>
-    <script src="js/chat/RatingService.js"></script>
-    <script src="js/chat/MarkdownParser.js"></script>
-    <script src="js/chat/RatingExtended.js"></script>
-
-</head>
-<body>
-<div class="chat-container">
-    <div class="tool-container">
-        <button class="tool" id="clear">Clear</button>
-        <div class="tool-text-img-box">
-            <div>Theme:</div>
-            <button class="tool" id="darkmode"><img src="pictures/darkmode.svg" width="24px" height="20px"></button>
-        </div>
+{#include base.html}
+    {#title}multiple Choice Modus{/title}
+    {#firstMessage}Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?{/firstMessage}
+    {#scripts}
+        <script src="js/chat/DualMessage.js"></script>
+        <script src="js/chat/ErrorMessage.js"></script>
+        <script src="js/chat/LoadingMessage.js"></script>
+        <script src="js/chat/RatingHint.js"></script>
+        <script src="js/chat/ChatService.js"></script>
+        <script src="js/chat/RatingService.js"></script>
+        <script src="js/chat/RatingExtended.js"></script>
+    {/scripts}
+    {#styles}{/styles}
+    {#popUp}<div class="popup" id="popup">Bitte gebe eine Bewertung ab!</div>{/popUp}
+    {#eventListener}
+        const ratingHint = new RatingHint();
+        const chatService = new ChatService();
 
 
-    </div>
-    <div class="conversation-container" id="scroller">
-
-        <div id="conversation">
-            <div class="ai-message message">
-                <div class="icon"></div>
-                <div class="message-content">
-                    <div class="name">Bot</div>
-                    <p class="text">Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein? </p>
-                </div>
-            </div>
-
-        </div>
-        <div id="anchor"></div>
-    </div>
-    <div id="suggestions">
-        <div class="suggestion" id="suggestion1">Erkläre kurz was Gesundheitsinformatik ist, welche Vorteile ein Studium in dem Bereich hat und wo man es studieren kann.</div>
-        <div class="suggestion" id="suggestion2">Welche Aufgaben haben Zentriolen und welche Aufgaben haben die Mikrotubuli im Rahmen der Mitose und Meiose der menschlichen Zelle?</div>
-        <div class="suggestion" id="suggestion3">Wie funktioniert das deutsche Gesundheitswesen?</div>
-        <div class="suggestion" id="suggestion4">Was ist die Krankenhausreform 2023?</div>
-    </div>
-    <div class="input-container">
-        <label for="input"></label>
-        <textarea rows="1" id="input" class="input" placeholder="Frage mich etwas..."></textarea>
-        <div class="popup" id="popup">Bitte gebe eine Bewertung ab!</div>
-        <button id="send" class="send"><img src="pictures/send.svg" alt="absenden"></button>
-    </div>
-    <div class="hint-bottom">
-        <p>Der Chat geht nach dem Neuladen der Seite verloren!</p>
-    </div>
-</div>
-</body>
-<script>
-
-
-
-    const chatService = new ChatService();
-
-    const input = document.getElementById('input');
-    const send = document.getElementById('send');
-    const clear = document.getElementById('clear');
-    const ratingHint = new RatingHint();
-    const uiService = new UIService();
-
-    window.onload = function() {
-        uiService.loadDarkMode();
-    };
-
-    // Verhindert XSS
-    function sanitizeString(str) {
+        // Verhindert XSS
+        function sanitizeString(str) {
         return str.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;")
-            .replace(/`/g, "&#96;");
-    }
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/`/g, "&#96;");
+        }
 
-    // Eventlistener für das Absenden einer Nachricht bei Click auf Button
-    send.addEventListener('click', function() {
+        // Eventlistener für die Vorschläge
+        const suggestions = document.getElementsByClassName('suggestion');
+        for (const suggestion of suggestions) {
+        suggestion.addEventListener('click', function() {
+        input.disabled = true;
+        chatService.getDualAnswer(suggestion.textContent,ratingHint);
+        document.getElementById('input').value = '';
+        document.getElementById('suggestions').style.display = 'none';
+        });
+
+
+        // Eventlistener für das Absenden einer Nachricht bei Click auf Button
+        send.addEventListener('click', function() {
         if (input.value === ''){
 
         } else{
-            input.disabled = true;
-            document.getElementById('suggestions').style.display = 'none';
-            let inputText = sanitizeString(input.value);
-            chatService.getDualAnswer(inputText,ratingHint);
-            input.value = '';
-            document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+        input.disabled = true;
+        document.getElementById('suggestions').style.display = 'none';
+        let inputText = sanitizeString(input.value);
+        chatService.getDualAnswer(inputText,ratingHint);
+        input.value = '';
+        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
         }
-    });
-
-    // Eventlistener für das Absenden einer Nachricht bei Enter
-    input.addEventListener('keyup', function(event) {
-        if(input.value !== ''){
-            if(event.key === 'Enter' && event.shiftKey){
-                input.value += '\n';
-            }
-            else if (event.key === 'Enter' && !event.shiftKey) {
-                input.disabled = true;
-                document.getElementById('suggestions').style.display = 'none';
-                let inputText = sanitizeString(input.value);
-                chatService.getDualAnswer(inputText,ratingHint);
-                input.value = '';
-                input.style.height = 'auto';
-                document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
-            }}
-    });
-
-    // Eventlistener für das Löschen des Chats
-    clear.addEventListener('click', function() {
-        chatService.clearMessages();
-        document.getElementById('suggestions').style.display = 'grid';
-    });
-
-    // Eventlistener für das Wechseln des Themes
-    document.getElementById('darkmode').addEventListener('click', function() {
-        uiService.toggleDarkMode();
-        uiService.saveDarkMode();
-    });
-
-    uiService.enablePopUp();
-
-    // Eventlistener für die Vorschläge
-    const suggestions = document.getElementsByClassName('suggestion');
-    for (const suggestion of suggestions) {
-        suggestion.addEventListener('click', function() {
-            input.disabled = true;
-            chatService.getDualAnswer(suggestion.textContent,ratingHint);
-            document.getElementById('input').value = '';
-            document.getElementById('suggestions').style.display = 'none';
         });
-    }
 
-    // Eventlistener für das automatische Anpassen des Inputfeldes
-    input.addEventListener('input', function() {
+        // Eventlistener für das Absenden einer Nachricht bei Enter
+        input.addEventListener('keyup', function(event) {
+        if(input.value !== ''){
+        if(event.key === 'Enter' && event.shiftKey){
+        input.value += '\n';
+        }
+        else if (event.key === 'Enter' && !event.shiftKey) {
+        input.disabled = true;
+        document.getElementById('suggestions').style.display = 'none';
+        let inputText = sanitizeString(input.value);
+        chatService.getDualAnswer(inputText,ratingHint);
+        input.value = '';
         input.style.height = 'auto';
-        input.style.height = (input.scrollHeight) + 'px';
-        input.style.maxHeight = '300px';
-    });
+        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+        }}
+        });
+        }
 
-
-</script>
-</html>
+        uiService.enablePopUp();
+    {/eventListener}
+    {#suggestions}
+        <div id="suggestions">
+            <div class="suggestion" id="suggestion1">Erkläre kurz was Gesundheitsinformatik ist, welche Vorteile ein Studium in dem Bereich hat und wo man es studieren kann.</div>
+            <div class="suggestion" id="suggestion2">Welche Aufgaben haben Zentriolen und welche Aufgaben haben die Mikrotubuli im Rahmen der Mitose und Meiose der menschlichen Zelle?</div>
+            <div class="suggestion" id="suggestion3">Wie funktioniert das deutsche Gesundheitswesen?</div>
+            <div class="suggestion" id="suggestion4">Was ist die Krankenhausreform 2023?</div>
+        </div>
+    {/suggestions}
+    {#clearMessagesExtension}
+        document.getElementById('suggestions').style.display = 'grid';
+        chatService.clearMessages();
+    {/clearMessagesExtension}
+{/include}

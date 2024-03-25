@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{#insert title}Thesis-Chatbot{/}</title>
+  <link rel="icon" type="image/x-icon" href="/pictures/Chatbot_Logo.webp">
+  <link rel="stylesheet" href="./styles/style.css">
+  <link rel="stylesheet" href="./styles/darkmode.css">
+  {#insert styles}
+  {/insert}
+
+  <script src="js/chat/UIService.js"></script>
+  <script src="js/chat/Message.js"></script>
+  <script src="js/chat/MarkdownParser.js"></script>
+  {#insert scripts}
+  {/}
+</head>
+<body>
+<div class="chat-container">
+  <div class="tool-container">
+    <div class="left-tools">
+      <button class="tool" id="quit"><img src="pictures/quit-icon.svg" width="24px" height="20px"></button>
+
+      <button class="tool" id="clear">Clear</button>
+    </div>
+    <div class="right-tools">
+      <div class="tool-text-img-box">
+        <div>Theme:</div>
+        <button class="tool" id="darkmode"><img src="pictures/darkmode.svg" width="24px" height="20px"></button>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="conversation-container" id="scroller">
+
+    <div id="conversation">
+      <div class="ai-message message">
+        <div class="icon"></div>
+        <div class="message-content">
+          <div class="name">Bot</div>
+          <p class="text">{#insert firstMessage}Hallo, wie kann ich dir weiter helfen?
+            {/}</p>
+        </div>
+      </div>
+
+    </div>
+    <div id="anchor"></div>
+  </div>
+{#insert suggestions}
+{/}
+  <div class="input-container">
+    <label for="input"></label>
+    <textarea rows="1" id="input" class="input" placeholder="{#insert inputText}Frage mich etwas...{/}"></textarea>
+    {#insert popUp}{/insert}
+    <button id="send" class="send"><img src="pictures/send.svg" alt="absenden"></button>
+  </div>
+  <div class="hint-bottom">
+    <p>Der Chat geht nach dem Neuladen der Seite verloren!</p>
+  </div>
+</div>
+</body>
+
+<script>
+
+  const uiService = new UIService();
+  const input = document.getElementById('input');
+  const clear = document.getElementById('clear');
+
+  window.onload = function() {
+    uiService.loadDarkMode();
+  };
+
+  // EventListener für das Wechseln des Themes
+  document.getElementById('darkmode').addEventListener('click', function() {
+    uiService.toggleDarkMode();
+    uiService.saveDarkMode();
+  });
+
+  // EventListener für das automatische Anpassen des Inputfeldes
+  input.addEventListener('input', function() {
+    input.style.height = 'auto';
+    input.style.height = (input.scrollHeight) + 'px';
+    input.style.maxHeight = '300px';
+  });
+
+  // Eventlistener für das Löschen des Chats
+  clear.addEventListener('click', function() {
+    const firstMessage = new Message('Chatbot', '{#insert firstMessage}Hallo, wie kann ich dir weiter helfen?{/}', 'ai');
+    uiService.clearMessages(firstMessage);
+    {#insert clearMessagesExtension}
+    {/insert}
+  });
+
+  // Eventlistener für das Beenden des Chats
+  document.getElementById('quit').addEventListener('click', function() {
+    window.location.href = '/';
+  });
+
+    // Eventlistener für das Senden einer Nachricht
+  {#insert eventListener}
+
+  {/}
+
+</script>
+</html>

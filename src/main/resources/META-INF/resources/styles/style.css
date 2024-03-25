@@ -17,6 +17,7 @@ body{
   flex-direction: column;
   transition: all 0.3s ease;
   overflow: hidden;
+  width: 100%;
 }
 
 *{
@@ -336,6 +337,11 @@ code {
 
 .suggestion:hover{
   background-color: rgb(241, 239, 239);
+}
+
+.left-tools{
+  display: flex;
+  gap: 10px;
 }
 
 

@@ -13,9 +13,9 @@ class UIService {
     }
 
     // Entfernt alle Nachrichten aus der UI und fügt eine Begrüßungsnachricht hinzu
-    clearMessages() {
+    clearMessages(message) {
         this.conversation.innerHTML = '';
-        this.addMessage(new Message(null, "Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?", "ai"));
+        this.addMessage(message ? message : new Message(null, "Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?", "ai"));
     }
 
     // Gibt der UI die Möglichkeit den Dark-Mode zu aktivieren und fügt die CSS Klasse hinzu oder entfernt sie
@@ -63,9 +63,6 @@ class UIService {
             document.body.classList.add('dark-mode');
         }
     }
-
-
-
 
 
 }

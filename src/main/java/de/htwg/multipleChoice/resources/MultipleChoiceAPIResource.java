@@ -8,6 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/api/multipleChoice")
 @ApplicationScoped
@@ -16,23 +17,21 @@ public class MultipleChoiceAPIResource {
     @Inject
     MultipleChoiceAIService multipleChoiceAIService;
 
-    @Inject
-    ConversationRepository conversationRepository;
 
     /**
      * This method is called when a GET request is sent to /api/multipleChoice.
      * It returns the multiple choice question with the given id.
      *
-     * @param id The id of the multiple choice question.
-     * @return The multiple choice question.
+     * @param message The user-message.
+     * @param conversationId The conversation id.
      */
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public String getMultipleChoice(@FormParam("id") String id) {
-        Conversation conversation = new Conversation();
-        conversationRepository.persist(conversation);
-
-        return multipleChoiceAIService.getQuestion(id, conversation.getId().toString());
+    public Response produceQuiz(@FormParam("message") String message, @FormParam("conversationId") String conversationId){
+        if (conversationId == null || conversationId.isEmpty() || message == null || message.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("conversationId and message must not be empty").build();
+        }
+        return Response.ok().entity(multipleChoiceAIService.getQuestion(message, conversationId)).build();
     }
 }
