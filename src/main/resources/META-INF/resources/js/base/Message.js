@@ -7,8 +7,6 @@ class Message {
 
     constructor(id, message, sender) {
         this.message = message;
-        this.markdownParser = new MarkdownParser();
-        this.message = this.markdownParser.parse(this.message);
         this.id = id;
         this.sender = sender;
         this.element = document.createElement('div');

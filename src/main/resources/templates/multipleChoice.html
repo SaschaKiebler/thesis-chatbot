@@ -1,8 +1,67 @@
 {#include base.html}
 {#title}multiple Choice Modus{/title}
-{#firstMessage}Hallo, wähle ein Skript aus mit dem wir heute lernen{/firstMessage}
-    {#scripts}{/scripts}
+
+    {#scripts}
+    <script src="js/multipleChoice/MultipleChoiceService.js"></script>
+    <script src="js/multipleChoice/OptionMessage.js"></script>
+    {/scripts}
     {#styles}{/styles}
-    {#eventListener}{/eventListener}
+    {#onLoad}
+    document.getElementById("input").focus();
+        uiService.addMessage(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}"{lecture.name}",{/for}]));
+    {/onLoad}
+    {#eventListener}
+        const multipleChoiceService = new MultipleChoiceService();
+
+
+        // Verhindert XSS
+        function sanitizeString(str) {
+        return str.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/`/g, "&#96;");
+        }
+
+        // Eventlistener für das Absenden einer Nachricht bei Click auf Button
+        send.addEventListener('click', function() {
+        if (input.value === ''){
+
+        } else{
+        let inputText = sanitizeString(input.value);
+        multipleChoiceService.getAnswer(inputText);
+        input.value = '';
+        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+        }
+        });
+
+        // Eventlistener für das Absenden einer Nachricht bei Enter
+        input.addEventListener('keyup', async function(event) {
+        if(input.value !== ''){
+        if(event.key === 'Enter' && event.shiftKey){
+        input.value += '\n';
+        }
+        else if (event.key === 'Enter' && !event.shiftKey) {
+        let inputText = sanitizeString(input.value);
+        uiService.addMessage(new Message(null,inputText, 'user'));
+        const loadingMessage = new LoadingMessage();
+        uiService.addMessage(loadingMessage);
+        input.value = '';
+        input.style.height = 'auto';
+        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+        const answer = await multipleChoiceService.getAnswer(inputText);
+        console.log(answer);
+        uiService.removeMessage(loadingMessage.id);
+        uiService.addMessage(new Message(null,answer, 'ai'));
+        }}
+        });
+
+
+    {/eventListener}
     {#inputText}Lernen wir heute...{/inputText}
+    {#clearMessagesExtension}
+        uiService.clearMessages(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}"{lecture.name}",{/for}]));
+    {/clearMessagesExtension}
+
 {/include}

@@ -12,4 +12,5 @@ public class LectureRepository implements PanacheRepository<Lecture> {
     public Lecture findById(UUID id) {
         return find("id", id).firstResult();
     }
+
 }

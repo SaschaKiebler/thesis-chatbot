@@ -64,5 +64,11 @@ class UIService {
         }
     }
 
+    // löscht Nachrichten aus der UI
+    removeMessage(id) {
+        const message = document.getElementById(id);
+        message.remove();
+    }
+
 
 }

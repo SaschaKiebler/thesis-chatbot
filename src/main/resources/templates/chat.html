@@ -1,16 +1,22 @@
 {#include base.html}
     {#title}multiple Choice Modus{/title}
-    {#firstMessage}Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?{/firstMessage}
-    {#scripts}
+  {#scripts}
         <script src="js/chat/DualMessage.js"></script>
-        <script src="js/chat/ErrorMessage.js"></script>
-        <script src="js/chat/LoadingMessage.js"></script>
         <script src="js/chat/RatingHint.js"></script>
         <script src="js/chat/ChatService.js"></script>
         <script src="js/chat/RatingService.js"></script>
         <script src="js/chat/RatingExtended.js"></script>
     {/scripts}
     {#styles}{/styles}
+    {#onLoad}
+    uiService.addMessage(new Message(null,"Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?","ai"));
+    {/onLoad}
+    {#input}<textarea id="input" placeholder="Schreibe hier deine Nachricht..."></textarea>{/input}
+    {#sendButton}<button id="send">Senden</button>{/sendButton}
+    {#messages}
+        <div id="scroller">
+            <div class="message" id="message1">
+                <div class="messageContent">Erkläre kurz was Gesundheitsinformatik ist, welche Vorteile ein Studium in dem
     {#popUp}<div class="popup" id="popup">Bitte gebe eine Bewertung ab!</div>{/popUp}
     {#eventListener}
         const ratingHint = new RatingHint();

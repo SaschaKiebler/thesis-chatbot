@@ -3,12 +3,16 @@ package de.htwg.multipleChoice.resources;
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.multipleChoice.services.MultipleChoiceAIService;
+import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+
+import java.util.UUID;
 
 @Path("/api/multipleChoice")
 @ApplicationScoped
@@ -16,6 +20,9 @@ public class MultipleChoiceAPIResource {
 
     @Inject
     MultipleChoiceAIService multipleChoiceAIService;
+
+    @Inject
+    ConversationRepository conversationRepository;
 
 
     /**
@@ -28,10 +35,18 @@ public class MultipleChoiceAPIResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response produceQuiz(@FormParam("message") String message, @FormParam("conversationId") String conversationId){
-        if (conversationId == null || conversationId.isEmpty() || message == null || message.isEmpty()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("conversationId and message must not be empty").build();
+    public Response produceQuiz(@RequestBody(ref = "message") String message, @QueryParam("conversationId") String conversationId){
+        Conversation conversation;
+        if (conversationId == null || conversationId.isEmpty() || message == null) {
+            conversation = new Conversation();
+            conversationRepository.persist(conversation);
         }
-        return Response.ok().entity(multipleChoiceAIService.getQuestion(message, conversationId)).build();
+        else {
+            conversation = conversationRepository.findById(UUID.fromString(conversationId));
+        }
+
+        String answer = multipleChoiceAIService.getQuestion(message, conversation.getId().toString());
+
+        return Response.ok().entity(Json.object().put("answer",answer).put("conversationId",conversation.getId().toString()).build()).build();
     }
 }
