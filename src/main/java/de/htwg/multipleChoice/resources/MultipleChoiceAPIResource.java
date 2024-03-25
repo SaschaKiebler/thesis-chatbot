@@ -1,14 +1,13 @@
-package de.htwg.multipleChoice;
+package de.htwg.multipleChoice.resources;
 
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.ConversationRepository;
+import de.htwg.multipleChoice.services.MultipleChoiceAIService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-
-import java.util.List;
 
 @Path("/api/multipleChoice")
 @ApplicationScoped

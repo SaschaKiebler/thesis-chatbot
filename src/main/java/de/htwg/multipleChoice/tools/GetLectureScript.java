@@ -1,5 +1,7 @@
-package de.htwg.multipleChoice;
+package de.htwg.multipleChoice.tools;
 
+import de.htwg.multipleChoice.entities.Script;
+import de.htwg.multipleChoice.repositories.ScriptRepository;
 import dev.langchain4j.agent.tool.Tool;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

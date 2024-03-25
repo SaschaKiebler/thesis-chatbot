@@ -1,5 +1,6 @@
-package de.htwg.multipleChoice;
+package de.htwg.multipleChoice.entities;
 
+import de.htwg.multipleChoice.entities.PossibleAnswer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

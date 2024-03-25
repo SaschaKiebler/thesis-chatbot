@@ -1,4 +1,4 @@
-package de.htwg.llms.services;
+package de.htwg.chat.llms.services;
 
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;

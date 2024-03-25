@@ -1,4 +1,4 @@
-package de.htwg.multipleChoice;
+package de.htwg.multipleChoice.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

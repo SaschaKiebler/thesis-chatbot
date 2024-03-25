@@ -1,4 +1,4 @@
-package de.htwg.llms;
+package de.htwg.chat.llms;
 
 import de.htwg.chat.entities.Answer;
 import de.htwg.chat.entities.Conversation;
@@ -6,10 +6,10 @@ import de.htwg.chat.entities.Message;
 import de.htwg.chat.repositories.AnswerRepository;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.chat.repositories.MessageRepository;
-import de.htwg.llms.services.OpenAIService;
-import de.htwg.llms.services.OpenAIServiceNoRAG;
-import de.htwg.llms.services.TogetherAIService;
-import de.htwg.llms.services.TogetherAIServiceNoRAG;
+import de.htwg.chat.llms.services.OpenAIService;
+import de.htwg.chat.llms.services.OpenAIServiceNoRAG;
+import de.htwg.chat.llms.services.TogetherAIService;
+import de.htwg.chat.llms.services.TogetherAIServiceNoRAG;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

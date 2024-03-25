@@ -1,4 +1,4 @@
-package de.htwg.multipleChoice;
+package de.htwg.multipleChoice.resources;
 
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;

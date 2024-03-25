@@ -1,5 +1,6 @@
-package de.htwg.multipleChoice;
+package de.htwg.multipleChoice.repositories;
 
+import de.htwg.multipleChoice.entities.Script;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 

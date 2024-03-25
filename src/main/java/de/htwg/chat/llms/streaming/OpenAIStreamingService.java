@@ -1,4 +1,4 @@
-package de.htwg.llms.streaming;
+package de.htwg.chat.llms.streaming;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.GET;
