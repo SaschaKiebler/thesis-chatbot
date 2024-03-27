@@ -6,6 +6,7 @@ class ChatService {
         this.conversationIdright = null;
         this.uiService = new UIService();
         this.ratingService = new RatingService();
+        this.markdownParser = new MarkdownParser();
     }
 
     // Diese Methode fügt die Nachricht der Chatliste hinzu und ruft die Methode addMessagesToUI auf
@@ -73,6 +74,8 @@ class ChatService {
                 if (data1.answer && data2.answer) {
                     this.messages.pop();
                     document.getElementById("loading-message").remove();
+                    data1.answer = this.markdownParser.parse(data1.answer);
+                    data2.answer = this.markdownParser.parse(data2.answer);
                     const messageLeft = new Message(data1.answerId, data1.answer, "ai");
                     const messageRight = new Message(data2.answerId, data2.answer, "ai");
                     const dualMessage = new DualMessage(messageLeft, messageRight);

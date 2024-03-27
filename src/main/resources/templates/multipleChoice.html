@@ -8,7 +8,7 @@
     {#styles}{/styles}
     {#onLoad}
     document.getElementById("input").focus();
-        uiService.addMessage(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}"{lecture.name}",{/for}]));
+        uiService.addMessage(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]));
     {/onLoad}
     {#eventListener}
         const multipleChoiceService = new MultipleChoiceService();
@@ -61,7 +61,7 @@
     {/eventListener}
     {#inputText}Lernen wir heute...{/inputText}
     {#clearMessagesExtension}
-        uiService.clearMessages(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}"{lecture.name}",{/for}]));
+        uiService.clearMessages(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]));
     {/clearMessagesExtension}
 
 {/include}

@@ -30,4 +30,23 @@ class MultipleChoiceService {
             console.error('Error:', error);
         });
     }
+
+    getScriptsFromLecture(lectureId) {
+        return fetch(`/api/lectures/${lectureId}/scripts`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(
+            data => {
+                return data.json();
+            }
+        ).then(
+            data => {
+            console.log(data);
+            return data;
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
 }

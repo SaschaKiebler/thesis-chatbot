@@ -114,3 +114,9 @@ a{
 .dark-mode .tool-container button:hover{
     border: #7eb8f5 2px solid;
 }
+
+.dark-mode .option{
+    border-color: #4A90E2;
+    color: #fff;
+    transition: all 0.3s ease;
+}
