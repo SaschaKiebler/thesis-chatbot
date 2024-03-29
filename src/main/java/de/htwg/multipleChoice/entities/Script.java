@@ -1,9 +1,6 @@
 package de.htwg.multipleChoice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -21,6 +18,7 @@ public class Script {
     @GeneratedValue(generator = "UUID")
     private UUID id;
     private String name;
+    @Column(length = 30000)
     private String text;
     @ManyToOne(targetEntity = Lecture.class)
     private Lecture lecture;

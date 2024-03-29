@@ -40,6 +40,15 @@
         <input type="text" id="docu-name" placeholder="Hier Dokumentenname eingeben" >
         <p>.pdf</p>
     </div>
+    <div class="lecture-input-container">
+        <label for="lecture">Vorlesung:</label>
+        <select>
+            <option value="">Keine Vorlesung</option>
+            {#for lecture in lectures}
+            <option value="{lecture.name}">{lecture.name}</option>
+            {/for}
+        </select>
+    </div>
     <div id="drop-zone" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)">
         <p>Datei hier ablegen</p>
     </div>
@@ -95,11 +104,12 @@
 
     document.getElementById('add-docu-button').addEventListener('click', () => {
         const docuName = document.getElementById('docu-name').value;
+        const lecture = document.querySelector('.lecture-input-container select').value;
         if (docuName === '' || uploadedFile === null) {
             alert('Bitte Dokumentenname und Datei angeben');
             return;
         }
-        documentService.addDocumentToDB(docuName, uploadedFile);
+        documentService.addDocumentToDB(docuName, uploadedFile,lecture);
         document.getElementById('docu-name').value = '';
         dropZone.innerHTML = `<p>Datei hier ablegen</p>`;
         uploadedFile = null;

@@ -4,6 +4,7 @@
     {#scripts}
     <script src="js/multipleChoice/MultipleChoiceService.js"></script>
     <script src="js/multipleChoice/OptionMessage.js"></script>
+    <script src="js/multipleChoice/QuizStartMessage.js"></script>
     {/scripts}
     {#styles}{/styles}
     {#onLoad}
@@ -53,6 +54,9 @@
         const answer = await multipleChoiceService.getAnswer(inputText);
         console.log(answer);
         uiService.removeMessage(loadingMessage.id);
+        if(answer.quizId!=null && answer.quizId!=""){
+        uiService.addMessage(new QuizStartMessage(answer.quizId));
+        }
         uiService.addMessage(new Message(null,answer, 'ai'));
         }}
         });

@@ -60,10 +60,11 @@ class DocumentService {
     }
 
     // Methode zum Hinzufügen eines Dokuments, Ladesymbol fehlt noch da upload länger gehen kann
-    async addDocumentToDB (docName, file) {
+    async addDocumentToDB (docName, file, lecture) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('name', docName);
+        formData.append('lecture', lecture);
         const response = await fetch('/api/ingest/pdf', {
             method: 'POST',
             body: formData

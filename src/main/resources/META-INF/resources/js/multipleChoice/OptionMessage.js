@@ -9,7 +9,7 @@ class OptionMessage extends Message{
     }
 
     createOptions() {
-        const text = this.element.querySelector('.text')
+        const text = this.element.querySelector('.text');
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'options';
         this.options.forEach(option => {

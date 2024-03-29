@@ -1,5 +1,7 @@
 package de.htwg.rag.ingestor.resources;
 
+import de.htwg.multipleChoice.entities.Script;
+import de.htwg.multipleChoice.repositories.ScriptRepository;
 import de.htwg.rag.ingestor.UploadFileRepository;
 import de.htwg.rag.ingestor.UploadedFile;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,6 +25,9 @@ public class UploadFileResource {
     @Inject
     UploadFileRepository uploadFileRepository;
 
+    @Inject
+    ScriptRepository scriptRepository;
+
     /**
      * This method is called when a GET request is sent to /all.
      * It returns all files in the database.
@@ -36,7 +41,7 @@ public class UploadFileResource {
     }
 
     /**
-     * This method deletes files by id from the database.
+     * This method deletes files by id from the database and the Script with the same name if exists.
      * @param id The id of the file to delete.
      * @return A response.
      */
@@ -46,6 +51,10 @@ public class UploadFileResource {
     public Response deleteFile(@PathParam("id") UUID id) {
         try {
             System.out.println("Deleting file with id: " + id + " from database at: " + new Date());
+            UploadedFile file = uploadFileRepository.findById(id);
+            if (file != null) {
+                scriptRepository.delete("name", file.getName());
+            }
             uploadFileRepository.deleteById(id);
             return Response.ok().build();
         } catch (Exception e) {

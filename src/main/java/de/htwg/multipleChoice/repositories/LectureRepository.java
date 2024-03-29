@@ -13,4 +13,7 @@ public class LectureRepository implements PanacheRepository<Lecture> {
         return find("id", id).firstResult();
     }
 
+    public Lecture findByName(String name) {
+        return find("name", name).firstResult();
+    }
 }

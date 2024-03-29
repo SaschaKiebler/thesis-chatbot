@@ -24,7 +24,7 @@ class MultipleChoiceService {
             data => {
                 this.conversationId = data.conversationId;
                 console.log(data);
-                return data.answer;
+                return data;
             }
         ).catch(error => {
             console.error('Error:', error);

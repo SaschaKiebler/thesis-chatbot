@@ -1,5 +1,7 @@
 package de.htwg.rag.ingestor.resources;
 
+import de.htwg.multipleChoice.repositories.LectureRepository;
+import de.htwg.multipleChoice.repositories.ScriptRepository;
 import de.htwg.rag.dataTools.Summarizer;
 import de.htwg.rag.ingestor.DocumentIngestor;
 import de.htwg.rag.ingestor.UploadFileRepository;
@@ -9,6 +11,8 @@ import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -26,8 +30,15 @@ class IngestDocumentResourceTest {
     @Inject
     UploadFileRepository uploadFileRepository;
 
+    @Inject
+    LectureRepository lectureRepository;
+
+    @Inject
+    ScriptRepository scriptRepository;
+
     @InjectMock
     Summarizer summarizer;
+
 
 
     @Test
@@ -37,7 +48,10 @@ class IngestDocumentResourceTest {
         String randowmName = UUID.randomUUID().toString();
         when(summarizer.summarize(anyString())).thenReturn("summary");
        given()
-                .when().formParam("name",randowmName).multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
+                .when()
+                .formParam("name",randowmName)
+                .formParam("lecture", "GMED")
+                .multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
                 .post("/api/ingest/pdf")
                 .then()
                 .statusCode(200);
@@ -60,7 +74,10 @@ class IngestDocumentResourceTest {
         doThrow(new RuntimeException("Error saving file")).when(documentIngestor).ingest(anyList());
         when(summarizer.summarize(anyString())).thenReturn("summary");
         given()
-                .when().formParam("name","test").multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
+                .when()
+                .formParam("name","test")
+                .formParam("lecture","GMED")
+                .multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
                 .post("/api/ingest/pdf")
                 .then()
                 .statusCode(500);
@@ -93,5 +110,61 @@ class IngestDocumentResourceTest {
                 .statusCode(500);
 
     }
+
+    @Test
+    @TestTransaction
+    void testUploadPdfForEmptyLecture() {
+            when(summarizer.summarize(anyString())).thenReturn("summary");
+        given()
+                .when()
+                .formParam("name","test")
+                .formParam("lecture","")
+                .multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
+                .post("/api/ingest/pdf")
+                .then()
+                .statusCode(200);
+
+        verify(documentIngestor, times(1)).ingest(anyList());
+        verify(summarizer, times(1)).summarize(anyString());
+
+        // cleanup
+        UploadedFile file = uploadFileRepository.findByName("test");
+
+        given()
+                .when().delete("/api/files/" + file.getId())
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    @TestTransaction
+    void testUploadPdfForNonExistingLecture() {
+        when(summarizer.summarize(anyString())).thenReturn("summary");
+        given()
+                .when()
+                .formParam("name","test")
+                .formParam("lecture","GibtsNicht")
+                .multiPart("file", new File("src/test/resources/pdfs/Krankenhausfinanzierung.pdf"))
+                .post("/api/ingest/pdf")
+                .then()
+                .statusCode(200);
+
+        verify(documentIngestor, times(1)).ingest(anyList());
+        verify(summarizer, times(1)).summarize(anyString());
+        assert lectureRepository.findByName("GibtsNicht") != null;
+        assert scriptRepository.findByName("test") != null;
+
+        // cleanup
+        UploadedFile file = uploadFileRepository.findByName("test");
+
+        given()
+                .when().delete("/api/files/" + file.getId())
+                .then()
+                .statusCode(200);
+
+
+    }
+
+
 
 }

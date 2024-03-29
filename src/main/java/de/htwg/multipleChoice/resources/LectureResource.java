@@ -22,6 +22,10 @@ public class LectureResource {
     @Inject
     ScriptRepository scriptRepository;
 
+    /**
+     * Get all lectures
+     * @return List of all lectures
+     */
     @Path("/all")
     @GET
     @Produces("application/json")
@@ -29,6 +33,11 @@ public class LectureResource {
         return lectureRepository.listAll();
     }
 
+    /**
+     * Get all scripts from a lecture
+     * @param id UUID of the lecture
+     * @return List of all scripts from the lecture
+     */
     @Path("/{id}/scripts")
     @GET
     @Produces("application/json")

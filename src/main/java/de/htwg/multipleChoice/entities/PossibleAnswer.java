@@ -4,12 +4,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+import java.util.UUID;
+
 @Entity
 public class PossibleAnswer {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    private String id;
+    private UUID id;
     private String answer;
     private boolean correct;
 
@@ -25,8 +27,24 @@ public class PossibleAnswer {
         return answer;
     }
 
-    public boolean isCorrect() {
+    public boolean getCorrect() {
         return correct;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
     }
 
     @Override

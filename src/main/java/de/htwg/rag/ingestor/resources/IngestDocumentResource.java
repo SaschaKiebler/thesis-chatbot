@@ -1,5 +1,9 @@
 package de.htwg.rag.ingestor.resources;
 
+import de.htwg.multipleChoice.entities.Lecture;
+import de.htwg.multipleChoice.entities.Script;
+import de.htwg.multipleChoice.repositories.LectureRepository;
+import de.htwg.multipleChoice.repositories.ScriptRepository;
 import de.htwg.rag.dataTools.Summarizer;
 import de.htwg.rag.dataTools.WebsiteTextExtractor;
 import de.htwg.rag.ingestor.DocumentIngestor;
@@ -46,6 +50,12 @@ public class IngestDocumentResource {
     UploadFileRepository uploadFileRepository;
 
     @Inject
+    LectureRepository lectureRepository;
+
+    @Inject
+    ScriptRepository scriptRepository;
+
+    @Inject
     Summarizer summarizer;
 
     @Inject
@@ -55,7 +65,7 @@ public class IngestDocumentResource {
 
     /**
      * This method is called when a POST request is sent to /pdf.
-     * It ingests a PDF file.
+     * It ingests a PDF file and safes the Embeddings, the summarized text and a Object of the UploadedFile class.
      * @param pdfFile the PDF file to ingest
      * @param name the name of the PDF file
      * @return a Response
@@ -65,7 +75,7 @@ public class IngestDocumentResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Transactional
     @TransactionConfiguration(timeout = 3000)
-    public Response uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name) {
+    public Response uploadPdf(@MultipartForm PdfFile pdfFile, @FormParam("name") String name, @FormParam("lecture") String lectureName) {
         if (isFileEmpty(pdfFile)) {
             System.err.println("Uploaded File is empty");
             return Response.status(Response.Status.BAD_REQUEST).entity("file is required").build();
@@ -82,8 +92,20 @@ public class IngestDocumentResource {
 
             // load the document with the documentParser and add the fileKey to the metadata
             Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
+            // save the link to the file in Markdown syntax in the metadata  better understanding for the llm
             document.metadata().add("link","["+ uploadedFile.getName() +"](/api/files/" + uploadedFile.getId().toString() + ")");
             document.metadata().add("fileKey", uploadedFile.getId().toString());
+
+            // Safe the Script with plain text and add the lecture
+            if (!lectureName.isEmpty()) {
+            String text = document.text();
+            Lecture lecture = lectureRepository.findByName(lectureName);
+            if (lecture == null) {
+                lecture = Lecture.builder().name(lectureName).build();
+                lectureRepository.persist(lecture);
+            }
+            scriptRepository.persist(Script.builder().name(name).lecture(lecture).text(text).build());
+            }
 
             // Summarize the text and ingest it
             String sumtext = summarizer.summarize(document.text());
@@ -147,7 +169,7 @@ public class IngestDocumentResource {
     }
 
     /**
-     * This method is called when a POST request is sent to /url.
+     * This method is called when a POST request is sent to /url. impl not finished
      * It ingests a URL.
      * @param url the URL to ingest
      * @param name the name of the URL

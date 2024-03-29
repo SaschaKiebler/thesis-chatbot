@@ -17,12 +17,15 @@ public interface MultipleChoiceAIService {
     @SystemMessage(
             """
                     Du bist ein Quizmaster. Der Nutzer gibt an,  zu welchem Script er getestet werden möchte.
+                    Benutze das Skript.
                     Erzeuge insgesamt 5 Fragen mit 3 Antwortmöglichkeiten zu dem Skript.
-                    Sende die erzeugte Frage danach im richtigen Format an den User.
+                    Erzeuge erst ein Quiz und im Anschluss die Fragen für den Nutzer.
                     Wenn der Nutzer kein Skript angibt, Frage ihn nach dem Skript und weise darauf hin, dass er eine 
                     normale Konversation nur im Q&A Modus führen kann.
+                    Erstelle ausdrücklich nur ein Quiz, wenn der Nutzer einen Skript angegeben hat.
+                    Antworte immer mit dem richtigen Format.
                     """
     )
-    String getQuestion(@UserMessage String scriptId, @MemoryId String memoryId);
+    MultipleChoiceAnswerFormat getQuestion(@UserMessage String scriptId, @MemoryId String memoryId);
 
 }

@@ -2,7 +2,10 @@ package de.htwg.multipleChoice.resources;
 
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.ConversationRepository;
+import de.htwg.multipleChoice.entities.MCQuiz;
+import de.htwg.multipleChoice.repositories.MCQuizRepository;
 import de.htwg.multipleChoice.services.MultipleChoiceAIService;
+import de.htwg.multipleChoice.services.MultipleChoiceAnswerFormat;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -23,6 +26,8 @@ public class MultipleChoiceAPIResource {
 
     @Inject
     ConversationRepository conversationRepository;
+    @Inject
+    MCQuizRepository mcQuizRepository;
 
 
     /**
@@ -45,8 +50,23 @@ public class MultipleChoiceAPIResource {
             conversation = conversationRepository.findById(UUID.fromString(conversationId));
         }
 
-        String answer = multipleChoiceAIService.getQuestion(message, conversation.getId().toString());
+        MultipleChoiceAnswerFormat answer = multipleChoiceAIService.getQuestion(message, conversation.getId().toString());
 
-        return Response.ok().entity(Json.object().put("answer",answer).put("conversationId",conversation.getId().toString()).build()).build();
+        return Response.ok()
+                .entity(Json.object()
+                        .put("answer",answer.getAnswer())
+                        .put("quizId",answer.getQuizId())
+                        .put("conversationId",conversation.getId()
+                                .toString()).build()).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getQuiz(@QueryParam("quizId") String quizId){
+        MCQuiz quiz = mcQuizRepository.findById(UUID.fromString(quizId));
+        if (quiz == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok().entity(Json.object().put("quiz", quiz.toString()).build()).build();
     }
 }

@@ -23,9 +23,8 @@ public class GetLectureScript {
      * @return The lecture script.
      */
     @Tool("get the lecture script by id")
-    public String getLectureScriptById(String scriptId) {
-        UUID uuid = UUID.fromString(scriptId);
-        Script script = scriptRepository.findById(uuid);
+    public String getLectureScriptById(UUID scriptId) {
+        Script script = scriptRepository.findById(scriptId);
         if (script == null) {
             return "No script found with id " + scriptId;
         }

@@ -6,13 +6,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class MultipleChoiceQuestion {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    private String id;
+    private UUID id;
 
     private String question;
 
@@ -27,7 +28,7 @@ public class MultipleChoiceQuestion {
         this.possibleAnswers = answers;
     }
 
-    public MultipleChoiceQuestion(String question, List<PossibleAnswer> answers, String id) {
+    public MultipleChoiceQuestion(String question, List<PossibleAnswer> answers, UUID id) {
         this.question = question;
         this.possibleAnswers = answers;
         this.id = id;
@@ -39,6 +40,34 @@ public class MultipleChoiceQuestion {
 
     public List<PossibleAnswer> getAnswers() {
         return possibleAnswers;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public void setAnswers(List<PossibleAnswer> answers) {
+        this.possibleAnswers = answers;
+    }
+
+    public void addAnswer(PossibleAnswer answer) {
+        possibleAnswers.add(answer);
+    }
+
+    public void removeAnswer(PossibleAnswer answer) {
+        possibleAnswers.remove(answer);
+    }
+
+    public void removeAllAnswers() {
+        possibleAnswers.clear();
     }
 
 

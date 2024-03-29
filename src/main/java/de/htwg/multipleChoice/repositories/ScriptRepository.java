@@ -12,4 +12,8 @@ public class ScriptRepository implements PanacheRepository<Script> {
         public Script findById(UUID id) {
             return find("id", id).firstResult();
         }
+
+        public Script findByName(String name) {
+            return find("name", name).firstResult();
+        }
 }
