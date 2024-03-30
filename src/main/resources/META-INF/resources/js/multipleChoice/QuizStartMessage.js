@@ -1,6 +1,6 @@
 
 class QuizStartMessage extends Message{
-    constructor(id) {
+    constructor(id, uiService) {
         super(id, "Willkommen zum Multiple Choice Quiz", "ai");
         const text = this.element.querySelector('.text');
         const buttonContainer = document.createElement('div');
@@ -13,21 +13,15 @@ class QuizStartMessage extends Message{
         })
         buttonContainer.appendChild(button);
         text.appendChild(buttonContainer);
+
+        this.MultipleChoiceService = new MultipleChoiceService();
+        this.uiService = uiService;
+
     }
 
-    // Fragt das Quiz mit der Id an
+    // Fragt das Quiz mit der Id an von Service an und füge es als MultipleChoiceQuizMessage der UI hinzu
     async startQuiz(id) {
-        const response = await fetch(`/api/quiz/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        console.log(data);
-        if (data.success) {
-
-        }
-
+        const quiz = await this.MultipleChoiceService.getQuiz(id);
+        this.uiService.addMessage(new MultipleChoiceQuizMessage(quiz));
     }
 }

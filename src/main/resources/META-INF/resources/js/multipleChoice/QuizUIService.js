@@ -58,7 +58,7 @@ class QuizUIService {
         const answer = await this.multipleChoiceService.getAnswer(scriptOption.id);
         this.uiService.removeMessage(loadingMessageId);
 
-        const message = answer.quizId ? new QuizStartMessage(answer.quizId) : new Message(null, answer, 'ai');
+        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService) : new Message(null, answer, 'ai');
         this.uiService.addMessage(message);
     }
 

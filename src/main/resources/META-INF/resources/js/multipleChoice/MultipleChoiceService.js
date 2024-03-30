@@ -45,5 +45,24 @@ class MultipleChoiceService {
         });
     };
 
+    async getQuiz(quizId) {
+        return await fetch(`/api/quiz/${quizId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(data => {
+            return data.json();
+        }).then(
+            data => {
+                console.log(data);
+                return data;
+            }
+        ).catch(error => {
+            console.error('Error:', error);
+        });
+
+    }
+
 
 }

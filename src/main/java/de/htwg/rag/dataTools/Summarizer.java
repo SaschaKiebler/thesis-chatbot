@@ -31,9 +31,8 @@ public class Summarizer {
         // Summarize the text and ingest it
         // Use of the @RegisterAiService annotation is not possible on TextSummarizer because no option to say chatMemory = null
         ChatLanguageModel model = OpenAiChatModel.builder()
-                .apiKey(System.getenv("TOGETHERAI_API_KEY"))
-                .modelName("NousResearch/Nous-Hermes-2-Mixtral-8x7B-SFT")
-                .baseUrl("https://api.together.xyz")
+                .apiKey(System.getenv("OPENAI_APIKEY"))
+                .modelName("gpt-3.5-turbo-0125")
                 .timeout(Duration.ofMinutes(5))
                 .logRequests(true)
                 .logResponses(true)

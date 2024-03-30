@@ -10,6 +10,8 @@ class UIService {
     // Fügt Nachrichten der UI hinzu
     addMessage(message) {
         this.conversation.appendChild(message.element);
+        // scrolle nach unten
+        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
     }
 
     // Entfernt alle Nachrichten aus der UI und fügt eine Begrüßungsnachricht hinzu
