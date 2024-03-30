@@ -8,8 +8,11 @@
     <script src="js/multipleChoice/QuizUIService.js"></script>
     <script src="js/multipleChoice/MultipleChoiceQuizMessage.js"></script>
     <script src="js/multipleChoice/MultipleChoiceQuestion.js"></script>
+        <script src="js/multipleChoice/QuizEnd.js"></script>
     {/scripts}
-    {#styles}{/styles}
+    {#styles}
+        <link rel="stylesheet" href="styles/mcStyle.css">
+    {/styles}
     {#onLoad}
     document.getElementById("input").focus();
         const quizUIService = new QuizUIService(uiService, multipleChoiceService, [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]);

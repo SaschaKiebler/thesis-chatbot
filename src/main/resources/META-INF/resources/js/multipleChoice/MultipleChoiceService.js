@@ -6,9 +6,6 @@ class MultipleChoiceService {
     }
 
     async getAnswer(message) {
-            const body = {
-                message: message
-            };
 
         return await fetch(`/api/multipleChoice?conversationId=${this.conversationId ? this.conversationId : ""}`, {
             method: 'POST',

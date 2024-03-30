@@ -55,10 +55,10 @@ class QuizUIService {
         this.displayUserMessage(scriptOption.innerHTML);
         const loadingMessageId = this.displayLoadingMessage();
 
-        const answer = await this.multipleChoiceService.getAnswer(scriptOption.id);
+        const answer = await this.multipleChoiceService.getAnswer("erzeuge ein Quiz zum Skript " + scriptOption.id);
         this.uiService.removeMessage(loadingMessageId);
 
-        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService) : new Message(null, answer, 'ai');
+        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService) : new Message(null, answer.answer, 'ai');
         this.uiService.addMessage(message);
     }
 

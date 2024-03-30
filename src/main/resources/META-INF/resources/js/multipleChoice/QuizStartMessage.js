@@ -21,6 +21,7 @@ class QuizStartMessage extends Message{
 
     // Fragt das Quiz mit der Id an von Service an und füge es als MultipleChoiceQuizMessage der UI hinzu
     async startQuiz(id) {
+        this.element.querySelector('.start-quiz-button').disabled = true;
         const quiz = await this.MultipleChoiceService.getQuiz(id);
         this.uiService.addMessage(new MultipleChoiceQuizMessage(quiz));
     }
