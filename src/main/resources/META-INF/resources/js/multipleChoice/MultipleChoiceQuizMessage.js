@@ -84,6 +84,7 @@ class MultipleChoiceQuizMessage extends Message {
             }
             else if (element.element.classList.contains('wrong')) {
                 element.element.querySelector('.clicked').style.backgroundColor = '#ff0000';
+                element.element.querySelector('.correct').style.border = '1px solid #00ff00';
             }
         })
     }

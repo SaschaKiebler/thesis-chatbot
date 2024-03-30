@@ -17,6 +17,9 @@ class MultipleChoiceQuestion {
                 <button class="next-question-button question-control-buttons">Weiter</button>
             </div>
         `;
+        // shuffel answers
+        this.answers.sort(() => Math.random() - 0.5);
+
         for (const answer of this.answers) {
             this.addAnswer(answer);
         }
