@@ -5,15 +5,16 @@
     <script src="js/multipleChoice/MultipleChoiceService.js"></script>
     <script src="js/multipleChoice/OptionMessage.js"></script>
     <script src="js/multipleChoice/QuizStartMessage.js"></script>
+    <script src="js/multipleChoice/QuizUIService.js"></script>
     {/scripts}
     {#styles}{/styles}
     {#onLoad}
     document.getElementById("input").focus();
-        uiService.addMessage(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]));
+        const quizUIService = new QuizUIService(uiService, multipleChoiceService, [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]);
+
     {/onLoad}
     {#eventListener}
         const multipleChoiceService = new MultipleChoiceService();
-
 
         // Verhindert XSS
         function sanitizeString(str) {
@@ -44,20 +45,38 @@
         input.value += '\n';
         }
         else if (event.key === 'Enter' && !event.shiftKey) {
+
+        // wandelt mögliche Sonderzeichen des Inputs um sodass diese nicht formatiert werden
         let inputText = sanitizeString(input.value);
+
+        // Fügt die Message des Users der UI hinzu
         uiService.addMessage(new Message(null,inputText, 'user'));
+
+        // Erstellt eine LoadingMessage
         const loadingMessage = new LoadingMessage();
         uiService.addMessage(loadingMessage);
+
+        // Macht das Inputfeld leer, eine Zeile hoch und scrollt ans ende des Chat-Feldes
         input.value = '';
         input.style.height = 'auto';
         document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+
+        // Hole die Antwort
         const answer = await multipleChoiceService.getAnswer(inputText);
-        console.log(answer);
+
+        // Entferne die LoadingMessage
         uiService.removeMessage(loadingMessage.id);
+
+
+        // Wenn die Antwort ein Quiz ist dann wird eine
+        // Start-Nachricht der UI hinzugefügt, ansonsten wird eine
+        // normale Nachricht der UI hinzugefügt
         if(answer.quizId!=null && answer.quizId!=""){
         uiService.addMessage(new QuizStartMessage(answer.quizId));
         }
-        uiService.addMessage(new Message(null,answer, 'ai'));
+        else{
+            uiService.addMessage(new Message(null,answer, 'ai'));
+        }
         }}
         });
 
@@ -65,7 +84,9 @@
     {/eventListener}
     {#inputText}Lernen wir heute...{/inputText}
     {#clearMessagesExtension}
-        uiService.clearMessages(new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]));
+
+        const quizUIService = new QuizUIService(uiService, multipleChoiceService, [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]);
+
     {/clearMessagesExtension}
 
 {/include}

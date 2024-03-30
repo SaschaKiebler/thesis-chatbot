@@ -31,22 +31,19 @@ class MultipleChoiceService {
         });
     }
 
-    getScriptsFromLecture(lectureId) {
-        return fetch(`/api/lectures/${lectureId}/scripts`, {
+
+    async getScripts(lectureId) {
+        return await fetch(`/api/lectures/${lectureId}/scripts`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             }
-        }).then(
-            data => {
-                return data.json();
-            }
-        ).then(
-            data => {
-            console.log(data);
-            return data;
+        }).then(data => {
+            return data.json();
         }).catch(error => {
             console.error('Error:', error);
         });
-    }
+    };
+
+
 }
