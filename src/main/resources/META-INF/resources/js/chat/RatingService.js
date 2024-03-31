@@ -1,12 +1,13 @@
 
 /*
-    Diese Klasse ist der Service für das Rating System. Sie fügt den Nachrichten das Rating-System hinzu und sendet die Bewertung an den Server
+    Handels the rating system and sends the rating to the server
  */
 class RatingService {
     constructor() {
         this.messages = [];
     }
 
+    // adds the rating listener to the dual message
     addRatingListener(dualMessage) {
         this.messages = document.getElementById(dualMessage.id).children;
         for (let message of this.messages) {
@@ -18,6 +19,7 @@ class RatingService {
         }
     }
 
+    // sends the rating to the server
     async sendRating(message) {
         // Send the rating to the server
         message.classList.add("rated");
@@ -33,6 +35,7 @@ class RatingService {
         this.addExtendedRating(message);
     }
 
+    // removes the rating UI
     setRatingDisabled(){
         const messages = document.getElementsByClassName("rating-disabled");
         for (let message of messages) {
@@ -42,6 +45,7 @@ class RatingService {
         }
     }
 
+    // adds the extended rating UI
     addExtendedRating(message){
         const ratingExtended = new RatingExtended(message.id);
         document.getElementById(message.id).parentElement.after(ratingExtended.element);

@@ -1,4 +1,6 @@
 
+version: "3.8"
+
 services:
   quarkus-service:
     image: "saschakiebler/thesis-chatbot"

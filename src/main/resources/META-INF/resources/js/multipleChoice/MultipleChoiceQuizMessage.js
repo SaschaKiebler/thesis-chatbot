@@ -1,7 +1,10 @@
 
+// TODO: add progress bar
+// This class displays a quiz with multiple choice questions and is a child of the Message class
+// It also contains the logic for displaying the next and previous question buttons of the MultipleChoiceQuestion class
 class MultipleChoiceQuizMessage extends Message {
     constructor(quiz) {
-        super(quiz.id, "Beantworte die Fragen, im Anschluss können wir über die Lösungen sprechen.", 'ai');
+        super(quiz.id, "Hier ist dein Quiz😎. Wenn du alle Fragen beantwortet hast, können wir gerne deine Ergebnisse besprechen.", 'ai');
         const text = this.element.querySelector('.text');
         this.questionElements = [];
         this.questionContainer = this.createQuestionContainer();
@@ -14,12 +17,14 @@ class MultipleChoiceQuizMessage extends Message {
         this.endOfQuiz = false;
     }
 
+    // creates the container for the questions
     createQuestionContainer() {
         const questionContainer = document.createElement('div');
         questionContainer.className = 'questions';
         return questionContainer;
     }
 
+    // adds a question to the container and adds an event listener to the next and previous question buttons
     addQuestion(question) {
         const questionElement = new MultipleChoiceQuestion(question.id, question.question, question.answers);
         this.questionContainer.appendChild(questionElement.element);
@@ -36,11 +41,12 @@ class MultipleChoiceQuizMessage extends Message {
         })
     }
 
+    // displays the first question
     display() {
         this.questionElements[0].element.style.display = 'flex';
     }
 
-
+    // displays the next question (logic for the next Button)
     displayNextQuestion(questionElement) {
         const index = this.questionElements.indexOf(questionElement);
         if (index < this.questionElements.length - 1 && !this.endOfQuiz) {
@@ -59,6 +65,7 @@ class MultipleChoiceQuizMessage extends Message {
         }
     }
 
+    // displays the previous question (logic for the previous Button)
     displayPreviousQuestion(questionElement) {
         const index = this.questionElements.indexOf(questionElement);
         if (index > 0) {
@@ -67,6 +74,8 @@ class MultipleChoiceQuizMessage extends Message {
         }
     }
 
+    // gets called when the end of the quiz is reached, calls the showResults
+    // function and adds the QuizEnd class to the questionElements array
     end() {
         this.endOfQuiz = true;
         const quizEnd = new QuizEnd(this.id);
@@ -76,15 +85,17 @@ class MultipleChoiceQuizMessage extends Message {
         this.showResults();
     }
 
+    // shows the results
     showResults() {
         this.questionElements.forEach(element => {
             if (element.element.classList.contains('right')) {
                 this.score++;
-                element.element.querySelector('.correct').style.backgroundColor = '#00ff00';
+                element.element.querySelector('.correct').style.backgroundColor = 'var(--correct)';
+                element.element.querySelector('.correct').style.color = '#000';
             }
             else if (element.element.classList.contains('wrong')) {
-                element.element.querySelector('.clicked').style.backgroundColor = '#ff0000';
-                element.element.querySelector('.correct').style.border = '1px solid #00ff00';
+                element.element.querySelector('.clicked').style.backgroundColor = 'var(--wrong)';
+                element.element.querySelector('.correct').style.border = '1px solid var(--correct)';
             }
         })
     }

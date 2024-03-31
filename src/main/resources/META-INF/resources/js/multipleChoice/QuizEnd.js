@@ -1,4 +1,6 @@
 
+// TODO options how to continue
+// Represents the end of a quiz. Contains the results of the quiz and the options how to continue.
 class QuizEnd {
 
     constructor(id) {
@@ -19,12 +21,14 @@ class QuizEnd {
         this.display();
     }
 
+    // get all question elements from DOM
     getQuestionElements() {
         document.querySelectorAll('.question').forEach(element => {
             this.questionElements.push(element);
         })
     }
 
+    // display results and mark the answers in the questions
     display() {
         this.getQuestionElements();
         this.questionElements.forEach(element => {
@@ -35,9 +39,9 @@ class QuizEnd {
             result.className = 'question-result';
             result.innerHTML = this.questionElements.indexOf(element) + 1;
             if (element.classList.contains('right')) {
-                result.style.backgroundColor = '#00ff00';
+                result.style.backgroundColor = 'var(--correct)';
             } else {
-                result.style.backgroundColor = '#ff0000';
+                result.style.backgroundColor = 'var(--wrong)';
             }
             this.questionContainer.appendChild(result);
         });

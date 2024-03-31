@@ -1,13 +1,16 @@
+
+// class to convert markdown to html
 class MarkdownParser {
     constructor() {
 
     }
 
+    // converts markdown to html
     parse(message) {
         return this.convertMarkdownToHtml(message);
     }
 
-    // ruft alle Methoden auf, die Markdown in HTML umwandeln
+    // calls all convert functions
     convertMarkdownToHtml(markdown) {
         let html = markdown;
         html = this.convertBold(html);
@@ -21,42 +24,42 @@ class MarkdownParser {
         return html;
     }
 
-    // wandelt **bold** in <b>bold</b> um
+    // changes **bold** text to <b>bold</b>
     convertBold(html) {
         return html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
     }
 
-    // wandelt *italic* in <i>italic</i> um
+    // changes *italic* in <i>italic</i>
     convertItalic(html) {
         return html.replace(/\*(.*?)\*/g, '<i>$1</i>');
     }
 
-    // wandelt __underline__ in <u>underline</u> um
+    // changes __underline__ in <u>underline</u>
     convertUnderline(html) {
         return html.replace(/__(.*?)__/g, '<u>$1</u>');
     }
 
-    // wandelt ```code``` in <div class="code"><pre><code>code</code></pre></div> um
+    // changes ```code``` in <div class="code"><pre><code>code</code></pre></div>
     convertCode(html) {
         return html.replace(/`{3}(.*)\n([\s\S]*)\n`{3}/gim, '<div class="code"><pre><code class="$1">$2</code></pre></div>');
     }
 
-    // wandelt `code` in <code>code</code> um
+    // changes `code` in <code>code</code>
     convertInlineCode(html) {
         return html.replace(/`(.[^`]*)`/g, '<code>$1</code>');
     }
 
-    // wandelt [link](url) in <a href="url">link</a> um
+    // changes [link](url) in <a href="url">link</a>
     convertLink(html) {
         return html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
     }
 
-    // wandelt 1. in <ol>1.</ol> um
+    // changes 1. in <ol>1.</ol>
     convertOrderedList(html) {
         return html.replace(/(\d\..*?)(?=\n)/g, '<ol>$1</ol>');
     }
 
-    // wandelt * in <ul><li>*</li></ul> um
+    // changes * in <ul><li>*</li></ul>
     convertUnorderedList(html) {
         html = html.replace(/(\*.*?)(?=\n)/g, '<ul>$1</ul>');
         return html.replace(/(<ul>.*?<\/ul>)/g, '<li>$1</li>');

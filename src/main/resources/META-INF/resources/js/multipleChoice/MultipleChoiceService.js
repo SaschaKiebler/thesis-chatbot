@@ -53,10 +53,14 @@ class MultipleChoiceService {
         }).then(
             data => {
                 console.log(data);
+                if (data.details){
+                    throw new Error(data.details);
+                }
                 return data;
             }
         ).catch(error => {
             console.error('Error:', error);
+            throw new Error(error);
         });
 
     }

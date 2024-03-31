@@ -1,5 +1,5 @@
 /*
-    ErrorMessage Klasse die Nachrichten als Fehlermeldungen darstellt
+    ErrorMessage to display an error
  */
 
 class ErrorMessage extends Message{

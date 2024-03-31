@@ -1,5 +1,5 @@
 /*
-    * Diese Klasse erweitert das Rating-System um die Möglichkeit, die bevorzugte Bewertung zu spezifizieren.
+    * Extends the rating UI with additional radio buttons to get the reason for the preferred cause
 */
 class RatingExtended{
     constructor(id) {
@@ -35,6 +35,7 @@ class RatingExtended{
         });
     }
 
+    // sends the rating to the server and removes the rating UI
     sendRating(rating) {
 
         fetch('/api/answer/preffered/cause?id=' + this.id + '&value=' + rating, {

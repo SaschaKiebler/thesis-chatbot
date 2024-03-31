@@ -1,6 +1,6 @@
 
 /*
-    Diese Klasse stellt einen Hinweis für das Rating-System dar und wird bei der Anzeige von zwei Antworten in der Chatliste hinzugefügt
+    Represents the hint for the rating that gets displayed in the chat after the answer of the LLM
  */
 
 class RatingHint {

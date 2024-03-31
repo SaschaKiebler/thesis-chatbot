@@ -1,6 +1,6 @@
 
 /*
-    Diese Klasse stellt eine Nachricht dar und formatiert sie für die UI. Je nach Sender wird die Nachricht mit Bot oder You beschriftet
+    This class represents a single message. It has a sender, a message and an id. if the sender is 'ai', the message is a bot message
  */
 
 class Message {

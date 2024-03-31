@@ -1,4 +1,5 @@
 
+// Represents a message with multiple options
 class OptionMessage extends Message{
 
     constructor(id, message, options, type) {
@@ -9,6 +10,7 @@ class OptionMessage extends Message{
         this.element.classList.add(type + '-message');
     }
 
+    // Creates the buttons for the options
     createOptions() {
         const text = this.element.querySelector('.text');
         const buttonContainer = document.createElement('div');

@@ -1,6 +1,6 @@
 
 /*
-    Klasse um zwei Nachrichten zu einem DualMessage-Objekt zusammenzufassen und in der Chatliste anzuzeigen
+    class to represent two messages side by side in the UI
  */
 class DualMessage {
     constructor(messageLeft, messageRight) {

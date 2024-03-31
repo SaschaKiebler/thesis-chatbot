@@ -1,3 +1,5 @@
+
+// handels all the chat logic in the Q&A UI
 class ChatService {
 
     constructor() {
@@ -9,13 +11,13 @@ class ChatService {
         this.markdownParser = new MarkdownParser();
     }
 
-    // Diese Methode fügt die Nachricht der Chatliste hinzu und ruft die Methode addMessagesToUI auf
+    // adds a message to the list of messages and updates the UI
     addMessage(message) {
         this.messages.push(message);
         this.addMessagesToUI()
     }
 
-    // Diese Methode kann verwendet werden, um ohne Rating einen normalen Chat zu starten und spricht den leftService an
+    // can be used to start a normal chat without the evaluation. calls the leftService
     async getAnswer(requestText) {
         const displayedText = this.encodeHTML(requestText);
         this.addMessage(new Message(null, displayedText, "user"));
@@ -48,7 +50,8 @@ class ChatService {
         }
     }
 
-    // Diese Methode spricht zwei Endpunkte gleichzeitig an und fügt die Antworten der Chatliste hinzu. Hier wird auch das Rating-System aktiviert
+    // can be used to start a dual chat with the evaluation. calls the leftService and the rightService in parallel
+    // and adds the messages to the list of messages and updates the UI
     async getDualAnswer(requestText, ratingHint) {
         this.addMessage(new Message(null, requestText, "user"));
         this.addMessage(new LoadingMessage());
@@ -105,14 +108,14 @@ class ChatService {
         return this.messages;
     }
 
-    // Fügt jede Nachricht der Chatliste der UI hinzu
+    // adds all messages to the UI
     addMessagesToUI() {
         this.messages.forEach(message => {
             this.uiService.addMessage(message);
         });
     }
 
-    // Löscht alle Nachrichten aus der Chatliste und der UI und setzt die Konversations-IDs zurück. Ebenso wird das Input-Feld wieder aktiviert
+    // deletes all messages from the UI and activates the input field
     clearMessages() {
         this.messages = [];
         this.conversationIdleft = null;

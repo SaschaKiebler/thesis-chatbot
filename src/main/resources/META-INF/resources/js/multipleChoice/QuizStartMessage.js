@@ -22,7 +22,19 @@ class QuizStartMessage extends Message{
     // Fragt das Quiz mit der Id an von Service an und füge es als MultipleChoiceQuizMessage der UI hinzu
     async startQuiz(id) {
         this.element.querySelector('.start-quiz-button').disabled = true;
+        try {
+
+
         const quiz = await this.MultipleChoiceService.getQuiz(id);
+        if (quiz.questions.length === 0) {
+            this.uiService.addMessage(new Message(null, "Leider konnten wir deine Quizdaten nicht laden. Bitte versuche es erneut.", 'ai'));
+        }
+        else {
         this.uiService.addMessage(new MultipleChoiceQuizMessage(quiz));
+        }
+        }
+        catch(error) {
+            this.uiService.addMessage(new Message(null, "Leider konnten wir deine Quizdaten nicht laden. Bitte versuche es erneut.", 'ai'));
+        }
     }
 }

@@ -1,38 +1,39 @@
 
 /*
-    Diese Klasse manipuliert die UI.
+    This class provides methods to add messages to the UI and to toggle the dark mode
  */
 class UIService {
     constructor() {
         this.conversation = document.getElementById('conversation');
     }
 
-    // Fügt Nachrichten der UI hinzu
+    // adds a message to the UI
     addMessage(message) {
         this.conversation.appendChild(message.element);
         // scrolle nach unten
         document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
     }
 
-    // Entfernt alle Nachrichten aus der UI und fügt eine Begrüßungsnachricht hinzu
+    // deletes all messages from the UI and adds a new welcome message
     clearMessages(message) {
         this.conversation.innerHTML = '';
         this.addMessage(message ? message : new Message(null, "Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?", "ai"));
     }
 
-    // Gibt der UI die Möglichkeit den Dark-Mode zu aktivieren und fügt die CSS Klasse hinzu oder entfernt sie
-    // Sie ändert auch das Bild des Dark-Mode Buttons
+    // function to toggle the dark mode
+    // also changes the icon of the button
     toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         document.getElementById('darkmode').firstChild.src = document.body.classList.contains('dark-mode') ? 'pictures/lightmode.svg' : 'pictures/darkmode.svg';
     }
 
-    // Aktiviert den Pop-Up Text, wenn das Input-Feld deaktiviert ist
+    // activates the pop up when the input is disabled
     enablePopUp() {
         document.addEventListener("DOMContentLoaded", function() {
             const input = document.getElementById("input");
             const popup = document.getElementById("popup");
 
+            // function to toggle the popup
             function togglePopup() {
                 if (input.disabled) {
                     popup.classList.add("show");
@@ -41,7 +42,7 @@ class UIService {
                 }
             }
 
-            // Event listener für mouseenter und mouseleave um das Pop-Up zu aktivieren/deaktivieren
+            // Event listener for mouseenter and mouseleave to toggle the popup
             input.addEventListener("mouseenter", togglePopup);
             input.addEventListener("mouseleave", function() {
                 popup.classList.remove("show");
@@ -50,7 +51,7 @@ class UIService {
 
     }
 
-    // Speichert den Dark-Mode in den Local Storage auf Client
+    // saves the dark mode in the Local Storage
     saveDarkMode() {
         if (document.body.classList.contains('dark-mode')) {
             localStorage.setItem('dark-mode', 'true');
@@ -59,14 +60,14 @@ class UIService {
         }
     }
 
-    // Lädt den Dark-Mode aus dem Local Storage beim Laden der Seite
+    // Loads the dark mode from the Local Storage
     loadDarkMode() {
         if (localStorage.getItem('dark-mode') === 'true') {
             document.body.classList.add('dark-mode');
         }
     }
 
-    // löscht Nachrichten aus der UI
+    // deletes the message with the given id from the UI
     removeMessage(id) {
         const message = document.getElementById(id);
         message.remove();

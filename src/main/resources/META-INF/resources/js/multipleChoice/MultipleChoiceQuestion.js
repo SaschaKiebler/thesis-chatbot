@@ -1,4 +1,7 @@
 
+// TODO: Add a timer
+// TODO: Add progress bar
+// Represents a single question with multiple answers and a next question button as well as a previous question button
 class MultipleChoiceQuestion {
 
     constructor(id, question, answers) {
@@ -26,6 +29,7 @@ class MultipleChoiceQuestion {
         this.addAnswerListener();
     }
 
+    // Adds an answer to the question
     addAnswer(answer) {
         const answerElement = document.createElement('button');
         answerElement.className = 'answer';
@@ -37,6 +41,7 @@ class MultipleChoiceQuestion {
         this.element.querySelector('.answers').appendChild(answerElement);
     }
 
+    // Adds an event listener to the answers
     addAnswerListener() {
         this.element.querySelectorAll('.answers .answer').forEach(button => {
             button.addEventListener('click', () => {

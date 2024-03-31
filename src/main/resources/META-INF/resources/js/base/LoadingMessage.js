@@ -1,5 +1,5 @@
 /*
-* Klasse um Antwortgenerierung dynamischer zu machen
+* Class to display a loading message in the UI with three dots that circulate as a loading animation
 * */
 class LoadingMessage extends Message{
     constructor(message) {

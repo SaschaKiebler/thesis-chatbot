@@ -1,6 +1,11 @@
 
+:root{
+    --correct: #6bff7c;
+    --wrong: #ff6464;
+}
+
 .questions{
-    width: 100%;
+    width: fit-content;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -28,7 +33,12 @@
     height: 95%;
     max-height: fit-content;
 }
+
+.answers{
+    width: 90%;
+}
 .answer{
+    font-size: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -68,3 +78,13 @@
     border: var(--highlight-color) 2px solid;
 }
 
+.question-result{
+    padding: 15px;
+    color: #000;
+}
+
+@media (max-width: 1050px){
+    .questions{
+        flex-direction: column;
+    }
+}
