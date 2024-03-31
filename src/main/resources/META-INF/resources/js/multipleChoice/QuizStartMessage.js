@@ -1,4 +1,6 @@
 
+// TODO: design the Start button
+// class that represents the start of the quiz
 class QuizStartMessage extends Message{
     constructor(id, uiService) {
         super(id, "Willkommen zum Multiple Choice Quiz", "ai");
@@ -19,7 +21,7 @@ class QuizStartMessage extends Message{
 
     }
 
-    // Fragt das Quiz mit der Id an von Service an und füge es als MultipleChoiceQuizMessage der UI hinzu
+    // function to start the quiz. Calls the getQuiz function of the MultipleChoiceService
     async startQuiz(id) {
         this.element.querySelector('.start-quiz-button').disabled = true;
         try {

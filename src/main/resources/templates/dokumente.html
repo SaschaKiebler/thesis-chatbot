@@ -15,9 +15,15 @@
 <h1>Dokumente für die Wissensdatenbank</h1>
 <div class="doku-liste-container">
     <div class="tool-container">
+        <div class="left-tools">
         <div class="tool-text-img-box">
             <div>Hinzufügen:</div>
             <button class="tool" id="add-document"><img src="pictures/file-plus.svg" width="25px" height="20px" alt="file with plus symbol"></button>
+        </div>
+        <div class="tool-text-img-box">
+            <div>Fach erstellen:</div>
+            <button class="tool" id="add-lecture"><img src="pictures/lecture-plus.svg" width="25px" height="20px" alt="plus symbol"></button>
+        </div>
         </div>
         <div class="tool-text-img-box">
             <div>Zum Chat:</div>
@@ -55,6 +61,21 @@
     <button id="add-docu-button">Hinzufügen</button>
 </div>
 
+<div class="create-lecture-container">
+    <div>
+        <button id="close-create-lecture-container">X</button>
+    </div>
+    <div class="name-input-container">
+        <label for="lecture-name">Name:</label>
+        <input type="text" id="lecture-name" placeholder="Hier Vorlesungsname eingeben" >
+    </div>
+    <div>
+        <label for="lecture-description">Beschreibung:</label>
+        <textarea id="lecture-description" placeholder="Hier Beschreibung eingeben" ></textarea>
+    </div>
+    <button id="create-lecture-button">Hinzufügen</button>
+
+</div>
 
 </body>
 <script>
@@ -122,6 +143,29 @@
 
     document.getElementById('close-add-docu-container').addEventListener('click', () => {
         document.querySelector('.add-docu-container').style.display = 'none';
+    });
+
+    document.querySelector('#add-lecture').addEventListener('click', () =>{
+        document.querySelector('.create-lecture-container').style.display = 'block';
+        }
+    );
+
+    document.querySelector('#close-create-lecture-container').addEventListener('click', () =>{
+        document.querySelector('.create-lecture-container').style.display = 'none';
+    });
+
+
+    document.getElementById('create-lecture-button').addEventListener('click', () => {
+        const lectureName = document.getElementById('lecture-name').value;
+        const description = document.getElementById('lecture-description').value;
+        if (lectureName === '') {
+            alert('Bitte Vorlesungsname angeben');
+            return;
+        }
+        documentService.createLecture(lectureName, description);
+        document.getElementById('lecture-name').value = '';
+        document.getElementById('lecture-description').value = '';
+        document.querySelector('.create-lecture-container').style.display = 'none';
     });
 
 </script>

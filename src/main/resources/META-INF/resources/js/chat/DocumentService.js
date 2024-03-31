@@ -77,4 +77,20 @@ class DocumentService {
         await this.getDocumentsFromDBAndShowThemInUI();
     }
 
+    // Method to create a new lecture
+    async createLecture (lectureName, description) {
+        console.log(lectureName, description);
+        const response = await fetch('/api/lectures/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: lectureName,
+                description: description
+            })
+        });
+        console.log(response);
+    }
+
 }

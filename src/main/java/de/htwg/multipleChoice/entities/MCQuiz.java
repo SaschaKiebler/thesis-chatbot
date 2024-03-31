@@ -63,6 +63,16 @@ public class MCQuiz {
         questions.add(question);
     }
 
+    public List<UUID> getCorrectAnswers() {
+        List<UUID> correctAnswers = new ArrayList<>();
+        for (MultipleChoiceQuestion question : questions) {
+            if (question.getCorrectAnswer() != null) {
+                correctAnswers.add(question.getCorrectAnswer().getId());
+            }
+        }
+        return correctAnswers;
+    }
+
     @Override
     public String toString() {
         return "MCQuiz{" +

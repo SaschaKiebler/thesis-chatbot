@@ -1,6 +1,9 @@
-
-// TODO options how to continue
-// Represents the end of a quiz. Contains the results of the quiz and the options how to continue.
+/**
+ * TODO options how to continue
+ * TODO progress bar
+ *
+ * Represents the end of a quiz. Contains the results of the quiz and the options how to continue.
+ */
 class QuizEnd {
 
     constructor(id) {
@@ -13,6 +16,8 @@ class QuizEnd {
             </div>
             <div class="questions"></div>
             <div class="progress"></div>
+            <button id="talk-about-results">Ergebnisse besprechen</button>
+            <button id="new-quiz">neues Quiz</button>
         `;
         this.questionContainer = this.element.querySelector('.questions');
         this.progress = this.element.querySelector('.progress');

@@ -39,8 +39,8 @@ class QuizUIService {
     }
 
     // function to display a loading message
-    displayLoadingMessage() {
-        const loadingMessage = new LoadingMessage();
+    displayLoadingMessage(message) {
+        const loadingMessage = new LoadingMessage(message);
         this.uiService.addMessage(loadingMessage);
         return loadingMessage.id;
     }
@@ -63,7 +63,7 @@ class QuizUIService {
     async selectScript(scriptOption) {
         this.disableInputOptions();
         this.displayUserMessage(scriptOption.innerHTML);
-        const loadingMessageId = this.displayLoadingMessage();
+        const loadingMessageId = this.displayLoadingMessage("erzeuge ein Quiz zum Skript " + scriptOption.name);
 
         const answer = await this.multipleChoiceService.getAnswer("erzeuge ein Quiz zum Skript " + scriptOption.id);
         this.uiService.removeMessage(loadingMessageId);

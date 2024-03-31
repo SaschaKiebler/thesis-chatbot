@@ -99,4 +99,11 @@ class MultipleChoiceQuizMessage extends Message {
             }
         })
     }
+
+    // function that adds the Eventlistener for the talk button
+    addTalkButtonListener() {
+        this.questionElements[this.questionElements.length - 1].element.querySelector('#talk-about-results').addEventListener('click', () => {
+
+        })
+    }
 }

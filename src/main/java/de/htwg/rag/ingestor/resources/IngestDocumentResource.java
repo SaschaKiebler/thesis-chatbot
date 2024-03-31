@@ -64,6 +64,8 @@ public class IngestDocumentResource {
     private static final String UPLOAD_DIRECTORY = "resources/pdfs";
 
     /**
+     * TODO: Implement new Textsplitter methods from langchain4j as well as transformers bc summarizer is not good
+     *
      * This method is called when a POST request is sent to /pdf.
      * It ingests a PDF file and safes the Embeddings, the summarized text and a Object of the UploadedFile class.
      * @param pdfFile the PDF file to ingest

@@ -1,10 +1,9 @@
 package de.htwg.multipleChoice.entities;
 
 import de.htwg.multipleChoice.entities.PossibleAnswer;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,8 +16,9 @@ public class MultipleChoiceQuestion {
 
     private String question;
 
-    @OneToMany(targetEntity = PossibleAnswer.class)
-    private List<PossibleAnswer> possibleAnswers;
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "question_id")
+    private List<PossibleAnswer> possibleAnswers = new ArrayList<>();
 
     public MultipleChoiceQuestion() {
     }
@@ -68,6 +68,15 @@ public class MultipleChoiceQuestion {
 
     public void removeAllAnswers() {
         possibleAnswers.clear();
+    }
+
+    public PossibleAnswer getCorrectAnswer() {
+        for (PossibleAnswer possibleAnswer : possibleAnswers) {
+            if (possibleAnswer.getCorrect()) {
+                return possibleAnswer;
+            }
+        }
+        return null;
     }
 
 
