@@ -5,7 +5,7 @@ import de.htwg.rag.ingestor.DocumentIngestor;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
@@ -40,7 +40,7 @@ class DocumentIngestorTest {
     void setUp() {
         documentIngestor = new DocumentIngestor();
         documentIngestor.setStore(store);
-        documentIngestor.setEmbeddingModel(new AllMiniLmL6V2QuantizedEmbeddingModel());
+        documentIngestor.setEmbeddingModel(OpenAiEmbeddingModel.builder().build());
         document1 = new Document("This is a test document");
         document2 = new Document("This is another test document");
         document3 = new Document("This is a third test document");
