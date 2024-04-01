@@ -100,18 +100,18 @@ public class IngestDocumentResource {
 
             // Safe the Script with plain text and add the lecture
             if (!lectureName.isEmpty()) {
-            String text = document.text();
-            Lecture lecture = lectureRepository.findByName(lectureName);
-            if (lecture == null) {
-                lecture = Lecture.builder().name(lectureName).build();
-                lectureRepository.persist(lecture);
-            }
-            scriptRepository.persist(Script.builder().name(name).lecture(lecture).text(text).build());
+                String text = document.text();
+                Lecture lecture = lectureRepository.findByName(lectureName);
+                if (lecture == null) {
+                    lecture = Lecture.builder().name(lectureName).build();
+                    lectureRepository.persist(lecture);
+                }
+                scriptRepository.persist(Script.builder().name(name).lecture(lecture).text(text).build());
             }
 
-            // Summarize the text and ingest it
-            String sumtext = summarizer.summarize(document.text());
-            document = Document.document(sumtext, document.metadata());
+            // Summarize the text and ingest it (Commented it out bc im waiting for the filterclass of langchain4j)
+                //String sumtext = summarizer.summarize(document.text());
+                //document = Document.document(sumtext, document.metadata());
 
             documentIngestor.ingest(List.of(document));
             System.out.println("Ingested file with id: " + uploadedFile.getId() + " at " + new Date());

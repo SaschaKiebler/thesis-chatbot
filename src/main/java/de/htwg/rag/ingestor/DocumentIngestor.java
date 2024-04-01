@@ -1,7 +1,11 @@
 package de.htwg.rag.ingestor;
 
 import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.splitter.DocumentBySentenceSplitter;
+import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,8 +24,11 @@ public class DocumentIngestor {
     @Inject
     PgVectorEmbeddingStore store;
 
-    @Inject
-    AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel;
+    EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
+            .apiKey(System.getenv("OPENAI_APIKEY"))
+            .dimensions(1536)
+            .modelName("text-embedding-3-small").build();
+
 
     /**
      * This method ingests a list of Documents into the Vectorstore.
@@ -31,9 +38,10 @@ public class DocumentIngestor {
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .embeddingStore(store)
                 .embeddingModel(embeddingModel)
-                .documentSplitter(recursive(300, 20))
+                .documentSplitter(new DocumentBySentenceSplitter(500,50))
                 .build();
         if (documents.isEmpty()) {
+            System.out.println("No documents to ingest");
             throw new IllegalArgumentException("No documents to ingest");
         }
         else {
@@ -46,7 +54,8 @@ public class DocumentIngestor {
         this.store = store;
     }
 
-    public void setEmbeddingModel(AllMiniLmL6V2QuantizedEmbeddingModel embeddingModel) {
-        this.embeddingModel = embeddingModel;
+    public void setEmbeddingModel(EmbeddingModel model) {
+        this.embeddingModel = model;
     }
+
 }

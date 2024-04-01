@@ -2,7 +2,7 @@ package de.htwg.rag.retriever;
 
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
@@ -25,7 +25,7 @@ class DocumentRetrieverTest {
     PgVectorEmbeddingStore store;
 
     @InjectMock
-    AllMiniLmL6V2QuantizedEmbeddingModel model;
+    OpenAiEmbeddingModel model;
 
     DocumentRetriever documentRetriever;
 

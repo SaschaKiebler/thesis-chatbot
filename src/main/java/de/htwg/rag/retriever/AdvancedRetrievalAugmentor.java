@@ -1,8 +1,9 @@
 package de.htwg.rag.retriever;
 
 import dev.langchain4j.model.cohere.CohereScoringModel;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.input.PromptTemplate;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.model.scoring.ScoringModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.model.chat.ChatLanguageModel;
@@ -15,9 +16,9 @@ import dev.langchain4j.rag.content.injector.DefaultContentInjector;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.rag.query.transformer.QueryTransformer;
-import io.github.cdimascio.dotenv.Dotenv;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import jakarta.inject.Singleton;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
 import java.util.function.Supplier;
@@ -33,9 +34,12 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
 
     private final RetrievalAugmentor augmentor;
 
+    @ConfigProperty(name = "rag.max-num-of-results", defaultValue = "5")
+    int numOfResults;
+
     // uses the PgVectorEmbeddingStore and the AllMiniLmL6V2QuantizedEmbeddingModel.
     // The Store is a extension of the normal PostgresDB and the model is running locally.
-    public AdvancedRetrievalAugmentor(PgVectorEmbeddingStore store, AllMiniLmL6V2QuantizedEmbeddingModel model) {
+    public AdvancedRetrievalAugmentor(PgVectorEmbeddingStore store, EmbeddingModel model) {
 
         // chatmodel just for the query transformer, can be any model,
         // all it does is compress the input query's to one so that the retrieval is more accurate
@@ -81,7 +85,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
         EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(model)
                 .embeddingStore(store)
-                .maxResults(7)
+                .maxResults(numOfResults)
                 .minScore(0.75)
                 .build();
 

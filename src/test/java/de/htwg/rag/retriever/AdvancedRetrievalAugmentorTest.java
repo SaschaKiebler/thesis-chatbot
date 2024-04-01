@@ -1,7 +1,7 @@
 package de.htwg.rag.retriever;
 
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.rag.query.Metadata;
 import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
 import io.quarkus.test.InjectMock;
@@ -18,7 +18,7 @@ class AdvancedRetrievalAugmentorTest {
     PgVectorEmbeddingStore store;
 
     @InjectMock
-    AllMiniLmL6V2QuantizedEmbeddingModel model;
+    OpenAiEmbeddingModel model;
 
     AdvancedRetrievalAugmentor advancedRetrievalAugmentor;
 

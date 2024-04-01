@@ -9,6 +9,8 @@ import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
 /**
+ * TODO: Add a fallback Method to make it more robust
+ *
  * This AiService provides a method to interact with a LLM and generate a multiple choice quiz from a lecturescript.
  */
 @RegisterAiService(modelName = "multiple-choice", tools = {GetLectureScript.class, QuizTools.class}, chatMemoryProviderSupplier = CustomMemoryProvider.class)
