@@ -32,11 +32,9 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
 
     private final RetrievalAugmentor augmentor;
 
-    @ConfigProperty(name = "rag.max-num-of-results", defaultValue = "5")
-    int numOfResults;
 
-    // uses the PgVectorEmbeddingStore and the AllMiniLmL6V2QuantizedEmbeddingModel.
-    // The Store is a extension of the normal PostgresDB and the model is running locally.
+    // uses the PgVectorEmbeddingStore and the OpenAiEmbeddingModel.
+    // The Store is a extension of the normal PostgresDB.
     public AdvancedRetrievalAugmentor(PgVectorEmbeddingStore store, EmbeddingModel model) {
 
         // chatmodel just for the query transformer, can be any model,
@@ -61,6 +59,8 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
                         "Es ist sehr wichtig, dass du nur die umformulierte Anfrage und nichts anderes bereitstellst! Füge einer Anfrage nichts voran!"))
                 .build();
 
+        System.out.println(queryTransformer.toString());
+
         // ContentInjector to give metadata with the retrieved documents
         ContentInjector contentInjector = DefaultContentInjector.builder()
                 .metadataKeysToInclude(asList("link"))
@@ -83,7 +83,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
         EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(model)
                 .embeddingStore(store)
-                .maxResults(numOfResults)
+                .maxResults(5)
                 .minScore(0.75)
                 .build();
 
