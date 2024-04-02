@@ -7,6 +7,7 @@ import dev.langchain4j.agent.tool.Tool;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -36,6 +37,23 @@ public class GetLectureScript {
         }
 
         return script.getText();
+    }
+
+    @Tool("Get the script by name")
+    public String RetrieveScriptByName(@P("The scriptName that the user provided") String scriptName) {
+        if (scriptName == null) {
+            return "Error: No script name provided. Please provide a valid script name.";
+        }
+        Script script = scriptRepository.findByName(scriptName);
+        if (script == null) {
+            return "No script found with the name: " + scriptName + ". Please check the name and try again.";
+        }
+        return script.getText();
+    }
+
+    @Tool("Get all scripts with similar name")
+    public List<Script> RetrieveAllScripts(@P("The scriptName that the user provided") String scriptName) {
+        return scriptRepository.listAllSimilarToName(scriptName);
     }
 
 }

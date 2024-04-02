@@ -44,7 +44,7 @@ public class QuizTools {
      * @param quizId The id of the quiz the question belongs to.
      *
      */
-    @Tool("Sends the multiple choice Question to the user. Before using this tool, create a new quiz. Make sure to send use the right format. Also be sure that the correct answer is one of the three possible answers. give the answer and questions in german.")
+    @Tool("Adds the question to the quiz. Before using this tool, create a new quiz. Make sure to send use the right format. Also be sure that the correct answer is one of the three possible answers. give the answer and questions in german.")
     @Transactional
     public void addQuestionToQuiz(@P("the question for the user") String question,
                                    @P("the first possible answer") String answer1,
@@ -72,13 +72,10 @@ public class QuizTools {
         mcQuiz.addQuestion(multipleChoiceQuestion);
     }
 
-    @Tool("Creates a new Quiz for the User and gives the quizId as UUID back.")
+    @Tool("Creates a new Quiz for the User and gives the quizId as UUID back")
     @Transactional
-    public UUID createNewQuiz(@P("the scriptId") String scriptId) {
-        UUID scriptUUID = UUID.fromString(scriptId);
-        Script script = scriptRepository.findById(scriptUUID);
+    public UUID createNewQuiz() {
         MCQuiz mcQuiz = new MCQuiz();
-        mcQuiz.setScript(script);
         mcQuizRepository.persist(mcQuiz);
         return mcQuiz.getId();
     }

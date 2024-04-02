@@ -13,7 +13,9 @@ import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
+import io.quarkus.arc.DefaultBean;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.UUID;
  * It uses MessageRepository, AnswerRepository, ConversationRepository and SystemPromptRepository to persist the messages in the database.
  */
 @ApplicationScoped
+@DefaultBean
 public class CustomChatMemoryStore implements ChatMemoryStore {
 
 

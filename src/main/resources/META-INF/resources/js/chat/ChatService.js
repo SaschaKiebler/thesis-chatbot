@@ -54,7 +54,7 @@ class ChatService {
     // and adds the messages to the list of messages and updates the UI
     async getDualAnswer(requestText, ratingHint) {
         this.addMessage(new Message(null, requestText, "user"));
-        this.addMessage(new LoadingMessage());
+        this.addMessage(new LoadingMessage(""));
 
         try {
             const url1 = `/llm/leftService?${this.conversationIdleft ? `conversationId=${this.conversationIdleft}` : ''}`;
