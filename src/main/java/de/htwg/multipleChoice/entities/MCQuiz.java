@@ -1,5 +1,6 @@
 package de.htwg.multipleChoice.entities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -92,5 +93,6 @@ public class MCQuiz {
                 ", questions=" + questions +
                 '}';
     }
+
 
 }

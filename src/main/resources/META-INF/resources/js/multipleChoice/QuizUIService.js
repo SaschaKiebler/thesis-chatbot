@@ -63,11 +63,10 @@ class QuizUIService {
     async selectScript(scriptOption) {
         this.disableInputOptions();
         this.displayUserMessage(scriptOption.innerHTML);
-        const loadingMessageId = this.displayLoadingMessage("erzeuge ein Quiz zum Skript " + scriptOption.name);
+        const loadingMessageId = this.displayLoadingMessage("erzeugt ein Quiz zum Skript " + scriptOption.name);
 
         const answer = await this.multipleChoiceService.getAnswer("erzeuge ein Quiz zum Skript " + scriptOption.id);
         this.uiService.removeMessage(loadingMessageId);
-
         const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService) : new Message(null, answer.answer, 'ai');
         this.uiService.addMessage(message);
     }

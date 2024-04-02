@@ -6,13 +6,16 @@ class MultipleChoiceService {
     }
 
     async getAnswer(message) {
-
-        return await fetch(`/api/multipleChoice?conversationId=${this.conversationId ? this.conversationId : ""}`, {
+        const body = {
+            message: message,
+            conversationId: (this.conversationId ? this.conversationId : "")
+        }
+        return await fetch(`/api/quizChain`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(message)
+            body: JSON.stringify(body)
         }).then(
             data => {
                 return data.json();
@@ -20,7 +23,6 @@ class MultipleChoiceService {
         ).then(
             data => {
                 this.conversationId = data.conversationId;
-                console.log(data);
                 return data;
             }
         ).catch(error => {
@@ -52,7 +54,6 @@ class MultipleChoiceService {
             return data.json();
         }).then(
             data => {
-                console.log(data);
                 if (data.details){
                     throw new Error(data.details);
                 }

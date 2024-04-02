@@ -64,6 +64,7 @@ public class MultipleChoiceAPIResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQuiz(@QueryParam("quizId") String quizId){
         MCQuiz quiz = mcQuizRepository.findById(UUID.fromString(quizId));
+        System.out.println("Get quiz with id: " + quizId);
         if (quiz == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

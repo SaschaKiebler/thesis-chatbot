@@ -14,7 +14,7 @@ class QuizEnd {
             <div class="text">
                 <p>Deine Ergebnisse:</p>
             </div>
-            <div class="questions"></div>
+            <div id="question-result-container" class="questions"></div>
             <div class="progress"></div>
             <button id="talk-about-results">Ergebnisse besprechen</button>
             <button id="new-quiz">neues Quiz</button>
@@ -24,6 +24,7 @@ class QuizEnd {
         this.score = 0;
         this.id = id;
         this.display();
+        this.questionResultContainer = this.element.querySelector('.question-result-container');
     }
 
     // get all question elements from DOM
