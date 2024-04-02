@@ -3,9 +3,11 @@ package de.htwg.multipleChoice.tools;
 import de.htwg.multipleChoice.entities.MCQuiz;
 import de.htwg.multipleChoice.entities.MultipleChoiceQuestion;
 import de.htwg.multipleChoice.entities.PossibleAnswer;
+import de.htwg.multipleChoice.entities.Script;
 import de.htwg.multipleChoice.repositories.MCQuizRepository;
 import de.htwg.multipleChoice.repositories.MultipleChoiceQuestionRepository;
 import de.htwg.multipleChoice.repositories.PossibleAnswerRepository;
+import de.htwg.multipleChoice.repositories.ScriptRepository;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.service.MemoryId;
@@ -29,6 +31,8 @@ public class QuizTools {
     MultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
     @Inject
     PossibleAnswerRepository possibleAnswerRepository;
+    @Inject
+    ScriptRepository scriptRepository;
 
     /**
      * This method is a tool for an AiService to send a multiple choice question to the user.
@@ -71,7 +75,10 @@ public class QuizTools {
     @Tool("Creates a new Quiz for the User and gives the quizId as UUID back.")
     @Transactional
     public UUID createNewQuiz(@P("the scriptId") String scriptId) {
+        UUID scriptUUID = UUID.fromString(scriptId);
+        Script script = scriptRepository.findById(scriptUUID);
         MCQuiz mcQuiz = new MCQuiz();
+        mcQuiz.setScript(script);
         mcQuizRepository.persist(mcQuiz);
         return mcQuiz.getId();
     }
