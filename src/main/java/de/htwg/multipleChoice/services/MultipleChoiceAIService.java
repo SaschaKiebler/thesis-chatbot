@@ -19,6 +19,7 @@ import java.util.UUID;
  *
  * This AiService provides a method to interact with a LLM and generate a multiple choice quiz from a lecturescript.
  */
+@Deprecated
 @RegisterAiService(modelName = "multiple-choice", tools = {GetLectureScript.class, QuizTools.class}, chatMemoryProviderSupplier = CustomMemoryProvider.class)
 public interface MultipleChoiceAIService {
 

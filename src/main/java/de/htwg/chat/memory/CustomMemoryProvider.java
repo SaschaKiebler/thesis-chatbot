@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 /**
  * This class is a custom implementation of the ChatMemoryProvider interface.
  * It is used to provide a custom ChatMemoryProvider.
- * It uses the CustomChatMemoryStore to store the messages in a database.
  */
 @ApplicationScoped
 public class CustomMemoryProvider implements Supplier<ChatMemoryProvider> {

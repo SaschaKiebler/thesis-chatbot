@@ -29,7 +29,6 @@ import java.util.UUID;
  * It uses MessageRepository, AnswerRepository, ConversationRepository and SystemPromptRepository to persist the messages in the database.
  */
 @ApplicationScoped
-@DefaultBean
 public class CustomChatMemoryStore implements ChatMemoryStore {
 
 

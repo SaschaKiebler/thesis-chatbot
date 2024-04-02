@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @ApplicationScoped
-public class SimpleMemory implements ChatMemoryStore {
+public class SimpleMemory{
 
     @Inject
     ConversationRepository conversationRepository;
@@ -29,7 +29,6 @@ public class SimpleMemory implements ChatMemoryStore {
     SimpleChatMessageRepository messageRepository;
 
 
-    @Override
     public List<ChatMessage> getMessages(Object o) {
         UUID memoryIdUUID = o instanceof UUID ? (UUID) o : UUID.fromString((String) o);
         Conversation conversation = conversationRepository.findById(memoryIdUUID);
@@ -49,7 +48,6 @@ public class SimpleMemory implements ChatMemoryStore {
         return messages;
     }
 
-    @Override
     public void updateMessages(Object o, List<ChatMessage> list) {
         List<SimpleChatMessage> messages = new ArrayList<>();
         UUID memoryIdUUID = o instanceof UUID ? (UUID) o : UUID.fromString((String) o);
@@ -70,7 +68,6 @@ public class SimpleMemory implements ChatMemoryStore {
 
     }
 
-    @Override
     public void deleteMessages(Object o) {
         UUID memoryIdUUID = o instanceof UUID ? (UUID) o : UUID.fromString((String) o);
         messageRepository.deleteByConversationId(memoryIdUUID);

@@ -1,14 +1,14 @@
 
 :root{
-    --correct: #6bff7c;
+    --correct: #77DD77;
     --wrong: #ff6464;
 }
 
 .questions{
     width: fit-content;
+    min-width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
@@ -39,6 +39,7 @@
 }
 .answer{
     font-size: 20px;
+    color: black;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -46,13 +47,14 @@
     margin-top: 10px;
     margin-bottom: 10px;
     width: 100%;
-    max-width: 300px;
+    max-height: fit-content;
+    max-width: 400px;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 300px;
+    border-color: #002244!important;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
-    border: none;
 }
 
 .answer:hover{

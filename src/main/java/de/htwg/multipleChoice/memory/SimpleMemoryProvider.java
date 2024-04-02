@@ -4,12 +4,14 @@ import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.store.memory.chat.InMemoryChatMemoryStore;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.function.Supplier;
 
+@ApplicationScoped
 public class SimpleMemoryProvider implements Supplier<ChatMemoryProvider> {
 
-    private final SimpleMemory store = new SimpleMemory();
+    private final InMemoryChatMemoryStore store = new InMemoryChatMemoryStore();
 
     @Override
     public ChatMemoryProvider get() {

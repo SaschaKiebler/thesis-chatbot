@@ -40,6 +40,7 @@ public class MultipleChoiceAPIResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
+    @Deprecated
     public Response produceQuiz(@RequestBody(ref = "message") String message, @QueryParam("conversationId") String conversationId){
         Conversation conversation;
         if (conversationId == null || conversationId.isEmpty() || message == null) {
