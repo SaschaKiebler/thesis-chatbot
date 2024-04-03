@@ -44,7 +44,6 @@ public class QuizChainResource {
             UUID conversationUUID = UUID.fromString(inputDTO.getConversationId());
             conversation = conversationRepository.findById(conversationUUID);
         }
-
         if (conversation == null) {
             conversation = new Conversation();
             conversationRepository.persist(conversation);

@@ -139,6 +139,7 @@ a{
 .dark-mode .answer{
     background-color: var(--dark-bg);
     color: #fff;
+    border-color: var(--dark-second);
 }
 
 .dark-mode .answer:hover{
@@ -149,3 +150,4 @@ a{
     background-color: var(--dark-second);
     color: #fff;
 }
+

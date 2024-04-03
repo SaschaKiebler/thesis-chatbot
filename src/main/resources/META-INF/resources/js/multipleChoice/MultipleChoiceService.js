@@ -66,5 +66,49 @@ class MultipleChoiceService {
 
     }
 
+    async sendResults(quizId, answers) {
+        const body = { conversationId: this.conversationId, results: answers, quizId: quizId };
+        return await fetch(`/api/quiz/result`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body)
+        }).then(
+            data => {
+                return data.json();
+            }
+        ).then(
+            data => {
+                console.log(data);
+                return data;
+            }
+        ).catch(error => {
+            console.error('Error:', error);
+        })
+    }
+
+    async talkAboutResults(userInput) {
+        const body = { conversationId: this.conversationId, message: userInput };
+        return await fetch(`/api/quiz/talk`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body)
+        }).then(
+            data => {
+                return data.json();
+            }
+        ).then(
+            data => {
+                console.log(data);
+                return data;
+            }
+        ).catch( error => {
+            console.error('Error:', error);
+        })
+    }
+
 
 }

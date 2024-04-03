@@ -2,7 +2,7 @@
 // TODO: design the Start button
 // class that represents the start of the quiz
 class QuizStartMessage extends Message{
-    constructor(quizId, uiService) {
+    constructor(quizId, uiService, multipleChoiceService) {
         super(quizId, "Willkommen zum Multiple Choice Quiz", "ai");
         const text = this.element.querySelector('.text');
         const buttonContainer = document.createElement('div');
@@ -16,7 +16,7 @@ class QuizStartMessage extends Message{
         buttonContainer.appendChild(button);
         text.appendChild(buttonContainer);
 
-        this.MultipleChoiceService = new MultipleChoiceService();
+        this.multipleChoiceService = multipleChoiceService;
         this.uiService = uiService;
 
     }
@@ -25,12 +25,12 @@ class QuizStartMessage extends Message{
     async startQuiz(id) {
         this.element.querySelector('.start-quiz-button').disabled = true;
         try {
-        const quiz = await this.MultipleChoiceService.getQuiz(id);
+        const quiz = await this.multipleChoiceService.getQuiz(id);
         if (quiz.questions.length === 0) {
             this.uiService.addMessage(new Message(null, "Leider konnten wir deine Quizdaten nicht laden. Bitte versuche es erneut.", 'ai'));
         }
         else {
-        this.uiService.addMessage(new MultipleChoiceQuizMessage(quiz));
+        this.uiService.addMessage(new MultipleChoiceQuizMessage(quiz, this.multipleChoiceService));
         }
         }
         catch(error) {

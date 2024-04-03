@@ -25,27 +25,17 @@ public class GenerateQuizChain {
     GetTheScriptAIService getTheScriptAIService;
     @Inject
     GenerateTheQuizAIService generateTheQuizAIService;
-    @Inject
-    SimpleMemory simpleMemory;
 
     public String startTheChain(String userInput, UUID conversationId) {
 
-        simpleMemory.updateMessages(conversationId, List.of(new UserMessage(userInput)));
 
         // First step in the chain is to get the script. be it by id or just the name, or the most similar name
         GetTheScriptDTO getTheScriptDTO = getTheScriptAIService.getTheScript(userInput, conversationId);
-        if (!getTheScriptDTO.getSuccess()) {
-            simpleMemory.updateMessages(conversationId, List.of(new AiMessage(getTheScriptDTO.getText())));
-            return getTheScriptDTO.getText();
-        }
+
         // Second step is to generate a new quiz and then add the questions to the quiz.
         GenerateTheQuizDTO generateTheQuizDTO = generateTheQuizAIService.generateTheQuiz(getTheScriptDTO.getText(), conversationId);
-        if (!generateTheQuizDTO.getSuccess()) {
-            simpleMemory.updateMessages(conversationId, List.of(new AiMessage(generateTheQuizDTO.getMessage())));
-            return generateTheQuizDTO.getMessage();
-        }
+
         // After that it should be sent to the user
-        simpleMemory.updateMessages(conversationId, List.of(new AiMessage(generateTheQuizDTO.getQuizId())));
         return generateTheQuizDTO.getQuizId();
 
         // Third step is to wait for the user to answer the questions and send the results back

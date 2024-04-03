@@ -11,7 +11,7 @@ import java.util.UUID;
 public class SimpleChatMessageRepository implements PanacheRepository<SimpleChatMessage> {
 
     public List<SimpleChatMessage> findByConversationId(UUID id) {
-        return find("conversation_id = ?1", id).list();
+        return find("conversation.id = ?1", id).list();
     }
 
     public void saveAll(List<SimpleChatMessage> messages) {

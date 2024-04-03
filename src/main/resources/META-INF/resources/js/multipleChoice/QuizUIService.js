@@ -67,7 +67,7 @@ class QuizUIService {
 
         const answer = await this.multipleChoiceService.getAnswer("erzeuge ein Quiz zum Skript " + scriptOption.id);
         this.uiService.removeMessage(loadingMessageId);
-        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService) : new Message(null, answer.answer, 'ai');
+        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, answer.answer, 'ai');
         this.uiService.addMessage(message);
     }
 

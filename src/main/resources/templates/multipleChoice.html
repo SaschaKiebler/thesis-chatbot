@@ -16,10 +16,11 @@
     {#onLoad}
     document.getElementById("input").focus();
         const quizUIService = new QuizUIService(uiService, multipleChoiceService, [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]);
-
+        input.disabled = true;
     {/onLoad}
     {#eventListener}
         const multipleChoiceService = new MultipleChoiceService();
+        const markdownParser = new MarkdownParser();
 
         // Verhindert XSS
         function sanitizeString(str) {
@@ -32,14 +33,11 @@
         }
 
         // Eventlistener für das Absenden einer Nachricht bei Click auf Button
-        send.addEventListener('click', function() {
+        send.addEventListener('click', async function() {
         if (input.value === ''){
 
         } else{
-        let inputText = sanitizeString(input.value);
-        multipleChoiceService.getAnswer(inputText);
-        input.value = '';
-        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+        handleSendEvent();
         }
         });
 
@@ -50,7 +48,12 @@
         input.value += '\n';
         }
         else if (event.key === 'Enter' && !event.shiftKey) {
+        handleSendEvent();
+        }
+        }
+        });
 
+        async function handleSendEvent() {
         // wandelt mögliche Sonderzeichen des Inputs um sodass diese nicht formatiert werden
         let inputText = sanitizeString(input.value);
 
@@ -58,7 +61,7 @@
         uiService.addMessage(new Message(null,inputText, 'user'));
 
         // Erstellt eine LoadingMessage
-        const loadingMessage = new LoadingMessage();
+        const loadingMessage = new LoadingMessage("");
         uiService.addMessage(loadingMessage);
 
         // Macht das Inputfeld leer, eine Zeile hoch und scrollt ans ende des Chat-Feldes
@@ -67,23 +70,14 @@
         document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
 
         // Hole die Antwort
-        const answer = await multipleChoiceService.getAnswer(inputText);
+        const answer = await multipleChoiceService.talkAboutResults(inputText);
 
         // Entferne die LoadingMessage
         uiService.removeMessage(loadingMessage.id);
 
-
-        // Wenn die Antwort ein Quiz ist dann wird eine
-        // Start-Nachricht der UI hinzugefügt, ansonsten wird eine
-        // normale Nachricht der UI hinzugefügt
-        if(answer.quizId!=null && answer.quizId!=""){
-        uiService.addMessage(new QuizStartMessage(answer.quizId));
+        const formattedAnswer = markdownParser.parse(answer.answer);
+        uiService.addMessage(new Message(null,formattedAnswer, 'ai'));
         }
-        else{
-            uiService.addMessage(new Message(null,answer, 'ai'));
-        }
-        }}
-        });
 
 
     {/eventListener}

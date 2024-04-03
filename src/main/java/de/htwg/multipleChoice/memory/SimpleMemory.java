@@ -9,24 +9,18 @@ import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
-import jakarta.annotation.Priority;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Alternative;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@ApplicationScoped
-public class SimpleMemory{
+@Transactional
+public class SimpleMemory implements ChatMemoryStore{
 
-    @Inject
-    ConversationRepository conversationRepository;
-    @Inject
-    SimpleChatMessageRepository messageRepository;
+    ConversationRepository conversationRepository = new ConversationRepository();
+    SimpleChatMessageRepository messageRepository = new SimpleChatMessageRepository();
 
 
     public List<ChatMessage> getMessages(Object o) {
@@ -49,22 +43,21 @@ public class SimpleMemory{
     }
 
     public void updateMessages(Object o, List<ChatMessage> list) {
-        List<SimpleChatMessage> messages = new ArrayList<>();
+        System.out.println(list.toString());
+        ChatMessage lastMessage = list.get(list.size() - 1);
+        SimpleChatMessage message;
         UUID memoryIdUUID = o instanceof UUID ? (UUID) o : UUID.fromString((String) o);
         Conversation conversation = conversationRepository.findById(memoryIdUUID);
 
-        for (ChatMessage message : list) {
-            if(message instanceof UserMessage){
-                messages.add(new SimpleChatMessage(conversation, "user", ((UserMessage) message).contents().toString()));
-            } else if (message instanceof AiMessage) {
-                messages.add(new SimpleChatMessage(conversation, "assistant", ((AiMessage) message).text()));
-            } else if (message instanceof SystemMessage) {
-                messages.add(new SimpleChatMessage(conversation, "system", ((SystemMessage) message).text()));
-            }
+        if (lastMessage instanceof UserMessage) {
+            message = new SimpleChatMessage(conversation, ((UserMessage) lastMessage).contents().toString(), "user");
+        } else if (lastMessage instanceof AiMessage) {
+            message = new SimpleChatMessage(conversation, ((AiMessage) lastMessage).text(), "assistant");
+        } else {
+            message = new SimpleChatMessage(conversation, ((SystemMessage) lastMessage).text(), "system");
         }
 
-        messageRepository.saveAll(messages);
-
+        messageRepository.persist(message);
 
     }
 

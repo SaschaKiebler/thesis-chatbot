@@ -8,10 +8,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.function.Supplier;
 
+// Is not in Use bc the SimpleChatMemory cant be a bean. If it was, the CustomChatMemory doesnt work anymore
 @ApplicationScoped
 public class SimpleMemoryProvider implements Supplier<ChatMemoryProvider> {
 
-    private final InMemoryChatMemoryStore store = new InMemoryChatMemoryStore();
+    private final SimpleMemory store = new SimpleMemory();
 
     @Override
     public ChatMemoryProvider get() {
@@ -20,7 +21,7 @@ public class SimpleMemoryProvider implements Supplier<ChatMemoryProvider> {
             @Override
             public ChatMemory get(Object memoryId) {
                 return MessageWindowChatMemory.builder()
-                        .maxMessages(20)
+                        .maxMessages(10)
                         .id(memoryId)
                         .chatMemoryStore(store)
                         .build();

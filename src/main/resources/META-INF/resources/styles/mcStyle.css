@@ -51,10 +51,11 @@
     max-width: 400px;
     padding: 10px;
     border-radius: 300px;
-    border-color: #002244!important;
+    border-color: #002244;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
+    box-shadow: none;
 }
 
 .answer:hover{

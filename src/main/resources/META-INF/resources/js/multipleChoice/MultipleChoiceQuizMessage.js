@@ -3,9 +3,10 @@
 // This class displays a quiz with multiple choice questions and is a child of the Message class
 // It also contains the logic for displaying the next and previous question buttons of the MultipleChoiceQuestion class
 class MultipleChoiceQuizMessage extends Message {
-    constructor(quiz) {
+    constructor(quiz, multipleChoiceService) {
         super(quiz.id, "Hier ist dein Quiz😎. Wenn du alle Fragen beantwortet hast, können wir gerne deine Ergebnisse besprechen.", 'ai');
         const text = this.element.querySelector('.text');
+        this.multipleChoiceService = multipleChoiceService;
         this.questionElements = [];
         this.questionContainer = this.createQuestionContainer();
         this.quiz = quiz;
@@ -78,7 +79,7 @@ class MultipleChoiceQuizMessage extends Message {
     // function and adds the QuizEnd class to the questionElements array
     end() {
         this.endOfQuiz = true;
-        const quizEnd = new QuizEnd(this.id);
+        const quizEnd = new QuizEnd(this.id, this.multipleChoiceService);
         this.questionElements.push(quizEnd);
         this.questionContainer.appendChild(quizEnd.element);
 

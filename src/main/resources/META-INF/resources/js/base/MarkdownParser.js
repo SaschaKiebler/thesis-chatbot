@@ -21,6 +21,7 @@ class MarkdownParser {
         html = this.convertLink(html);
         html = this.convertOrderedList(html);
         html = this.convertUnorderedList(html);
+        html = this.convertUnorderedList2(html);
         return html;
     }
 
@@ -62,6 +63,12 @@ class MarkdownParser {
     // changes * in <ul><li>*</li></ul>
     convertUnorderedList(html) {
         html = html.replace(/(\*.*?)(?=\n)/g, '<ul>$1</ul>');
+        return html.replace(/(<ul>.*?<\/ul>)/g, '<li>$1</li>');
+    }
+
+    // changes \n- in <ul><li>-</li></ul>
+    convertUnorderedList2(html) {
+        html = html.replace(/(\n-.*?)(?=\n)/g, '<ul>$1</ul>');
         return html.replace(/(<ul>.*?<\/ul>)/g, '<li>$1</li>');
     }
 

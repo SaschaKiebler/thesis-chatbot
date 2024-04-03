@@ -6,7 +6,7 @@
  */
 class QuizEnd {
 
-    constructor(id) {
+    constructor(id, multipleChoiceService) {
         this.element = document.createElement('div');
         this.element.className = 'quiz-end';
         this.questionElements = [];
@@ -25,6 +25,12 @@ class QuizEnd {
         this.id = id;
         this.display();
         this.questionResultContainer = this.element.querySelector('.question-result-container');
+        this.multipleChoiceService = multipleChoiceService;
+        this.uIService = new UIService();
+        this.markdownParser = new MarkdownParser();
+
+
+        this.addEventListenerToTalkAboutResults();
     }
 
     // get all question elements from DOM
@@ -52,4 +58,20 @@ class QuizEnd {
             this.questionContainer.appendChild(result);
         });
     }
+
+    addEventListenerToTalkAboutResults() {
+        this.element.querySelector('#talk-about-results').addEventListener('click', async () => {
+            const answers = [];
+            document.querySelectorAll('.clicked').forEach(element => {
+                answers.push(element.id);
+            });
+            console.log(answers);
+            this.uIService.addMessage(new LoadingMessage("wird gesendet..."));
+            await this.multipleChoiceService.sendResults(this.id, answers);
+            this.uIService.removeMessage("loading-message");
+            this.uIService.addMessage(new Message(null, "Was möchtest du besprechen?", 'ai'));
+            document.querySelector('#input').disabled = false;
+        });
+    }
+
 }
