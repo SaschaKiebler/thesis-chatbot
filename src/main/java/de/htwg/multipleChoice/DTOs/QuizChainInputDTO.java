@@ -1,5 +1,8 @@
 package de.htwg.multipleChoice.DTOs;
 
+/**
+ * Represents the input for the method startQuizChain in {@link de.htwg.multipleChoice.resources.QuizChainResource}
+ */
 public class QuizChainInputDTO {
 
     private String conversationId;

@@ -11,11 +11,13 @@ class PossibleQuestionsService {
 
 
         for (const possibleQuestion of possibleQuestions) {
+            if (possibleQuestion !== "" && possibleQuestion.length > 0) {
             const button = document.createElement('button');
             button.innerText = possibleQuestion;
             button.className = 'possible-question-button option';
 
            possibleQuestionsDiv.appendChild(button);
+            }
         }
         message.element.querySelector('.message-content').lastChild.after(possibleQuestionsDiv);
     }

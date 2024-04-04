@@ -26,6 +26,16 @@ public class GenerateQuizChain {
     @Inject
     GenerateTheQuizAIService generateTheQuizAIService;
 
+    /**
+     * This method implements a chain of AiAgents to generate a quiz.
+     * It first trays to get the Script by calling an agent that has tools
+     * to retrieve the script.
+     * After that it calls an agent that has tools to generate a quiz.
+     *
+     * @param  userInput      the user message with the scriptId or scriptName
+     * @param  conversationId the id of the conversation
+     * @return                either a quizId (UUID as a String) or an error message
+     */
     public String startTheChain(String userInput, UUID conversationId) {
 
 
@@ -36,7 +46,11 @@ public class GenerateQuizChain {
         GenerateTheQuizDTO generateTheQuizDTO = generateTheQuizAIService.generateTheQuiz(getTheScriptDTO.getText(), conversationId);
 
         // After that it should be sent to the user
-        return generateTheQuizDTO.getQuizId();
+        if (generateTheQuizDTO.getSuccess()) {
+            return generateTheQuizDTO.getQuizId();
+        }else {
+            return generateTheQuizDTO.getMessage();
+        }
 
         // Third step is to wait for the user to answer the questions and send the results back
 

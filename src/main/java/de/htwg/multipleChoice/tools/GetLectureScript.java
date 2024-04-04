@@ -39,6 +39,11 @@ public class GetLectureScript {
         return script.getText();
     }
 
+    /**
+     * Method to get the script by its name. If the script is not found, an error message is returned.
+     * @param scriptName
+     * @return the text of the script if found, otherwise an error message.
+     */
     @Tool("Get the script by name")
     public String RetrieveScriptByName(@P("The scriptName that the user provided") String scriptName) {
         if (scriptName == null) {
@@ -51,6 +56,11 @@ public class GetLectureScript {
         return script.getText();
     }
 
+    /**
+     * Method to get all scripts with similar name.
+     * @param scriptName
+     * @return the list of scripts if found, otherwise an empty list.
+     */
     @Tool("Get all scripts with similar name")
     public List<Script> RetrieveAllScripts(@P("The scriptName that the user provided") String scriptName) {
         return scriptRepository.listAllSimilarToName(scriptName);

@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Class to get the quiz, add the results to the conversation and talk with the ai
+ * about the completed quiz
+ */
 @Path("/api/quiz")
 @ApplicationScoped
 public class MultipleChoiceAPIResource {
@@ -43,6 +47,12 @@ public class MultipleChoiceAPIResource {
     PossibleFollowUpQuestionsAIService possibleFollowUpQuestionsAIService;
 
 
+    /**
+     * Method to get a specific quiz and return it to the user in JSON
+     * @param quizId the id of the quiz
+     * @param conversationId the id of the conversation
+     * @return the quiz
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQuiz(@QueryParam("quizId") String quizId, @QueryParam("conversationId") String conversationId) {
@@ -56,6 +66,11 @@ public class MultipleChoiceAPIResource {
         return Response.ok().entity(Json.object().put("quiz", quiz.toString()).build()).build();
     }
 
+    /**
+     * Method to add the quiz result to the conversation so that the ai knows what the user answered
+     * @param quizResults
+     * @return code 200 if successful
+     */
     @POST
     @Path("result")
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,6 +99,11 @@ public class MultipleChoiceAPIResource {
         return Response.ok().build();
     }
 
+    /**
+     * Method to talk with the ai after completing the quiz. will provide possible follow up questions
+     * @param userInput a object of type QuizChainInputDTO with the user-message and the conversationId
+     * @return answer and possible follow up questions
+     */
     @POST
     @Path("talk")
     @Produces(MediaType.APPLICATION_JSON)

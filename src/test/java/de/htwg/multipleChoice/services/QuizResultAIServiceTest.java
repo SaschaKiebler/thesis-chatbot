@@ -27,6 +27,5 @@ class QuizResultAIServiceTest {
         conversation.setId(uuid);
         when(conversationRepository.findById(uuid)).thenReturn(conversation);
 
-        quizResultAIService.resultChat()
     }
 }

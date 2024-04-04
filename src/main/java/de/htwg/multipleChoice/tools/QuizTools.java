@@ -72,6 +72,10 @@ public class QuizTools {
         mcQuiz.addQuestion(multipleChoiceQuestion);
     }
 
+    /**
+     * Method to create a new quiz
+     * @return the id of the new quiz
+     */
     @Tool("Creates a new Quiz for the User and gives the quizId as UUID back")
     @Transactional
     public UUID createNewQuiz() {

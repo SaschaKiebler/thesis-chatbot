@@ -19,6 +19,9 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.UUID;
 
+/**
+ * Resources for the quizchain
+ */
 @Path("/api/quizChain")
 @ApplicationScoped
 public class QuizChainResource {
@@ -32,6 +35,12 @@ public class QuizChainResource {
     @Inject
     MCQuizRepository mcQuizRepository;
 
+    /**
+     * This function makes the quizchain visible on the endpoint /api/quizChain
+     *
+     * @param  inputDTO	a ChainInputDTO containing the conversationId and the message
+     * @return         	either the generated quizId or an message from the ai
+     */
     @POST
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
