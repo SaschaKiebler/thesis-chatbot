@@ -9,6 +9,7 @@
     <script src="js/multipleChoice/MultipleChoiceQuizMessage.js"></script>
     <script src="js/multipleChoice/MultipleChoiceQuestion.js"></script>
         <script src="js/multipleChoice/QuizEnd.js"></script>
+        <script src="js/base/PossibleQuestionsService.js"></script>
     {/scripts}
     {#styles}
         <link rel="stylesheet" href="styles/mcStyle.css">
@@ -21,63 +22,84 @@
     {#eventListener}
         const multipleChoiceService = new MultipleChoiceService();
         const markdownParser = new MarkdownParser();
+        const possibleQService = new PossibleQuestionsService(input);
 
         // Verhindert XSS
         function sanitizeString(str) {
-        return str.replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;")
-        .replace(/`/g, "&#96;");
+            return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+            .replace(/`/g, "&#96;");
         }
 
         // Eventlistener für das Absenden einer Nachricht bei Click auf Button
         send.addEventListener('click', async function() {
-        if (input.value === ''){
-
-        } else{
-        handleSendEvent();
-        }
+            if (input.value === ''){
+                return;
+            } else{
+                possibleQService.removePossibleQuestionsEventListeners();
+                handleSendEvent();
+            }
         });
 
         // Eventlistener für das Absenden einer Nachricht bei Enter
         input.addEventListener('keyup', async function(event) {
         if(input.value !== ''){
-        if(event.key === 'Enter' && event.shiftKey){
-        input.value += '\n';
-        }
-        else if (event.key === 'Enter' && !event.shiftKey) {
-        handleSendEvent();
-        }
-        }
+            if(event.key === 'Enter' && event.shiftKey){
+                input.value += '\n';
+            }
+            else if (event.key === 'Enter' && !event.shiftKey) {
+                possibleQService.removePossibleQuestionsEventListeners();
+                handleSendEvent();
+            }
+            }
         });
 
         async function handleSendEvent() {
-        // wandelt mögliche Sonderzeichen des Inputs um sodass diese nicht formatiert werden
-        let inputText = sanitizeString(input.value);
+            // wandelt mögliche Sonderzeichen des Inputs um sodass diese nicht formatiert werden
+            let inputText = sanitizeString(input.value);
 
-        // Fügt die Message des Users der UI hinzu
-        uiService.addMessage(new Message(null,inputText, 'user'));
+            // Fügt die Message des Users der UI hinzu
+            uiService.addMessage(new Message(null,inputText, 'user'));
 
-        // Erstellt eine LoadingMessage
-        const loadingMessage = new LoadingMessage("");
-        uiService.addMessage(loadingMessage);
+            // Erstellt eine LoadingMessage
+            const loadingMessage = new LoadingMessage("");
+            uiService.addMessage(loadingMessage);
 
-        // Macht das Inputfeld leer, eine Zeile hoch und scrollt ans ende des Chat-Feldes
-        input.value = '';
-        input.style.height = 'auto';
-        document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+            // Macht das Inputfeld leer, eine Zeile hoch und scrollt ans ende des Chat-Feldes
+            input.value = '';
+            input.style.height = 'auto';
+            document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
 
-        // Hole die Antwort
-        const answer = await multipleChoiceService.talkAboutResults(inputText);
+            // Hole die Antwort
+            const answer = await multipleChoiceService.talkAboutResults(inputText);
 
-        // Entferne die LoadingMessage
-        uiService.removeMessage(loadingMessage.id);
+            // Entferne die LoadingMessage
+            uiService.removeMessage(loadingMessage.id);
 
-        const formattedAnswer = markdownParser.parse(answer.answer);
-        uiService.addMessage(new Message(null,formattedAnswer, 'ai'));
+            const formattedAnswer = markdownParser.parse(answer.answer);
+
+            const message = new Message(null,formattedAnswer, 'ai');
+
+
+            possibleQService.addPossibleQuestions(message, answer.possibleFollowUpQuestions);
+            uiService.addMessage(message);
+            addEventListenerToPosQuestions();
         }
+
+        function addEventListenerToPosQuestions(){
+            document.querySelectorAll('.possible-question-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    possibleQService.removePossibleQuestionsEventListeners();
+                    possibleQService.addChosenQuestionToInput(button.innerText);
+                    handleSendEvent();
+                })
+            })
+        }
+
+
 
 
     {/eventListener}

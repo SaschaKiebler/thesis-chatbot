@@ -5,7 +5,6 @@ import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.store.memory.chat.InMemoryChatMemoryStore;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import java.util.function.Supplier;
 
@@ -14,7 +13,7 @@ import java.util.function.Supplier;
  * It is used to provide a custom ChatMemoryProvider.
  */
 @ApplicationScoped
-public class CustomMemoryProvider implements Supplier<ChatMemoryProvider> {
+public class InMemoryProvider implements Supplier<ChatMemoryProvider> {
 
     private final InMemoryChatMemoryStore store = new InMemoryChatMemoryStore();
 

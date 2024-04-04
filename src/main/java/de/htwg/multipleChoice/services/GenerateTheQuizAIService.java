@@ -1,18 +1,16 @@
 package de.htwg.multipleChoice.services;
 
-import de.htwg.chat.memory.CustomMemoryProvider;
+import de.htwg.chat.memory.InMemoryProvider;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GenerateTheQuizDTO;
-import de.htwg.multipleChoice.memory.SimpleMemoryProvider;
 import de.htwg.multipleChoice.tools.QuizTools;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
-import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.UUID;
 
-@RegisterAiService(modelName = "generate-the-quiz", tools = {QuizTools.class}, chatMemoryProviderSupplier = CustomMemoryProvider.class)
+@RegisterAiService(modelName = "generate-the-quiz", tools = {QuizTools.class}, chatMemoryProviderSupplier = InMemoryProvider.class)
 public interface GenerateTheQuizAIService {
 
     @SystemMessage("The User will provide you with a text. " +

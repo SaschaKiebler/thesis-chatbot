@@ -27,6 +27,7 @@ class MultipleChoiceService {
             }
         ).catch(error => {
             console.error('Error:', error);
+            return {"answer": "etwas is schief gelaufen... bitte drücke auf clear und versuche es erneut."}
         });
     }
 
@@ -76,12 +77,7 @@ class MultipleChoiceService {
             body: JSON.stringify(body)
         }).then(
             data => {
-                return data.json();
-            }
-        ).then(
-            data => {
                 console.log(data);
-                return data;
             }
         ).catch(error => {
             console.error('Error:', error);

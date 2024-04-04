@@ -8,11 +8,12 @@ import de.htwg.multipleChoice.entities.*;
 import de.htwg.multipleChoice.memory.SimpleMemory;
 import de.htwg.multipleChoice.repositories.MCQuizRepository;
 import de.htwg.multipleChoice.repositories.PossibleAnswerRepository;
+import de.htwg.multipleChoice.services.PossibleFollowUpQuestionsAIService;
 import de.htwg.multipleChoice.services.QuizResultAIService;
-import de.htwg.rag.dataTools.WebsiteTextExtractor;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.UserMessage;
 import io.quarkus.vertx.http.runtime.devmode.Json;
+import io.vertx.core.json.JsonArray;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -20,7 +21,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.jboss.logging.annotations.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +39,8 @@ public class MultipleChoiceAPIResource {
     SimpleMemory memory = new SimpleMemory();
     @Inject
     QuizResultAIService quizResultAIService;
+    @Inject
+    PossibleFollowUpQuestionsAIService possibleFollowUpQuestionsAIService;
 
 
     @GET
@@ -88,7 +90,11 @@ public class MultipleChoiceAPIResource {
     @Transactional
     public Response getAiResponse(@RequestBody QuizChainInputDTO userInput) {
         String aiResponse = quizResultAIService.resultChat(userInput.getMessage(), UUID.fromString(userInput.getConversationId()));
-
-        return Response.ok().entity(Json.object().put("answer", aiResponse).build()).build();
+        List<String> possibleFollowUpQuestions = possibleFollowUpQuestionsAIService.possibleQuestionsChat(aiResponse);
+        Json.JsonArrayBuilder possibleFollowUpQuestionsJson = Json.array();
+        for (String question : possibleFollowUpQuestions) {
+            possibleFollowUpQuestionsJson.add(question);
+        }
+        return Response.ok().entity(Json.object().put("answer", aiResponse).put("possibleFollowUpQuestions", possibleFollowUpQuestionsJson).build()).build();
     }
 }

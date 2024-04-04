@@ -5,6 +5,7 @@ import de.htwg.multipleChoice.entities.Script;
 import de.htwg.multipleChoice.repositories.LectureRepository;
 import de.htwg.multipleChoice.repositories.ScriptRepository;
 import de.htwg.rag.dataTools.Summarizer;
+import de.htwg.rag.dataTools.TextCleaner;
 import de.htwg.rag.dataTools.WebsiteTextExtractor;
 import de.htwg.rag.ingestor.DocumentIngestor;
 import de.htwg.rag.ingestor.UploadFileRepository;
@@ -56,7 +57,7 @@ public class IngestDocumentResource {
     ScriptRepository scriptRepository;
 
     @Inject
-    Summarizer summarizer;
+    TextCleaner cleaner;
 
     @Inject
     WebsiteTextExtractor websiteTextExtractor;
@@ -101,6 +102,7 @@ public class IngestDocumentResource {
             // Safe the Script with plain text and add the lecture
             if (!lectureName.isEmpty()) {
                 String text = document.text();
+                text = cleaner.clean(text);
                 Lecture lecture = lectureRepository.findByName(lectureName);
                 if (lecture == null) {
                     lecture = Lecture.builder().name(lectureName).build();

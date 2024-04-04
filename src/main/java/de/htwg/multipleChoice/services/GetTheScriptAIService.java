@@ -1,9 +1,7 @@
 package de.htwg.multipleChoice.services;
 
-import de.htwg.chat.memory.CustomMemoryProvider;
+import de.htwg.chat.memory.InMemoryProvider;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GetTheScriptDTO;
-import de.htwg.multipleChoice.entities.Script;
-import de.htwg.multipleChoice.memory.SimpleMemoryProvider;
 import de.htwg.multipleChoice.tools.GetLectureScript;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
@@ -12,7 +10,7 @@ import io.quarkiverse.langchain4j.RegisterAiService;
 
 import java.util.UUID;
 
-@RegisterAiService(modelName = "get-the-script", tools = {GetLectureScript.class}, chatMemoryProviderSupplier = CustomMemoryProvider.class)
+@RegisterAiService(modelName = "get-the-script", tools = {GetLectureScript.class}, chatMemoryProviderSupplier = InMemoryProvider.class)
 public interface GetTheScriptAIService {
 
     @SystemMessage("The User will provide you with a scriptId or a script name. " +

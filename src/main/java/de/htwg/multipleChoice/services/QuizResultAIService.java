@@ -16,6 +16,6 @@ public interface QuizResultAIService {
     @SystemMessage("Du bist Experte und Tutor. Du führst ein Gespräch mit dem Nutzer " +
             "über seine Ergebnisse im Quiz, die ihm bereits vorliegen, und versuchst aufgetretene Fragen zu beantworten." +
             "Antworte kurz und mit den wichtigsten Punkten.")
-
+    @Transactional
     String resultChat(@UserMessage String userInput, @MemoryId UUID memoryId);
 }

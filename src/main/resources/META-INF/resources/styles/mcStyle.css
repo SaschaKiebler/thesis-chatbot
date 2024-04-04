@@ -99,3 +99,11 @@
         flex-direction: column;
     }
 }
+
+.possible-questions{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 5px;
+}
