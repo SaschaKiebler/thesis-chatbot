@@ -16,8 +16,8 @@ class QuizEnd {
             </div>
             <div id="question-result-container" class="questions"></div>
             <div class="progress"></div>
-            <button id="talk-about-results">Ergebnisse besprechen</button>
-            <button id="new-quiz">neues Quiz</button>
+            <button id="talk-about-results" class="question-control-buttons">Ergebnisse besprechen</button>
+            <button id="new-quiz" class="question-control-buttons">neues Quiz</button>
         `;
         this.questionContainer = this.element.querySelector('.questions');
         this.progress = this.element.querySelector('.progress');
@@ -61,15 +61,21 @@ class QuizEnd {
 
     addEventListenerToTalkAboutResults() {
         this.element.querySelector('#talk-about-results').addEventListener('click', async () => {
+            document.querySelector('#talk-about-results').disabled = true;
+            document.querySelector('#new-quiz').disabled = true;
             const answers = [];
             document.querySelectorAll('.clicked').forEach(element => {
                 answers.push(element.id);
             });
             console.log(answers);
             this.uIService.addMessage(new LoadingMessage("wird gesendet..."));
-            await this.multipleChoiceService.sendResults(this.id, answers);
+            const result = await this.multipleChoiceService.sendResults(this.id, answers);
             this.uIService.removeMessage("loading-message");
-            this.uIService.addMessage(new Message(null, "Was möchtest du besprechen?", 'ai'));
+            const message = new Message(null, "Was möchtest du besprechen?", 'ai');
+            this.uIService.addMessage(message);
+            const possQService = new PossibleQuestionsService(document.querySelector('#input'));
+            possQService.addPossibleQuestions(message, result.possibleFollowUpQuestions);
+            possQService.addClickListenerToPossibleQuestions();
             document.querySelector('#input').disabled = false;
         });
     }

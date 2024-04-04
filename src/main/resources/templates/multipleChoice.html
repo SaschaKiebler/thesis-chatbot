@@ -86,20 +86,8 @@
 
             possibleQService.addPossibleQuestions(message, answer.possibleFollowUpQuestions);
             uiService.addMessage(message);
-            addEventListenerToPosQuestions();
+            possibleQService.addClickListenerToPossibleQuestions();
         }
-
-        function addEventListenerToPosQuestions(){
-            document.querySelectorAll('.possible-question-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    possibleQService.removePossibleQuestionsEventListeners();
-                    possibleQService.addChosenQuestionToInput(button.innerText);
-                    handleSendEvent();
-                })
-            })
-        }
-
-
 
 
     {/eventListener}

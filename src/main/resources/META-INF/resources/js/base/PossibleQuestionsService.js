@@ -35,4 +35,14 @@ class PossibleQuestionsService {
     addChosenQuestionToInput(chosenQuestion){
         this.input.value = chosenQuestion;
     }
+
+    addClickListenerToPossibleQuestions(){
+        const possibleQuestions = document.querySelectorAll('.possible-question-button');
+        for(const possibleQuestion of possibleQuestions){
+            possibleQuestion.addEventListener('click', () => {
+                this.addChosenQuestionToInput(possibleQuestion.innerText);
+                document.querySelector('#send').click();
+            });
+        }
+    }
 }

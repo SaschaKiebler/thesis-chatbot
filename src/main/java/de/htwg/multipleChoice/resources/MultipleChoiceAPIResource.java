@@ -96,7 +96,13 @@ public class MultipleChoiceAPIResource {
                 new AiMessage("Was möchtest du nochmal genauer besprechen?")
         ));
 
-        return Response.ok().build();
+        List<String> possibleFollowUpQuestions = possibleFollowUpQuestionsAIService.possibleQuestionsChat(memory.getMessages(conversation.getId()).toString());
+        Json.JsonArrayBuilder possibleFollowUpQuestionsJson = Json.array();
+        for (String question : possibleFollowUpQuestions) {
+            possibleFollowUpQuestionsJson.add(question);
+        }
+
+        return Response.ok().entity(Json.object().put("possibleFollowUpQuestions", possibleFollowUpQuestionsJson).build()).build();
     }
 
     /**

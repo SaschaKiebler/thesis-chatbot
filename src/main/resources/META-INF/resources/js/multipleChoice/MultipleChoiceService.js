@@ -78,6 +78,7 @@ class MultipleChoiceService {
         }).then(
             data => {
                 console.log(data);
+                return data.json();
             }
         ).catch(error => {
             console.error('Error:', error);
