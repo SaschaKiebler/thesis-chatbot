@@ -101,9 +101,32 @@
 }
 
 .possible-questions{
+    font-size: 14px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     flex-wrap: nowrap;
-    gap: 5px;
+    gap: 6px;
+}
+
+.possible-question-button{
+    background-color: #c9c9c9;
+    color: #000;
+    padding: 6px;
+    border-radius: 90px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: start;
+    border: none;
+}
+
+.possible-question-button:hover{
+    background-color: #a2a2a2;
+}
+
+.possible-question-button:before{
+    content: url("../pictures/share-solid.svg");
+    display: inline-block;
+    width: 15px;
+    margin-inline: 2px;
 }

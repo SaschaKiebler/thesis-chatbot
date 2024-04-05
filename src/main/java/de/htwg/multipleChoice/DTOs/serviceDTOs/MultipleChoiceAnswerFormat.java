@@ -1,4 +1,4 @@
-package de.htwg.multipleChoice.services;
+package de.htwg.multipleChoice.DTOs.serviceDTOs;
 
 
 import dev.langchain4j.model.output.structured.Description;

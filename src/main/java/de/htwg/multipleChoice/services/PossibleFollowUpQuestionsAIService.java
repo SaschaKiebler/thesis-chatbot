@@ -10,7 +10,7 @@ import java.util.List;
 public interface PossibleFollowUpQuestionsAIService {
 
     @SystemMessage("The User will provide you with a message. " +
-            "You will generate a list of 4 questions that could be asked next by the user. " +
+            "You will generate up to four questions that could be asked next by the user. " +
             "After generating the questions, you will answer the user in the right format. " )
     List<String> possibleQuestionsChat(@UserMessage String userInput);
 }

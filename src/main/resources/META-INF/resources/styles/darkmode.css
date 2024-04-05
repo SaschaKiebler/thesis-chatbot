@@ -151,3 +151,18 @@ a{
     color: #fff;
 }
 
+.dark-mode .possible-question-button{
+    color: #fff;
+    background-color: #282828;
+}
+
+.dark-mode .possible-question-button:hover{
+    background-color: #555555;
+}
+
+.dark-mode .possible-question-button:before{
+    content: url("../pictures/share-solid-grey.svg");
+    display: inline-block;
+    width: 15px;
+    margin-inline: 2px;
+}

@@ -7,14 +7,14 @@ class PossibleQuestionsService {
     addPossibleQuestions(message, possibleQuestions) {
         const possibleQuestionsDiv = document.createElement('div');
         possibleQuestionsDiv.className = 'possible-questions';
-
+        possibleQuestionsDiv.innerText = 'Hier sind ein paar Vorschläge die du als nächstes Fragen könntest: ';
 
 
         for (const possibleQuestion of possibleQuestions) {
             if (possibleQuestion !== "" && possibleQuestion.length > 0) {
             const button = document.createElement('button');
-            button.innerText = possibleQuestion;
-            button.className = 'possible-question-button option';
+            button.innerText = possibleQuestion.replace(/\d+\.\s/g, '');
+            button.className = 'possible-question-button';
 
            possibleQuestionsDiv.appendChild(button);
             }
