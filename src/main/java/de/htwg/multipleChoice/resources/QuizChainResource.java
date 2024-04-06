@@ -57,6 +57,7 @@ public class QuizChainResource {
         String result = generateQuizChain.startTheChain(inputDTO.getMessage(), conversation.getId());
         UUID quizId;
 
+        // try to get the id of the generated quiz, if not return the message text to the user
         try {
             quizId = UUID.fromString(result);
         } catch (Exception e) {

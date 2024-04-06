@@ -9,8 +9,10 @@ import java.util.List;
 @RegisterAiService(modelName = "possible-questions", chatMemoryProviderSupplier = RegisterAiService.NoChatMemoryProviderSupplier.class)
 public interface PossibleFollowUpQuestionsAIService {
 
-    @SystemMessage("The User will provide you with a message. " +
-            "You will generate up to four questions that could be asked next by the user. " +
-            "After generating the questions, you will answer the user in the right format. " )
+    @SystemMessage("Du definierst drei mögliche Folgefragen des Nutzers basierend auf der letzten Antwort der KI. " +
+            "Dabei ermittelst du relevante und wahrscheinliche Fragen, " +
+            "die der Nutzer als Anschluss an die letzte Antwort der KI stellen könnte. " +
+            "Ziel ist es, den Dialogfluss vorausschauend zu gestalten und proaktiv auf potenzielle " +
+            "Informationsbedürfnisse des Nutzers einzugehen. Du gibst nur die Liste mit den möglichen Fragen zurück." )
     List<String> possibleQuestionsChat(@UserMessage String userInput);
 }
