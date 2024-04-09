@@ -1,6 +1,5 @@
 /**
  * TODO options how to continue
- * TODO progress bar
  *
  * Represents the end of a quiz. Contains the results of the quiz and the options how to continue.
  */
@@ -12,7 +11,7 @@ class QuizEnd {
         this.questionElements = [];
         this.element.innerHTML = `
             <div class="text">
-                <p>Deine Ergebnisse:</p>
+                <p>Hier sind deine Ergebnisse, klicke einfach auf die zurück/weiter buttons um die richtigen Antworten zu sehen:</p>
             </div>
             <div id="question-result-container" class="questions"></div>
             <div class="progress"></div>
@@ -71,7 +70,7 @@ class QuizEnd {
             this.uIService.addMessage(new LoadingMessage("wird gesendet..."));
             const result = await this.multipleChoiceService.sendResults(this.id, answers);
             this.uIService.removeMessage("loading-message");
-            const message = new Message(null, "Was möchtest du besprechen?", 'ai');
+            const message = new Message(null, "Möchtest du ein Thema besprechen oder vielleicht sogar ein neues Quiz dazu?", 'ai');
             this.uIService.addMessage(message);
             const possQService = new PossibleQuestionsService(document.querySelector('#input'));
             possQService.addPossibleQuestions(message, result.possibleFollowUpQuestions);

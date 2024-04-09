@@ -1,10 +1,15 @@
 package de.htwg.multipleChoice;
 
+import de.htwg.chat.llms.services.OpenAIService;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GenerateTheQuizDTO;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GetTheScriptDTO;
 import de.htwg.multipleChoice.memory.SimpleMemory;
 import de.htwg.multipleChoice.services.GenerateTheQuizAIService;
 import de.htwg.multipleChoice.services.GetTheScriptAIService;
+import de.htwg.multipleChoice.services.NormalChatAIService;
+import de.htwg.multipleChoice.services.WebScraperService;
+import de.htwg.multipleChoice.tools.RequestType;
+import de.htwg.multipleChoice.tools.UserInputClassifier;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.UserMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,10 +31,17 @@ public class GenerateQuizChain {
     @Inject
     GenerateTheQuizAIService generateTheQuizAIService;
 
+    @Inject
+    UserInputClassifier userInputClassifier;
+
+    @Inject
+    WebScraperService webScraperService;
+    @Inject
+    NormalChatAIService chatService;
+
     /**
      * This method implements a chain of AiAgents to generate a quiz.
-     * It first trays to get the Script by calling an agent that has tools
-     * to retrieve the script.
+     * It first classifies the user input, then decides how to get to the data
      * After that it calls an agent that has tools to generate a quiz.
      *
      * @param  userInput      the user message with the scriptId or scriptName
@@ -38,12 +50,30 @@ public class GenerateQuizChain {
      */
     public String startTheChain(String userInput, UUID conversationId) {
 
+        // Determine if the user input is an url or a text and get the data
+        String data = "";
+        List<RequestType> type = userInputClassifier.classifyInput(userInput);
+        // no data was provided
+         if(type.get(0) == RequestType.NO_DATA){
+             return chatService.chat(conversationId, userInput);
+         }
+        // text input
+         if(type.get(0) == RequestType.TEXT){
+             data = userInput;
+         }
+        // url
+         if(type.get(0) == RequestType.URL){
+             data = webScraperService.scrapeURL(userInput, conversationId);
+         }
 
-        // First step in the chain is to get the script. be it by id or just the name, or the most similar name
-        GetTheScriptDTO getTheScriptDTO = getTheScriptAIService.getTheScript(userInput, conversationId);
+        // script
+        /*GetTheScriptDTO getTheScriptDTO = getTheScriptAIService.getTheScript(userInput, conversationId);
 
+        if (!getTheScriptDTO.getSuccess()) {
+            return getTheScriptDTO.getText();
+        }*/
         // Second step is to generate a new quiz and then add the questions to the quiz.
-        GenerateTheQuizDTO generateTheQuizDTO = generateTheQuizAIService.generateTheQuiz(getTheScriptDTO.getText(), conversationId);
+        GenerateTheQuizDTO generateTheQuizDTO = generateTheQuizAIService.generateTheQuiz(data, conversationId);
 
         // After that it should be sent to the user
         if (generateTheQuizDTO.getSuccess()) {

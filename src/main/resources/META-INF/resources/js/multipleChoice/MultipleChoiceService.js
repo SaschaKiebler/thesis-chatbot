@@ -5,7 +5,7 @@ class MultipleChoiceService {
         this.conversationId = null;
     }
 
-    async getAnswer(message) {
+    async startTheQuizChain(message) {
         const body = {
             message: message,
             conversationId: (this.conversationId ? this.conversationId : "")

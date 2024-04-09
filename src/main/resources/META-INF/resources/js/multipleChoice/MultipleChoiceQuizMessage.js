@@ -1,5 +1,4 @@
 
-// TODO: add progress bar
 // This class displays a quiz with multiple choice questions and is a child of the Message class
 // It also contains the logic for displaying the next and previous question buttons of the MultipleChoiceQuestion class
 class MultipleChoiceQuizMessage extends Message {
@@ -11,7 +10,8 @@ class MultipleChoiceQuizMessage extends Message {
         this.questionContainer = this.createQuestionContainer();
         this.quiz = quiz;
         for (const question of quiz.questions) {
-            this.addQuestion(question);
+            const index = quiz.questions.indexOf(question)+1;
+            this.addQuestion(question, index);
         }
         text.appendChild(this.questionContainer);
         this.display();
@@ -26,8 +26,8 @@ class MultipleChoiceQuizMessage extends Message {
     }
 
     // adds a question to the container and adds an event listener to the next and previous question buttons
-    addQuestion(question) {
-        const questionElement = new MultipleChoiceQuestion(question.id, question.question, question.answers);
+    addQuestion(question, index) {
+        const questionElement = new MultipleChoiceQuestion(question.id, question.question, question.answers, index);
         this.questionContainer.appendChild(questionElement.element);
         console.log(questionElement);
         this.questionElements.push(questionElement);
@@ -96,15 +96,9 @@ class MultipleChoiceQuizMessage extends Message {
             }
             else if (element.element.classList.contains('wrong')) {
                 element.element.querySelector('.clicked').style.backgroundColor = 'var(--wrong)';
-                element.element.querySelector('.correct').style.border = '1px solid var(--correct)';
+                element.element.querySelector('.correct').style.border = '3px solid var(--correct)';
             }
         })
     }
 
-    // function that adds the Eventlistener for the talk button
-    addTalkButtonListener() {
-        this.questionElements[this.questionElements.length - 1].element.querySelector('#talk-about-results').addEventListener('click', () => {
-
-        })
-    }
 }

@@ -1,17 +1,16 @@
 
 // TODO: Add a timer
-// TODO: Add progress bar
 // Represents a single question with multiple answers and a next question button as well as a previous question button
 class MultipleChoiceQuestion {
 
-    constructor(id, question, answers) {
+    constructor(id, question, answers, index) {
         this.question = question;
         this.answers = answers;
         this.element = document.createElement('div');
         this.element.className = 'question';
         this.element.id = id;
         this.element.innerHTML = `
-            <div class="progress"></div>
+            <div class="progress">Frage ${index}:</div>
             <p>${this.question}</p>
             <div class="answers">
             </div>

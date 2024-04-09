@@ -11,7 +11,7 @@ class QuizUIService {
 
     // initializes the welcome message
     initializeWelcomeMessage() {
-        const welcomeMessage = new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Zu welchem Fach möchtest du ein Quiz durchführen?", this.lectures.map(lecture => ({ name: lecture.name, id: lecture.id })), "lectures");
+        const welcomeMessage = new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, kann ich dir ein Multiple-Choice-Quiz erstellen.", this.lectures.map(lecture => ({ name: lecture.name, id: lecture.id })), "lectures");
         this.uiService.clearMessages(welcomeMessage);
         this.initializeLectureSelection();
     }
@@ -65,7 +65,7 @@ class QuizUIService {
         this.displayUserMessage(scriptOption.innerHTML);
         const loadingMessageId = this.displayLoadingMessage("erzeugt ein Quiz zum Skript " + scriptOption.name);
 
-        const answer = await this.multipleChoiceService.getAnswer("erzeuge ein Quiz zum Skript " + scriptOption.id);
+        const answer = await this.multipleChoiceService.startTheQuizChain("erzeuge ein Quiz zum Skript " + scriptOption.id);
         this.uiService.removeMessage(loadingMessageId);
         const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, answer.answer, 'ai');
         this.uiService.addMessage(message);
