@@ -1,6 +1,8 @@
 package de.htwg.multipleChoice;
 
+import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.llms.services.OpenAIService;
+import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GenerateTheQuizDTO;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GetTheScriptDTO;
 import de.htwg.multipleChoice.memory.SimpleMemory;
@@ -8,6 +10,7 @@ import de.htwg.multipleChoice.services.*;
 import de.htwg.multipleChoice.tools.RequestType;
 import de.htwg.multipleChoice.tools.UserInputClassifier;
 import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -65,6 +68,19 @@ public class GenerateQuizChain {
          if(type == RequestType.URL){
 
              data = webScraperService.scrapeURL(userInput, conversationId);
+         }
+         // create another quiz
+         if(type == RequestType.SAME_TEXT){
+             SimpleMemory memory = new SimpleMemory();
+             List<ChatMessage> messages = memory.getMessages(conversationId);
+             StringBuilder inputText = new StringBuilder();
+             for (ChatMessage message : messages) {
+                 if (message instanceof UserMessage) {
+                     inputText.append(((UserMessage) message).contents().toString());
+                 }
+             }
+             inputText.append("\n").append(userInput);
+             data = inputText.toString();
          }
 
         // script

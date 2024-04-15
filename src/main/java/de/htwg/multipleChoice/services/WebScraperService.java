@@ -12,6 +12,7 @@ import java.util.UUID;
 @RegisterAiService(modelName = "web-scraper", chatMemoryProviderSupplier = InMemoryProvider.class, tools = {WebDataTools.class})
 public interface WebScraperService {
 
-    @SystemMessage("Get the text of the website the user provided the url for by using the provided tools")
+    @SystemMessage("Retrieve the text from the specified website by utilizing the designated tools " +
+            "available and give the user the full text back")
     String scrapeURL(@UserMessage String input, @MemoryId UUID id);
 }

@@ -1,7 +1,5 @@
 package de.htwg.multipleChoice.resources;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.multipleChoice.DTOs.QuizChainInputDTO;
@@ -76,23 +74,17 @@ public class QuizChainResource {
             quizId = UUID.fromString(result);
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new Jdk8Module());
 
         if (quizId != null) {
             MCQuiz quiz = mcQuizRepository.findById(quizId);
-            if (quiz == null) {
-                System.out.println("answer without a Quiz");
-                return Response.ok().entity(Json.object().put("answer", result).put("conversationId", conversation.getId().toString())).build();
+            if(quiz!=null) {
+                System.out.println("Quiz found with id: " + quizId.toString());
+                return Response.ok().entity(Json.object().put("quizId", quizId.toString()).put("conversationId", conversation.getId().toString()).build()).build();
             }
-            System.out.println("Quiz found with id: " + quizId.toString());
-            return Response.ok().entity(Json.object().put("quizId",quizId.toString()).put("conversationId",conversation.getId().toString()).build()).build();
         }
 
-        System.out.println("No quiz found. Answer" + " with message: " + result);
+        System.out.println("No quiz found. Answer with message: " + result);
         QuizChainInputDTO input = new QuizChainInputDTO(conversation.getId().toString(), result);
-        Response response = Response.ok().entity(input).build();
-        System.out.println(response.getEntity().toString());
-        return response;
+        return Response.ok().entity(input).build();
     }
 }

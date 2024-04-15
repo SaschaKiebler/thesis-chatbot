@@ -4,5 +4,6 @@ public enum RequestType {
 
     NO_DATA,
     TEXT,
-    URL
+    URL,
+    SAME_TEXT
 }

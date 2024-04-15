@@ -21,7 +21,7 @@ public class SimpleMemoryProvider implements Supplier<ChatMemoryProvider> {
             @Override
             public ChatMemory get(Object memoryId) {
                 return MessageWindowChatMemory.builder()
-                        .maxMessages(10)
+                        .maxMessages(15)
                         .id(memoryId)
                         .chatMemoryStore(store)
                         .build();
