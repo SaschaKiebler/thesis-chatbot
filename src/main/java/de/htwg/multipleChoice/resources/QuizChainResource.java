@@ -1,5 +1,7 @@
 package de.htwg.multipleChoice.resources;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.multipleChoice.DTOs.QuizChainInputDTO;
@@ -18,6 +20,7 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Resources for the quizchain
@@ -35,11 +38,22 @@ public class QuizChainResource {
     @Inject
     MCQuizRepository mcQuizRepository;
 
+
+    private static final Pattern UUID_PATTERN =
+            Pattern.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", Pattern.CASE_INSENSITIVE);
+
+    public static boolean isValidUUID(String str) {
+        if (str == null) {
+            return false;
+        }
+        return UUID_PATTERN.matcher(str).matches();
+    }
+
     /**
      * This function makes the quizchain visible on the endpoint /api/quizChain
      *
      * @param  inputDTO	a ChainInputDTO containing the conversationId and the message
-     * @return         	either the generated quizId or an message from the ai
+     * @return         	either the generated quizId or a message from the ai
      */
     @POST
     @Transactional
@@ -55,26 +69,30 @@ public class QuizChainResource {
             conversationRepository.persist(conversation);
         }
         String result = generateQuizChain.startTheChain(inputDTO.getMessage(), conversation.getId());
-        UUID quizId;
+        UUID quizId = null;
 
         // try to get the id of the generated quiz, if not return the message text to the user
-        try {
+        if (isValidUUID(result)) {
             quizId = UUID.fromString(result);
-        } catch (Exception e) {
-            quizId = null;
         }
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
 
         if (quizId != null) {
             MCQuiz quiz = mcQuizRepository.findById(quizId);
             if (quiz == null) {
-                System.out.println("No quiz found with id: " + quizId.toString());
+                System.out.println("answer without a Quiz");
                 return Response.ok().entity(Json.object().put("answer", result).put("conversationId", conversation.getId().toString())).build();
             }
             System.out.println("Quiz found with id: " + quizId.toString());
             return Response.ok().entity(Json.object().put("quizId",quizId.toString()).put("conversationId",conversation.getId().toString()).build()).build();
         }
 
-        System.out.println("No quiz found with id: " + result + " with message: " + inputDTO.getMessage());
-        return Response.ok().entity(Json.object().put("answer", result).put("conversationId", conversation.getId().toString())).build();
+        System.out.println("No quiz found. Answer" + " with message: " + result);
+        QuizChainInputDTO input = new QuizChainInputDTO(conversation.getId().toString(), result);
+        Response response = Response.ok().entity(input).build();
+        System.out.println(response.getEntity().toString());
+        return response;
     }
 }

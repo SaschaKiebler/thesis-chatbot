@@ -14,6 +14,7 @@ public class MultipleChoiceQuestion {
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
+    @Column(length = 2000)
     private String question;
 
     @OneToMany(orphanRemoval = true)

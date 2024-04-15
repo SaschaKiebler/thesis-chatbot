@@ -4,10 +4,7 @@ import de.htwg.chat.llms.services.OpenAIService;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GenerateTheQuizDTO;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GetTheScriptDTO;
 import de.htwg.multipleChoice.memory.SimpleMemory;
-import de.htwg.multipleChoice.services.GenerateTheQuizAIService;
-import de.htwg.multipleChoice.services.GetTheScriptAIService;
-import de.htwg.multipleChoice.services.NormalChatAIService;
-import de.htwg.multipleChoice.services.WebScraperService;
+import de.htwg.multipleChoice.services.*;
 import de.htwg.multipleChoice.tools.RequestType;
 import de.htwg.multipleChoice.tools.UserInputClassifier;
 import dev.langchain4j.data.message.AiMessage;
@@ -31,9 +28,11 @@ public class GenerateQuizChain {
     @Inject
     GenerateTheQuizAIService generateTheQuizAIService;
 
-    @Inject
-    UserInputClassifier userInputClassifier;
+    //@Inject
+    //UserInputClassifier userInputClassifier;
 
+    @Inject
+    UserInputClassifierAIService userInputClassifier;
     @Inject
     WebScraperService webScraperService;
     @Inject
@@ -52,17 +51,19 @@ public class GenerateQuizChain {
 
         // Determine if the user input is an url or a text and get the data
         String data = "";
-        List<RequestType> type = userInputClassifier.classifyInput(userInput);
+        // List<RequestType> type = userInputClassifier.classifyInput(userInput);
+        RequestType type = userInputClassifier.classify(userInput);
         // no data was provided
-         if(type.get(0) == RequestType.NO_DATA){
+         if(type == RequestType.NO_DATA){
              return chatService.chat(conversationId, userInput);
          }
         // text input
-         if(type.get(0) == RequestType.TEXT){
+         if(type == RequestType.TEXT){
              data = userInput;
          }
         // url
-         if(type.get(0) == RequestType.URL){
+         if(type == RequestType.URL){
+
              data = webScraperService.scrapeURL(userInput, conversationId);
          }
 

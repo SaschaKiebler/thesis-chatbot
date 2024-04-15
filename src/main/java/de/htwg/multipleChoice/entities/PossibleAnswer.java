@@ -1,5 +1,6 @@
 package de.htwg.multipleChoice.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,6 +13,7 @@ public class PossibleAnswer {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
+    @Column(length = 2000)
     private String answer;
     private boolean correct;
 

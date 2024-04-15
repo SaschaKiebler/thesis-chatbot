@@ -117,6 +117,16 @@ class GenerateQuizChainTest {
     }
 
     @Test
+    void testChainForURLInput2(){
+        String result = generateQuizChain.startTheChain("mach mal ein quiz zu folgender seite https://ki-campus.org/blog/chatgpt-hochschullehre", UUID.randomUUID());
+
+        System.out.println(result);
+        assertNotNull(result);
+        UUID validID = UUID.fromString(result);
+        assertNotNull(mcQuizRepository.findById(validID));
+    }
+
+    @Test
     @TestTransaction
     void testChainForJustChat(){
         Conversation conversation = new Conversation();

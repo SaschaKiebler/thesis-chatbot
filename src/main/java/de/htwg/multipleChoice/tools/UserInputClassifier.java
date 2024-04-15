@@ -2,10 +2,8 @@ package de.htwg.multipleChoice.tools;
 
 import dev.langchain4j.classification.EmbeddingModelTextClassifier;
 import dev.langchain4j.classification.TextClassifier;
-import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Map;
@@ -44,7 +42,14 @@ public class UserInputClassifier {
 
         "4. Künstliche Intelligenz und Maschinelles Lernen Künstliche Intelligenz (KI) befasst sich mit der Schaffung von Maschinen oder Software, die menschenähnliche Intelligenz und Verhalten aufweisen. Zentrale Bereiche der KI umfassen maschinelles Lernen, neuronale Netze, Deep Learning, Natürliche Sprachverarbeitung und Robotik. Maschinelles Lernen beinhaltet Algorithmen, die Computern ermöglichen, aus Daten zu lernen und Vorhersagen oder Entscheidungen ohne explizite Programmierung zu treffen. Wichtige Konzepte des maschinellen Lernens beinhalten überwachtes, unüberwachtes und verstärktes Lernen, sowie die Auswahl und Optimierung von Modellen und Algorithmen, um spezifische Probleme zu lösen.",
 
-        "5. Computernetzwerke Computernetzwerke ermöglichen die Verbindung von Computern, um Daten und Ressourcen zu teilen. Wichtige Konzepte in der Netzwerktechnologie umfassen das OSI-Modell, TCP/IP-Protokolle, Routing, Switching, Netzwerksicherheit und Wireless-Technologien. Das Verstehen der Funktionsweise von Netzwerken, einschließlich des Internets, ist entscheidend, um die Kommunikation zwischen Computern zu ermöglichen und zu optimieren. Dies umfasst das Verständnis von IP-Adressierung, Subnetting, Verschlüsselungstechniken und Firewall-Konzepten, um sichere und effiziente Netzwerklösungen zu entwickeln."),
+        "5. Computernetzwerke Computernetzwerke ermöglichen die Verbindung von Computern, " +
+                "um Daten und Ressourcen zu teilen. Wichtige Konzepte in der Netzwerktechnologie" +
+                " umfassen das OSI-Modell, TCP/IP-Protokolle, Routing, Switching, Netzwerksicherheit und " +
+                "Wireless-Technologien. Das Verstehen der Funktionsweise von Netzwerken, einschließlich des Internets, " +
+                "ist entscheidend, um die Kommunikation zwischen Computern zu ermöglichen und zu optimieren. " +
+                "Dies umfasst das Verständnis von IP-Adressierung, Subnetting, Verschlüsselungstechniken und " +
+                "Firewall-Konzepten, um sichere und effiziente Netzwerklösungen zu entwickeln."
+            ),
             RequestType.URL, List.of("https://www.wikipedia.org",
                                     "www.example.com",
                                     "http://www.meinewebsite.de",
@@ -54,7 +59,8 @@ public class UserInputClassifier {
                                     "http://meinblog.blogspot.com",
                                     "www.meinefirma.com/produkte",
                                     "https://www.openai.com",
-                                    "http://localhost:8080"
+                                    "https://www.deeplearning.ai",
+                                    "https://deeplearning.ai"
     )
     );
 

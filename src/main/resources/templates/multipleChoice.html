@@ -14,15 +14,16 @@
     {#styles}
         <link rel="stylesheet" href="styles/mcStyle.css">
     {/styles}
-    {#onLoad}
-    document.getElementById("input").focus();
-        const quizUIService = new QuizUIService(uiService, multipleChoiceService, [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]);
-        input.disabled = true;
-    {/onLoad}
-    {#eventListener}
+    {#services}
         const multipleChoiceService = new MultipleChoiceService();
         const markdownParser = new MarkdownParser();
         const possibleQService = new PossibleQuestionsService(input);
+        const quizUIService = new QuizUIService(uiService, multipleChoiceService);
+    {/services}
+    {#onLoad}
+    document.getElementById("input").focus();
+    {/onLoad}
+    {#eventListener}
 
         // Verhindert XSS
         function sanitizeString(str) {
@@ -39,7 +40,6 @@
             if (input.value === ''){
                 return;
             } else{
-                possibleQService.removePossibleQuestionsEventListeners();
                 handleSendEvent();
             }
         });
@@ -51,7 +51,6 @@
                 input.value += '\n';
             }
             else if (event.key === 'Enter' && !event.shiftKey) {
-                possibleQService.removePossibleQuestionsEventListeners();
                 handleSendEvent();
             }
             }
@@ -59,14 +58,7 @@
 
         async function handleSendEvent() {
             // wandelt mögliche Sonderzeichen des Inputs um sodass diese nicht formatiert werden
-            let inputText = sanitizeString(input.value);
-
-            // Fügt die Message des Users der UI hinzu
-            uiService.addMessage(new Message(null,inputText, 'user'));
-
-            // Erstellt eine LoadingMessage
-            const loadingMessage = new LoadingMessage("");
-            uiService.addMessage(loadingMessage);
+            let inputText = input.value;
 
             // Macht das Inputfeld leer, eine Zeile hoch und scrollt ans ende des Chat-Feldes
             input.value = '';
@@ -74,19 +66,15 @@
             document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
 
             // Hole die Antwort
-            const answer = await multipleChoiceService.talkAboutResults(inputText);
-
-            // Entferne die LoadingMessage
-            uiService.removeMessage(loadingMessage.id);
+            const answer = await quizUIService.handleRequest(inputText);
 
             const formattedAnswer = markdownParser.parse(answer.answer);
 
-            const message = new Message(null,formattedAnswer, 'ai');
+            const message = answer.quizId ? new QuizStartMessage(answer.quizId, uiService, multipleChoiceService) : new Message(null, answer.answer, 'ai');
 
-
-            possibleQService.addPossibleQuestions(message, answer.possibleFollowUpQuestions);
+            // possibleQService.addPossibleQuestions(message, answer.possibleFollowUpQuestions);
             uiService.addMessage(message);
-            possibleQService.addClickListenerToPossibleQuestions();
+            // possibleQService.addClickListenerToPossibleQuestions();
         }
 
 

@@ -2,18 +2,18 @@
 // TODO disable the inputfield before the end of the quiz
 // manages the UI for the multiple choice quiz
 class QuizUIService {
-    constructor(uiService, multipleChoiceService, lectures) {
-        this.lectures = lectures;
+    constructor(uiService, multipleChoiceService) {
         this.uiService = uiService;
         this.multipleChoiceService = multipleChoiceService;
         this.initializeWelcomeMessage();
+        this.markdownParser = new MarkdownParser();
     }
 
     // initializes the welcome message
     initializeWelcomeMessage() {
-        const welcomeMessage = new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, kann ich dir ein Multiple-Choice-Quiz erstellen.", this.lectures.map(lecture => ({ name: lecture.name, id: lecture.id })), "lectures");
+        // const welcomeMessage = new OptionMessage(null, "Hallo! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, kann ich dir ein Multiple-Choice-Quiz erstellen.", this.lectures.map(lecture => ({ name: lecture.name, id: lecture.id })), "lectures");
+        const welcomeMessage = new Message(null, "Hallo! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, kann ich dir ein Multiple-Choice-Quiz erstellen.", "ai");
         this.uiService.clearMessages(welcomeMessage);
-        this.initializeLectureSelection();
     }
 
     // initializes the event listener for each lecture in the message
@@ -69,6 +69,18 @@ class QuizUIService {
         this.uiService.removeMessage(loadingMessageId);
         const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, answer.answer, 'ai');
         this.uiService.addMessage(message);
+    }
+
+    async handleRequest(input) {
+        this.displayUserMessage(input);
+        const loadingMessageId = this.displayLoadingMessage("");
+
+        const answer = await this.multipleChoiceService.startTheQuizChain(input);
+        console.log(answer);
+        this.uiService.removeMessage(loadingMessageId);
+        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, this.markdownParser.parse(answer.message), 'ai');
+        this.uiService.addMessage(message);
+        return answer;
     }
 
     // function to disable the input options
