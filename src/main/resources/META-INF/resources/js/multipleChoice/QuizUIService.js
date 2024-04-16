@@ -80,6 +80,12 @@ class QuizUIService {
         this.uiService.removeMessage(loadingMessageId);
         const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, this.markdownParser.parse(answer.message), 'ai');
         this.uiService.addMessage(message);
+        if (answer.possibleFollowupQuestions) {
+            const possQService = new PossibleQuestionsService(document.querySelector('#input'));
+            possQService.addPossibleQuestions(message, answer.possibleFollowupQuestions);
+            possQService.addClickListenerToPossibleQuestions();
+
+        }
         return answer;
     }
 

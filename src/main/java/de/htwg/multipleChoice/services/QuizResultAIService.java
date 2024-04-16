@@ -12,6 +12,13 @@ import java.util.UUID;
 
 @RegisterAiService(modelName = "result-service", chatMemoryProviderSupplier = SimpleMemoryProvider.class, retrievalAugmentor = AdvancedRetrievalAugmentor.class)
 public interface QuizResultAIService {
+
+    /**
+     * Normal chat with specialized prompt to talk about the results of the quiz
+     * @param userInput  the user message
+     * @param memoryId    the memory id (conversation id)
+     * @return the answer of the llm
+     */
     @SystemMessage("Du bist Experte und Tutor. Du führst ein Gespräch mit dem Nutzer " +
             "über seine Ergebnisse im Quiz, die ihm bereits vorliegen, und versuchst aufgetretene Fragen zu beantworten." +
             "Antworte kurz und mit den wichtigsten Punkten.")

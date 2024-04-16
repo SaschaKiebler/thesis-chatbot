@@ -42,6 +42,7 @@ class PossibleQuestionsService {
             possibleQuestion.addEventListener('click', () => {
                 this.addChosenQuestionToInput(possibleQuestion.innerText);
                 document.querySelector('#send').click();
+                this.removePossibleQuestionsEventListeners();
             });
         }
     }

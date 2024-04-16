@@ -15,7 +15,7 @@ class QuizEnd {
             </div>
             <div id="question-result-container" class="questions"></div>
             <div class="progress"></div>
-            <button id="talk-about-results" class="question-control-buttons">Ergebnisse besprechen</button>
+            <button id="talk-about-results" class="question-control-buttons">Ergebnisse senden</button>
             <button id="new-quiz" class="question-control-buttons">neues Quiz</button>
         `;
         this.questionContainer = this.element.querySelector('.questions');

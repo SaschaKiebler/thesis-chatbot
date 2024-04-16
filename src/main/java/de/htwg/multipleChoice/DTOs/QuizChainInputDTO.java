@@ -1,5 +1,7 @@
 package de.htwg.multipleChoice.DTOs;
 
+import java.util.List;
+
 /**
  * Represents the input for the method startQuizChain in {@link de.htwg.multipleChoice.resources.QuizChainResource}
  */
@@ -8,9 +10,17 @@ public class QuizChainInputDTO {
     private String conversationId;
     private String message;
 
+    private List<String> possibleFollowupQuestions;
+
     public QuizChainInputDTO(String conversationId, String message) {
         this.conversationId = conversationId;
         this.message = message;
+    }
+
+    public QuizChainInputDTO(String conversationId, String message, List<String> possibleFollowupQuestions) {
+        this.conversationId = conversationId;
+        this.message = message;
+        this.possibleFollowupQuestions = possibleFollowupQuestions;
     }
 
     public QuizChainInputDTO() {}
@@ -29,5 +39,13 @@ public class QuizChainInputDTO {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public List<String> getPossibleFollowupQuestions() {
+        return possibleFollowupQuestions;
+    }
+
+    public void setPossibleFollowupQuestions(List<String> possibleFollowupQuestions) {
+        this.possibleFollowupQuestions = possibleFollowupQuestions;
     }
 }

@@ -6,6 +6,7 @@ import de.htwg.multipleChoice.DTOs.QuizChainInputDTO;
 import de.htwg.multipleChoice.GenerateQuizChain;
 import de.htwg.multipleChoice.entities.MCQuiz;
 import de.htwg.multipleChoice.repositories.MCQuizRepository;
+import de.htwg.multipleChoice.services.PossibleFollowUpQuestionsAIService;
 import io.quarkus.vertx.http.runtime.devmode.Json;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -17,6 +18,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -35,6 +37,9 @@ public class QuizChainResource {
 
     @Inject
     MCQuizRepository mcQuizRepository;
+
+    @Inject
+    PossibleFollowUpQuestionsAIService possibleFollowUpQuestionsAIService;
 
 
     private static final Pattern UUID_PATTERN =
@@ -85,6 +90,10 @@ public class QuizChainResource {
 
         System.out.println("No quiz found. Answer with message: " + result);
         QuizChainInputDTO input = new QuizChainInputDTO(conversation.getId().toString(), result);
+
+        // generate possible follow-up questions
+        List<String> possibleFollowUpQuestions = possibleFollowUpQuestionsAIService.possibleQuestionsChat(result);
+        input.setPossibleFollowupQuestions(possibleFollowUpQuestions);
         return Response.ok().entity(input).build();
     }
 }
