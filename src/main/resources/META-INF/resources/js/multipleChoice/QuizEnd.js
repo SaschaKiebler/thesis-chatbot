@@ -1,5 +1,4 @@
 /**
- * TODO options how to continue
  *
  * Represents the end of a quiz. Contains the results of the quiz and the options how to continue.
  */
@@ -26,8 +25,6 @@ class QuizEnd {
         this.questionResultContainer = this.element.querySelector('.question-result-container');
         this.multipleChoiceService = multipleChoiceService;
         this.uIService = new UIService();
-        this.markdownParser = new MarkdownParser();
-
 
         this.addEventListenerToTalkAboutResults();
     }

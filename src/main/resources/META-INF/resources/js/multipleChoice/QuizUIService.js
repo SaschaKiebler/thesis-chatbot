@@ -16,6 +16,65 @@ class QuizUIService {
         this.uiService.clearMessages(welcomeMessage);
     }
 
+    // function to display a loading message
+    displayLoadingMessage(message) {
+        const loadingMessage = new LoadingMessage(message);
+        this.uiService.addMessage(loadingMessage);
+        return loadingMessage.id;
+    }
+
+    // function to display a user message
+    displayUserMessage(message) {
+        const userMessage = new Message(null, message, 'user');
+        this.uiService.addMessage(userMessage);
+    }
+
+    // function to handle a request and either display a normal ai message or a start quiz message
+    async handleRequest(input) {
+        const inputText = this.sanitizeString(input);
+        this.displayUserMessage(inputText);
+        const loadingMessageId = this.displayLoadingMessage("");
+
+        const answer = await this.multipleChoiceService.startTheQuizChain(input);
+        console.log(answer);
+        this.uiService.removeMessage(loadingMessageId);
+        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, this.markdownParser.parse(answer.message), 'ai');
+        this.uiService.addMessage(message);
+        // check if there are possible follow-up questions and add them to the message
+        if (answer.possibleFollowupQuestions) {
+            const possQService = new PossibleQuestionsService(document.querySelector('#input'));
+            possQService.addPossibleQuestions(message, answer.possibleFollowupQuestions);
+            possQService.addClickListenerToPossibleQuestions();
+
+        }
+        return answer;
+    }
+
+    // Verhindert XSS
+    sanitizeString(str) {
+        return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+            .replace(/`/g, "&#96;");
+    }
+
+
+
+
+    // Ab hier alter code für feste Datenbasis, momentan nicht in Benutzung
+    // TODO: remove this code
+
+
+    // function to disable the input options
+    disableInputOptions() {
+        const inputOptions = document.getElementsByClassName('option');
+        for (const inputOption of inputOptions) {
+            inputOption.disabled = true;
+        }
+    }
+
     // initializes the event listener for each lecture in the message
     initializeLectureSelection() {
         const lectureOptions = document.querySelector('.lectures-message').getElementsByClassName('option');
@@ -38,18 +97,6 @@ class QuizUIService {
         this.initializeScriptSelection(scriptMessage);
     }
 
-    // function to display a loading message
-    displayLoadingMessage(message) {
-        const loadingMessage = new LoadingMessage(message);
-        this.uiService.addMessage(loadingMessage);
-        return loadingMessage.id;
-    }
-
-    // function to display a user message
-    displayUserMessage(message) {
-        const userMessage = new Message(null, message, 'user');
-        this.uiService.addMessage(userMessage);
-    }
 
     // initializes the event listener for each script-option in the message
     initializeScriptSelection(scriptMessage) {
@@ -69,32 +116,6 @@ class QuizUIService {
         this.uiService.removeMessage(loadingMessageId);
         const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, answer.answer, 'ai');
         this.uiService.addMessage(message);
-    }
-
-    async handleRequest(input) {
-        this.displayUserMessage(input);
-        const loadingMessageId = this.displayLoadingMessage("");
-
-        const answer = await this.multipleChoiceService.startTheQuizChain(input);
-        console.log(answer);
-        this.uiService.removeMessage(loadingMessageId);
-        const message = answer.quizId ? new QuizStartMessage(answer.quizId, this.uiService, this.multipleChoiceService) : new Message(null, this.markdownParser.parse(answer.message), 'ai');
-        this.uiService.addMessage(message);
-        if (answer.possibleFollowupQuestions) {
-            const possQService = new PossibleQuestionsService(document.querySelector('#input'));
-            possQService.addPossibleQuestions(message, answer.possibleFollowupQuestions);
-            possQService.addClickListenerToPossibleQuestions();
-
-        }
-        return answer;
-    }
-
-    // function to disable the input options
-    disableInputOptions() {
-        const inputOptions = document.getElementsByClassName('option');
-        for (const inputOption of inputOptions) {
-            inputOption.disabled = true;
-        }
     }
 }
 

@@ -25,15 +25,7 @@
     {/onLoad}
     {#eventListener}
 
-        // Verhindert XSS
-        function sanitizeString(str) {
-            return str.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;")
-            .replace(/`/g, "&#96;");
-        }
+
 
         // Eventlistener für das Absenden einer Nachricht bei Click auf Button
         send.addEventListener('click', async function() {
@@ -72,9 +64,7 @@
 
             const message = answer.quizId ? new QuizStartMessage(answer.quizId, uiService, multipleChoiceService) : new Message(null, answer.answer, 'ai');
 
-            // possibleQService.addPossibleQuestions(message, answer.possibleFollowUpQuestions);
             uiService.addMessage(message);
-            // possibleQService.addClickListenerToPossibleQuestions();
         }
 
 
@@ -82,7 +72,7 @@
     {#inputText}Chatte mit mir...{/inputText}
     {#clearMessagesExtension}
 
-        const quizUIService = new QuizUIService(uiService, multipleChoiceService, [{#for lecture in lectures}{| { |}"name":"{lecture.name}", "id":"{lecture.id}"{| } |},{/for}]);
+        const quizUIService = new QuizUIService(uiService, multipleChoiceService);
 
     {/clearMessagesExtension}
 

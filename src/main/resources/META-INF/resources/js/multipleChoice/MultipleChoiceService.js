@@ -31,20 +31,6 @@ class MultipleChoiceService {
         });
     }
 
-
-    async getScripts(lectureId) {
-        return await fetch(`/api/lectures/${lectureId}/scripts`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(data => {
-            return data.json();
-        }).catch(error => {
-            console.error('Error:', error);
-        });
-    };
-
     async getQuiz(quizId) {
         return await fetch(`/api/quiz/${quizId}`, {
             method: 'GET',
@@ -85,6 +71,11 @@ class MultipleChoiceService {
         })
     }
 
+
+
+    // Ab hier alte Methoden die nicht mehr genutzt werden. Wird zuerst gelöscht.
+    // TODO: löschen
+
     async talkAboutResults(userInput) {
         const body = { conversationId: this.conversationId, message: userInput };
         return await fetch(`/api/quiz/talk`, {
@@ -106,6 +97,19 @@ class MultipleChoiceService {
             console.error('Error:', error);
         })
     }
+
+    async getScripts(lectureId) {
+        return await fetch(`/api/lectures/${lectureId}/scripts`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(data => {
+            return data.json();
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    };
 
 
 }
