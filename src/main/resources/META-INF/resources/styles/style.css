@@ -392,17 +392,74 @@ code {
 .user-popup-input-container{
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: stretch;
   justify-content: center;
   gap: 10px;
+  background-color: rgb(255, 255, 255, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+}
 
+.close-user-popup-container{
+  display: flex;
+  justify-content: flex-end;
 }
 
 #close-user-popup{
-  position: absolute;
-  top: 10px;
-  right: 10px;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#personal-id-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  color: black;
+}
+
+#personal-id{
+  text-align: center;
+  width: 80%;
+  padding: 4px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  background-color: white;
+}
+
+#copy-personal-id{
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+.personal-id-field{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  color: black;
+}
+
+#user-name{
+  text-align: center;
+  width: 100%;
+  padding: 4px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+}
+
+#lecture-select{
+  cursor: pointer;
+  min-width: 25%;
 }
 
 .selected-lecture{
@@ -414,11 +471,45 @@ code {
   width: fit-content;
   border-radius: 30px;
   background-color: #4A90E2;
-  color: #fff;
+  color: black;
 }
 
 .remove-lecture{
   cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+.save-button{
+  cursor: pointer;
+  background-color: transparent;
+  border: #4A90E2 1px solid;
+  color: #4A90E2;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.save-button:hover{
+  background-color: #4A90E2;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.cancel-button{
+  cursor: pointer;
+  background-color: transparent;
+  border: #e24a4a 1px solid;
+  color: #e24a4a;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.cancel-button:hover{
+  background-color: #e24a4a;
+  color: white;
+  transition: all 0.3s ease;
 }
 
 

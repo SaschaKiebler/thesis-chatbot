@@ -86,7 +86,6 @@ public class MultipleChoiceAPIResource {
             answers.add(possibleAnswer);
             userAnswers.append("\n").append(possibleAnswer.getAnswer());
         }
-        System.out.println(userAnswers.toString());
         memory.updateMessages(conversation.getId(), List.of(
                 new AiMessage("Hier ist dein Quiz: " + quiz.toString())));
         memory.updateMessages(conversation.getId(), List.of(

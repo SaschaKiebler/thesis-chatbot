@@ -17,6 +17,7 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   <script src="js/base/MarkdownParser.js"></script>
   <script src="js/base/LoadingMessage.js"></script>
   <script src="js/base/ErrorMessage.js"></script>
+  <script src="js/base/StudentService.js"></script>
   {#insert scripts}
   {/}
 </head>
@@ -60,44 +61,68 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   </div>
 </div>
 
-<div id="user-popup">
-  <div>
-    <button id="close-user-popup">X</button>
-  </div>
-  <div class="user-popup-input-container">
 
+
+<div id="user-popup">
+
+  <div class="user-popup-input-container">
+    <div class="close-user-popup-container">
+      <button id="close-user-popup">X</button>
+    </div>
+    <div id="personal-id-container">
+      <label for="personal-id">Deine persönliche Benutzer-ID:</label>
+      <div class="personal-id-field">
+        <p id="personal-id"></p>
+        <button id="copy-personal-id"><img src="/pictures/clone-solid.svg" alt="kopieren" height="25px" width="25px"></button>
+      </div>
+      </div>
     <div class="name-input-container">
       <label for="user-name">Name:</label>
       <input type="text" id="user-name" placeholder="Hier deinen Namen eingeben" >
     </div>
   <div class="lecture-input-container">
-    <label for="lecture">Vorlesung hinzufügen:</label>
-    <select id="lecture">
-      <option value="">Keine Vorlesung</option>
+    <label for="lecture-select">Vorlesung hinzufügen:</label>
+    <select id="lecture-select">
+      <option value="" class="lecture-option"></option>
       {#for lecture in lectures}
-        <option value="{lecture.name}" class="lecture-option">{lecture.name}</option>
+        <option value="{lecture.name}" id="{lecture.id}" class="lecture-option">{lecture.name}</option>
       {/for}
     </select>
   </div>
   <div class="selected-lectures">
     <p id="selected-lectures-label">Deine Vorlesungen:</p>
-    <div class="selected-lecture">Test <button class="remove-lecture">X</button></div>
   </div>
-  <button id="save-user" class="">Speichern</button>
+    <div>
+    <button id="save-user" class="save-button">Speichern</button>
+    <button id="cancel-user" class="cancel-button">Abbrechen</button>
+    </div>
 </div>
 </div>
+
+
 </body>
 
 <script>
 
   const uiService = new UIService();
+  const studentService = new StudentService();
   const input = document.getElementById('input');
   const clear = document.getElementById('clear');
+  let personalId;
+  if (localStorage.getItem('personal-id')) {
+      personalId = localStorage.getItem('personal-id');
+    document.querySelector("#personal-id").innerHTML = personalId;
+  }
+  else {
+      setPersonalId();
+  }
+
   {#insert services}
   {/}
 
   window.onload = function() {
     uiService.loadDarkMode();
+    studentService.setStudentDataInUI(personalId);
     {#insert onLoad}
     {/}
   };
@@ -135,6 +160,38 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   document.getElementById('close-user-popup').addEventListener('click', function() {
     uiService.userPopUp();
   });
+
+  // Eventlistener für cancel button
+  document.getElementById('cancel-user').addEventListener('click', function() {
+    uiService.userPopUp();
+  });
+
+  // Eventlistener für copy button
+  document.getElementById('copy-personal-id').addEventListener('click', function() {
+    const personalId = document.getElementById('personal-id');
+    navigator.clipboard.writeText(personalId.textContent);
+  });
+
+  // Eventlistener für save button
+  document.getElementById('save-user').addEventListener('click', function() {
+    studentService.updateStudentData();
+    uiService.userPopUp();
+  });
+
+  // Eventlistener für LectureOptions
+  document.querySelector("#lecture-select").addEventListener('change', function() {
+    // get the selected lectures index
+    const select = document.querySelector("#lecture-select");
+    const selectedLecture = select.options[select.selectedIndex];
+
+    studentService.addLectureToUI(selectedLecture);
+  });
+
+  // Function to set the personal-Id
+  async function setPersonalId() {
+    personalId = await studentService.fetchNewStudentId();
+    document.querySelector("#personal-id").innerHTML = personalId;
+  }
 
     // Eventlistener für das Senden einer Nachricht
   {#insert eventListener}
