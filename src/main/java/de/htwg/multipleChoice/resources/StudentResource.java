@@ -93,9 +93,11 @@ public class StudentResource {
             if (studentDTO.getName() == null) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
-            if (student.getName().equals(studentDTO.getName())) {
+            if (student.getName()!=null) {
+                if (student.getName().equals(studentDTO.getName())) {
                 System.out.println("No changes in student: " + student.toString());
                 return Response.ok().build();
+                }
             }
             student.setName(studentDTO.getName());
             studentRepository.persist(student);

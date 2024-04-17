@@ -1,17 +1,17 @@
 
-// TODO disable the inputfield before the end of the quiz
 // manages the UI for the multiple choice quiz
 class QuizUIService {
     constructor(uiService, multipleChoiceService) {
         this.uiService = uiService;
         this.multipleChoiceService = multipleChoiceService;
-        this.initializeWelcomeMessage();
+        const name = localStorage.getItem('name');
+        this.initializeWelcomeMessage(name);
         this.markdownParser = new MarkdownParser();
     }
 
     // initializes the welcome message
-    initializeWelcomeMessage() {
-        const welcomeMessage = new Message(null, "Hallo! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, erstelle ich dir ein Multiple-Choice-Quiz.", "ai");
+    initializeWelcomeMessage(name) {
+        const welcomeMessage = new Message(null, `Hallo <span style="font-weight: bold; font-size: large">${name}</span>! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, erstelle ich dir ein Multiple-Choice-Quiz.`, "ai");
         this.uiService.clearMessages(welcomeMessage);
     }
 
@@ -49,7 +49,6 @@ class QuizUIService {
         return answer;
     }
 
-    // Verhindert XSS
     sanitizeString(str) {
         return str.replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")

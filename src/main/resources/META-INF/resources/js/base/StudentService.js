@@ -3,10 +3,20 @@ class StudentService {
 
     constructor(studentId) {
         this.studentId = studentId;
+        this.lectures = [];
+        this.name = '';
     }
 
     getStudentId() {
-        return this.studentId
+        return this.studentId;
+    }
+
+    getLectures() {
+        return this.lectures;
+    }
+
+    getName() {
+        return this.name;
     }
 
     async fetchNewStudentId() {
@@ -25,7 +35,8 @@ class StudentService {
             data => {
                 this.studentId = data.studentId;
                 localStorage.setItem('personal-id', this.studentId);
-
+                this.name = data.name;
+                this.lectures = data.lectures;
                 return data
             }
         )
@@ -48,6 +59,8 @@ class StudentService {
         )
         .then(
             data => {
+                this.name = data.name;
+                this.lectures = data.lectures;
                 return data
             }
         )
@@ -72,14 +85,17 @@ class StudentService {
 
     async updateStudentData() {
         const name = document.querySelector('#user-name').value;
+        const sanitizedName = this.sanitizeString(name);
         const lectureIds = [];
         const selectedLectures = document.querySelectorAll('.selected-lecture');
         for (const selectedLecture of selectedLectures) {
             lectureIds.push(selectedLecture.id);
         }
-        console.log(name);
+
+        this.name = sanitizedName;
+        localStorage.setItem('name', this.name);
         const body = {
-            name: name,
+            name: sanitizedName,
             lectures: lectureIds
         }
         await fetch(
@@ -99,7 +115,6 @@ class StudentService {
     async setStudentDataInUI(studentId){
         this.studentId = studentId;
         const data = await this.getStudentData();
-        console.log(data);
         document.querySelector('#user-name').value = data.name;
         this.addLecturesToUI(data.lectures);
     }
@@ -110,7 +125,7 @@ class StudentService {
         }
     }
 
-    // Adds a lecture to the UI
+    // Adds a lecture to the UI as a button with a remove button
     // TODO: Dont allow lectures to be added multiple times
     addLectureToUI(lecture) {
         const lectureDiv = document.createElement('div');
@@ -135,4 +150,15 @@ class StudentService {
             })
         }
     }
+
+
+ sanitizeString(str) {
+        return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+            .replace(/`/g, "&#96;");
+    }
+
 }
