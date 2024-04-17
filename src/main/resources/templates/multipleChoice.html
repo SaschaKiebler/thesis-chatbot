@@ -61,11 +61,6 @@
             // Hole die Antwort
             const answer = await quizUIService.handleRequest(inputText);
 
-            const formattedAnswer = markdownParser.parse(answer.answer);
-
-            const message = answer.quizId ? new QuizStartMessage(answer.quizId, uiService, multipleChoiceService) : new Message(null, answer.answer, 'ai');
-
-            uiService.addMessage(message);
         }
 
 
