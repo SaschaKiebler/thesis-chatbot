@@ -30,6 +30,7 @@ class QuizEnd {
     }
 
     // get all question elements from DOM
+    // TODO: only select the questions of the current quiz
     getQuestionElements() {
         document.querySelectorAll('.question').forEach(element => {
             this.questionElements.push(element);

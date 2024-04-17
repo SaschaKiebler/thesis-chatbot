@@ -74,4 +74,11 @@ class UIService {
     }
 
 
+    userPopUp() {
+        if (document.getElementById("user-popup").style.display === "flex") {
+            document.getElementById("user-popup").style.display = "none";
+        }
+        else
+        document.getElementById("user-popup").style.display = "flex";
+    }
 }

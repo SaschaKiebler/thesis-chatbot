@@ -56,6 +56,7 @@
             input.value = '';
             input.style.height = 'auto';
             document.getElementById("scroller").scrollTo(0, document.getElementById("scroller").scrollHeight);
+            possibleQService.removePossibleQuestionsEventListeners();
 
             // Hole die Antwort
             const answer = await quizUIService.handleRequest(inputText);

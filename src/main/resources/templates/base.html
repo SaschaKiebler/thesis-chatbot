@@ -33,6 +33,7 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
         <div>Theme:</div>
         <button class="tool" id="darkmode"><img src="pictures/darkmode.svg" width="24px" height="20px"></button>
       </div>
+        <button class="tool" id="user"><img src="pictures/user-solid.svg" width="24px" height="20px"></button>
     </div>
 
 
@@ -57,6 +58,33 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   <div class="hint-bottom">
     <p>Der Chat geht nach dem Neuladen der Seite verloren!</p>
   </div>
+</div>
+
+<div id="user-popup">
+  <div>
+    <button id="close-user-popup">X</button>
+  </div>
+  <div class="user-popup-input-container">
+
+    <div class="name-input-container">
+      <label for="user-name">Name:</label>
+      <input type="text" id="user-name" placeholder="Hier deinen Namen eingeben" >
+    </div>
+  <div class="lecture-input-container">
+    <label for="lecture">Vorlesung hinzufügen:</label>
+    <select id="lecture">
+      <option value="">Keine Vorlesung</option>
+      {#for lecture in lectures}
+        <option value="{lecture.name}" class="lecture-option">{lecture.name}</option>
+      {/for}
+    </select>
+  </div>
+  <div class="selected-lectures">
+    <p id="selected-lectures-label">Deine Vorlesungen:</p>
+    <div class="selected-lecture">Test <button class="remove-lecture">X</button></div>
+  </div>
+  <button id="save-user" class="">Speichern</button>
+</div>
 </div>
 </body>
 
@@ -96,6 +124,16 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   // Eventlistener für das Beenden des Chats
   document.getElementById('quit').addEventListener('click', function() {
     window.location.href = '/';
+  });
+
+  // Eventlistener für den UserButton
+  document.getElementById('user').addEventListener('click', function() {
+    uiService.userPopUp();
+  });
+
+  // Eventlistener für x des UserPopup
+  document.getElementById('close-user-popup').addEventListener('click', function() {
+    uiService.userPopUp();
   });
 
     // Eventlistener für das Senden einer Nachricht

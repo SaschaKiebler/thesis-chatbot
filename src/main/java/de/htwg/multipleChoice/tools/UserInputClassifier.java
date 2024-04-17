@@ -8,6 +8,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Cheaper classifier but currently only the llm classifier works well
+ */
 @ApplicationScoped
 public class UserInputClassifier {
 

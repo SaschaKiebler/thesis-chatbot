@@ -18,6 +18,9 @@ import jakarta.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * TODO: Add RAG to normal chat with user input text and metadata with "#:~:text="
+ */
 @ApplicationScoped
 public class GenerateQuizChain {
 
@@ -27,13 +30,7 @@ public class GenerateQuizChain {
     // different models with different strengths to the conversation and not distract the
     // models from doing one thing right.
     @Inject
-    GetTheScriptAIService getTheScriptAIService;
-    @Inject
     GenerateTheQuizAIService generateTheQuizAIService;
-
-    //@Inject
-    //UserInputClassifier userInputClassifier;
-
     @Inject
     UserInputClassifierAIService userInputClassifier;
     @Inject
@@ -42,9 +39,10 @@ public class GenerateQuizChain {
     NormalChatAIService chatService;
 
     /**
-     * This method implements a chain of AiAgents to generate a quiz.
-     * It first classifies the user input, then decides how to get to the data
-     * After that it calls an agent that has tools to generate a quiz.
+     * This method implements a chain of AIServices to generate a quiz.
+     * It first classifies the user input, then decides how to get to the data or
+     * just to answer the question.
+     * After that it calls an AIService that has tools to generate a quiz.
      *
      * @param  userInput      the user message with the scriptId or scriptName
      * @param  conversationId the id of the conversation
@@ -71,6 +69,8 @@ public class GenerateQuizChain {
          }
          // create another quiz
          if(type == RequestType.SAME_TEXT){
+             //needs to get fixed bc now it takes all user messages and not just the user data input
+             //TODO: add a method that stores the data given from the user to the current conversation
              SimpleMemory memory = new SimpleMemory();
              List<ChatMessage> messages = memory.getMessages(conversationId);
              StringBuilder inputText = new StringBuilder();
@@ -83,30 +83,17 @@ public class GenerateQuizChain {
              data = inputText.toString();
          }
 
-        // script
-        /*GetTheScriptDTO getTheScriptDTO = getTheScriptAIService.getTheScript(userInput, conversationId);
+         // TODO: add methods that connect the data from pubmed etc. to the user input
 
-        if (!getTheScriptDTO.getSuccess()) {
-            return getTheScriptDTO.getText();
-        }*/
         // Second step is to generate a new quiz and then add the questions to the quiz.
         GenerateTheQuizDTO generateTheQuizDTO = generateTheQuizAIService.generateTheQuiz(data, conversationId);
 
         // After that it should be sent to the user
         if (generateTheQuizDTO.getSuccess()) {
             return generateTheQuizDTO.getQuizId();
-        }else {
+        }
+        else {
             return generateTheQuizDTO.getMessage();
         }
-
-        // Third step is to wait for the user to answer the questions and send the results back
-
-        // Fourth step is to give the user examples what he could ask or talk about with the results
-
-        // Fifth step is to hold a conversation with the user about the results while always having the context of the lecture
-
     }
-
-
-
 }

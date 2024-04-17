@@ -12,6 +12,8 @@ import java.util.UUID;
 
 /**
  * This class provides a method as a langchain4j Tool to get the lecture script.
+ *
+ * TODO: delete or change to new use case
  */
 @ApplicationScoped
 public class GetLectureScript {

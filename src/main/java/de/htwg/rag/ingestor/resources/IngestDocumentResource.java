@@ -96,6 +96,7 @@ public class IngestDocumentResource {
             // load the document with the documentParser and add the fileKey to the metadata
             Document document = FileSystemDocumentLoader.loadDocument(path, new ApachePdfBoxDocumentParser());
             // save the link to the file in Markdown syntax in the metadata  better understanding for the llm
+            // TODO: add the reference to the exact text from the chunk to the metadata
             document.metadata().add("link","["+ uploadedFile.getName() +"](/api/files/" + uploadedFile.getId().toString() + ")");
             document.metadata().add("fileKey", uploadedFile.getId().toString());
 
