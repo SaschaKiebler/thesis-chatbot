@@ -1,15 +1,13 @@
 package de.htwg.multipleChoice;
 
 import de.htwg.chat.entities.Conversation;
-import de.htwg.chat.llms.services.OpenAIService;
 import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GenerateTheQuizDTO;
-import de.htwg.multipleChoice.DTOs.serviceDTOs.GetTheScriptDTO;
+import de.htwg.multipleChoice.entities.Student;
 import de.htwg.multipleChoice.memory.SimpleMemory;
+import de.htwg.multipleChoice.repositories.StudentRepository;
 import de.htwg.multipleChoice.services.*;
 import de.htwg.multipleChoice.tools.RequestType;
-import de.htwg.multipleChoice.tools.UserInputClassifier;
-import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,8 +34,9 @@ public class GenerateQuizChain {
     @Inject
     WebScraperService webScraperService;
     @Inject
-    NormalChatAIService chatService;
-
+    PersonalizedStudentChatAIService chatService;
+    @Inject
+    StudentRepository studentRepository;
     /**
      * This method implements a chain of AIServices to generate a quiz.
      * It first classifies the user input, then decides how to get to the data or
@@ -48,7 +47,7 @@ public class GenerateQuizChain {
      * @param  conversationId the id of the conversation
      * @return                either a quizId (UUID as a String) or an error message
      */
-    public String startTheChain(String userInput, UUID conversationId) {
+    public String startTheChain(String userInput, UUID conversationId, String studentId) {
 
         // Determine if the user input is an url or a text and get the data
         String data = "";
@@ -56,7 +55,9 @@ public class GenerateQuizChain {
         RequestType type = userInputClassifier.classify(userInput);
         // no data was provided
          if(type == RequestType.NO_DATA){
-             return chatService.chat(conversationId, userInput);
+             Student student = studentRepository.findById(UUID.fromString(studentId));
+             userInput += "\n\n\n context: {username: " + student.getName() + "}";
+             return chatService.chat(conversationId, userInput, studentId);
          }
         // text input
          if(type == RequestType.TEXT){
@@ -66,6 +67,7 @@ public class GenerateQuizChain {
          if(type == RequestType.URL){
 
              data = webScraperService.scrapeURL(userInput, conversationId);
+
          }
          // create another quiz
          if(type == RequestType.SAME_TEXT){

@@ -8,7 +8,8 @@ class MultipleChoiceService {
     async startTheQuizChain(message) {
         const body = {
             message: message,
-            conversationId: (this.conversationId ? this.conversationId : "")
+            conversationId: (this.conversationId ? this.conversationId : ""),
+            studentId: localStorage.getItem('personal-id')
         }
         return await fetch(`/api/quizChain`, {
             method: 'POST',

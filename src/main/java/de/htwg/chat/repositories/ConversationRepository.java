@@ -1,8 +1,10 @@
 package de.htwg.chat.repositories;
 
 import de.htwg.chat.entities.Conversation;
+import de.htwg.multipleChoice.entities.Student;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.hibernate.query.Query;
 
 import java.util.UUID;
 
@@ -24,4 +26,5 @@ public class ConversationRepository implements PanacheRepository<Conversation> {
     public Conversation findById(UUID uuid) {
         return find("id", uuid).firstResult();
     }
+
 }

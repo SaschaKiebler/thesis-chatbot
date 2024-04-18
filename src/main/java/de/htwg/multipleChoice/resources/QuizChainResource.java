@@ -63,6 +63,7 @@ public class QuizChainResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response startQuizChain(@RequestBody QuizChainInputDTO inputDTO) {
         Conversation conversation = null;
+        System.out.println(inputDTO.toString());
         if (!inputDTO.getConversationId().isEmpty()){
             UUID conversationUUID = UUID.fromString(inputDTO.getConversationId());
             conversation = conversationRepository.findById(conversationUUID);
@@ -71,7 +72,7 @@ public class QuizChainResource {
             conversation = new Conversation();
             conversationRepository.persist(conversation);
         }
-        String result = generateQuizChain.startTheChain(inputDTO.getMessage(), conversation.getId());
+        String result = generateQuizChain.startTheChain(inputDTO.getMessage(), conversation.getId(), inputDTO.getStudentId());
         UUID quizId = null;
 
         // try to get the id of the generated quiz, if not return the message text to the user
