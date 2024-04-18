@@ -395,7 +395,7 @@ code {
   align-items: stretch;
   justify-content: center;
   gap: 10px;
-  background-color: rgb(255, 255, 255, 0.7);
+  background-color: rgb(255, 255, 255, 0.9);
   padding: 10px;
   border-radius: 10px;
 }

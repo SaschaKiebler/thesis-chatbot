@@ -8,6 +8,8 @@ import de.htwg.multipleChoice.memory.SimpleMemory;
 import de.htwg.multipleChoice.repositories.StudentRepository;
 import de.htwg.multipleChoice.services.*;
 import de.htwg.multipleChoice.tools.RequestType;
+import de.htwg.rag.ingestor.DocumentIngestor;
+import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,11 +39,15 @@ public class GenerateQuizChain {
     PersonalizedStudentChatAIService chatService;
     @Inject
     StudentRepository studentRepository;
+    @Inject
+    DocumentIngestor documentIngestor;
+
     /**
      * This method implements a chain of AIServices to generate a quiz.
      * It first classifies the user input, then decides how to get to the data or
      * just to answer the question.
-     * After that it calls an AIService that has tools to generate a quiz.
+     * After that if it decides the user wants a quiz and
+     * calls an AIService that has tools to generate a quiz.
      *
      * @param  userInput      the user message with the scriptId or scriptName
      * @param  conversationId the id of the conversation
@@ -55,18 +61,27 @@ public class GenerateQuizChain {
         RequestType type = userInputClassifier.classify(userInput);
         // no data was provided
          if(type == RequestType.NO_DATA){
+
+             // add the username to the context to make it more personal
              Student student = studentRepository.findById(UUID.fromString(studentId));
              userInput += "\n\n\n context: {username: " + student.getName() + "}";
+
              return chatService.chat(conversationId, userInput, studentId);
          }
         // text input
          if(type == RequestType.TEXT){
              data = userInput;
+             Document document = Document.document(data);
+             document.metadata().add("studentId", studentId);
+             documentIngestor.ingest(List.of(document));
          }
         // url
          if(type == RequestType.URL){
 
              data = webScraperService.scrapeURL(userInput, conversationId);
+             Document document = Document.document(data);
+             document.metadata().add("studentId", studentId);
+             documentIngestor.ingest(List.of(document));
 
          }
          // create another quiz

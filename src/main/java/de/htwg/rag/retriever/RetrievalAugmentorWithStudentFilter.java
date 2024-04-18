@@ -57,10 +57,11 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
         System.out.println(queryTransformer.toString());
 
         // ContentInjector to give metadata with the retrieved documents
-        ContentInjector contentInjector = DefaultContentInjector.builder()
+        // comment the metadata injector out bc there is no reference to the documents injected by the user
+        /*ContentInjector contentInjector = DefaultContentInjector.builder()
                 .metadataKeysToInclude(asList("link"))
                 .promptTemplate(PromptTemplate.from("{{userMessage}}\n\nAntworte unter Verwendung der folgenden Informationen und füge unter deiner Antwort einen Link zu den Dokumenten hinzu:\n{{contents}}"))
-                .build();
+                .build();*/
 
         // In den Retriever kann man auch einen filter einbauen der nach metadaten filtert also z.B.
         // wenn bei Dokument als Metadaten steht Fach xy, könnte man in der Oberfläche ein Auswahlmenü
@@ -83,7 +84,7 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
                 .embeddingModel(model)
                 .embeddingStore(store)
                 .dynamicFilter(filterByStudentID)
-                .maxResults(4)
+                .maxResults(3)
                 .minScore(0.75)
                 .build();
 
@@ -92,7 +93,9 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
                 .builder()
                 .contentRetriever(contentRetriever)
                 .queryTransformer(queryTransformer)
+/*
                 .contentInjector(contentInjector)
+*/
                 .build();
     }
 

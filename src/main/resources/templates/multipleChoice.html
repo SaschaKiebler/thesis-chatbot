@@ -59,7 +59,9 @@
             possibleQService.removePossibleQuestionsEventListeners();
 
             // Hole die Antwort
+            input.disabled = true;
             const answer = await quizUIService.handleRequest(inputText);
+            input.disabled = false;
 
         }
 
@@ -67,9 +69,11 @@
     {/eventListener}
     {#inputText}Chatte mit mir...{/inputText}
     {#clearMessagesExtension}
-
+        multipleChoiceService.resetConversationId();
         const quizUIService = new QuizUIService(uiService, multipleChoiceService);
-
+        input.value = '';
+        input.style.height = 'auto';
+        input.focus();
     {/clearMessagesExtension}
 
 {/include}

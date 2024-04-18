@@ -72,6 +72,10 @@ class MultipleChoiceService {
         })
     }
 
+    resetConversationId() {
+        this.conversationId = null;
+    }
+
 
 
     // Ab hier alte Methoden die nicht mehr genutzt werden. Wird zuerst gelöscht.

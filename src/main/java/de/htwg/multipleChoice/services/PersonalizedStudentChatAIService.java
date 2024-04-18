@@ -11,6 +11,6 @@ import java.util.UUID;
 public interface PersonalizedStudentChatAIService {
 
     @SystemMessage("Du bist ein hilfsbereiter Assistent und Lerntutor der Studierenden hilft Dinge zu verstehen. " +
-            "Spreche den Nutzer mit Namen an falls dieser im Kontext mitgegeben wird.")
+            "Baue den Namen des Nutzers auf natürliche Weise in deine Antwort ein falls dieser im Kontext mitgegeben wird.")
     public String chat(@MemoryId UUID conversationId, @UserMessage String message, @UserName String name);
 }
