@@ -2,11 +2,10 @@ package de.htwg.multipleChoice;
 
 import de.htwg.chat.entities.Conversation;
 import de.htwg.chat.repositories.ConversationRepository;
-import de.htwg.multipleChoice.DTOs.serviceDTOs.GetTheScriptDTO;
+import de.htwg.multipleChoice.entities.Student;
 import de.htwg.multipleChoice.repositories.MCQuizRepository;
+import de.htwg.multipleChoice.repositories.StudentRepository;
 import de.htwg.multipleChoice.services.GenerateTheQuizAIService;
-import de.htwg.multipleChoice.services.GetTheScriptAIService;
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -15,15 +14,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 class GenerateQuizChainTest {
 
-    @InjectMock
-    GetTheScriptAIService getTheScriptAIService;
     @Inject
     GenerateTheQuizAIService generateTheQuizAIService;
     @Inject
@@ -32,58 +27,22 @@ class GenerateQuizChainTest {
     MCQuizRepository mcQuizRepository;
     @Inject
     ConversationRepository conversationRepository;
+    @Inject
+    StudentRepository studentRepository;
 
     @BeforeEach
     void setUp() {
 
     }
 
-    @Test
-    @TestTransaction
-    void startTheChainTestForValidInput() {
-        UUID scriptuuid = UUID.randomUUID();
-        UUID conversationId = UUID.randomUUID();
-        GetTheScriptDTO getTheScriptDTO = new GetTheScriptDTO();
-        getTheScriptDTO.setName("test");
-        getTheScriptDTO.setSuccess(true);
-        getTheScriptDTO.setText("Die Krankenhausreform 2023 ist ein geplantes Reformpaket in Deutschland, das darauf abzielt, die Finanzierung und die Qualität der Versorgung in Krankenhäusern zu verbessern. Zu den geplanten Maßnahmen zählen unter anderem die Einführung einer Pauschalierung der Krankenhausleistungen, die Stärkung der ambulanten Versorgung in Krankenhäusern sowie die Schaffung von Anreizen für eine verbesserte Qualität und Patientensicherheit. Die Reform soll dazu beitragen, die Wirtschaftlichkeit und Effizienz im Krankenhaussektor zu erhöhen und den sich wandelnden Bedürfnissen der Patienten gerecht zu werden. Derzeit wird das Reformpaket von der Bundesregierung und den beteiligten Akteuren im Gesundheitswesen diskutiert und weiterentwickelt.\"");
-        getTheScriptDTO.setScriptId(scriptuuid.toString());
-        when(getTheScriptAIService.getTheScript(any(String.class),any(UUID.class))).thenReturn(getTheScriptDTO);
 
 
-        String result = generateQuizChain.startTheChain("test", conversationId);
-
-        // check if the result is not null
-        assertNotNull(result);
-
-        // check if the quiz was generated
-        assertDoesNotThrow(() -> mcQuizRepository.findById(UUID.fromString(result)));
-
-        // check if the quiz has at least one question
-        assertFalse(mcQuizRepository.findById(UUID.fromString(result)).getQuestions().isEmpty());
-    }
-
-    @Test
-    @TestTransaction
-    void testStartTheChainTestForDocumentNotFound() {
-        UUID conversationId = UUID.randomUUID();
-        GetTheScriptDTO getTheScriptDTO = new GetTheScriptDTO();
-        getTheScriptDTO.setName("test");
-        getTheScriptDTO.setSuccess(true);
-        getTheScriptDTO.setText("das Script wurde nicht gefunden");
-        when(getTheScriptAIService.getTheScript(any(String.class),any(UUID.class))).thenReturn(getTheScriptDTO);
-
-        String result = generateQuizChain.startTheChain("test", conversationId);
-
-        // check if the result is not null
-        assertNotNull(result);
-
-    }
 
     @Test
     @TestTransaction
     void testChainForTextInput(){
-
+        Student student = new Student("Tester");
+        studentRepository.persist(student);
         String result = generateQuizChain.startTheChain("Definition\n" +
                 "Der Fachausschuss für Medizinische Informatik (FAMI) der Deutschen Gesellschaft für Medizinische Informatik, Biometrie und Epidemiologie e.V. (GMDS) beschreibt Medizinische Informatik wie folgt:\n" +
                 "\n" +
@@ -100,15 +59,19 @@ class GenerateQuizChainTest {
                 "\n" +
                 "Die Medizinische Informatik versteht diese als sozio-technische Systeme, deren Arbeitsweisen sich in Übereinstimmung mit ethischen, rechtlichen und ökonomischen Prinzipien befinden.“\n" +
                 "\n" +
-                "– Fachausschuss für Medizinische Informatik (FAMI) der GMDS: Definition Medizinische Informatik[1]", UUID.randomUUID());
+                "– Fachausschuss für Medizinische Informatik (FAMI) der GMDS: Definition Medizinische Informatik[1]", UUID.randomUUID(), String.valueOf(student.getId()));
         // check if the result is not null
         System.out.println(result);
         assertNotNull(result);
     }
 
     @Test
+    @TestTransaction
     void testChainForURLInput(){
-        String result = generateQuizChain.startTheChain("hier ist die URL https://de.wikipedia.org/wiki/Medizinische_Informatik", UUID.randomUUID());
+        Student student = new Student("Tester");
+        studentRepository.persist(student);
+
+        String result = generateQuizChain.startTheChain("hier ist die URL https://de.wikipedia.org/wiki/Medizinische_Informatik", UUID.randomUUID(), String.valueOf(student.getId()));
 
         System.out.println(result);
         assertNotNull(result);
@@ -117,8 +80,12 @@ class GenerateQuizChainTest {
     }
 
     @Test
+    @TestTransaction
     void testChainForURLInput2(){
-        String result = generateQuizChain.startTheChain("mach mal ein quiz zu folgender seite https://ki-campus.org/blog/chatgpt-hochschullehre", UUID.randomUUID());
+        Student student = new Student("Tester");
+        studentRepository.persist(student);
+
+        String result = generateQuizChain.startTheChain("mach mal ein quiz zu folgender seite https://ki-campus.org/blog/chatgpt-hochschullehre", UUID.randomUUID(), String.valueOf(student.getId()));
 
         System.out.println(result);
         assertNotNull(result);
@@ -131,7 +98,11 @@ class GenerateQuizChainTest {
     void testChainForJustChat(){
         Conversation conversation = new Conversation();
         conversationRepository.persist(conversation);
-        String result = generateQuizChain.startTheChain("Servus was besagt eig die berühmte Gleichung von Albert Einstein?", conversation.getId());
+
+        Student student = new Student("Tester");
+        studentRepository.persist(student);
+
+        String result = generateQuizChain.startTheChain("Servus was besagt eig die berühmte Gleichung von Albert Einstein?", conversation.getId(), String.valueOf(student.getId()));
         System.out.println(result);
         assertNotNull(result);
     }

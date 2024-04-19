@@ -32,6 +32,11 @@ public class Student {
         this.id = id;
     }
 
+    public Student(String name, List<Lecture> lectures) {
+        this.name = name;
+        this.lectures = lectures;
+    }
+
     public Student(UUID id, String name, List<Conversation> conversations, List<Lecture> lectures) {
         this.id = id;
         this.name = name;

@@ -21,19 +21,15 @@ public class MCQuiz {
     @JoinColumn(name = "quiz_id")
     private List<MultipleChoiceQuestion> questions = new ArrayList<>();
 
-    @ManyToOne(targetEntity = Script.class)
-    Script script;
+    @ManyToOne(targetEntity = Lecture.class)
+    private Lecture lecture;
 
 
-    public MCQuiz(UUID id, List<MultipleChoiceQuestion> questions, Script script) {
+    public MCQuiz(UUID id, List<MultipleChoiceQuestion> questions) {
         this.id = id;
         this.questions = questions;
-        this.script = script;
     }
 
-    public MCQuiz(Script script) {
-        this.script = script;
-    }
 
     public MCQuiz() {
 
@@ -78,12 +74,12 @@ public class MCQuiz {
         return correctAnswers;
     }
 
-    public Script getScript() {
-        return script;
+    public void setLecture(Lecture lecture) {
+        this.lecture = lecture;
     }
 
-    public void setScript(Script script) {
-        this.script = script;
+    public Lecture getLecture() {
+        return this.lecture;
     }
 
     @Override

@@ -1,8 +1,7 @@
 package de.htwg.multipleChoice.tools;
 
-import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
+import de.htwg.multipleChoice.enums.RequestType;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

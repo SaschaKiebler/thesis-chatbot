@@ -1,5 +1,6 @@
 package de.htwg.multipleChoice.tools;
 
+import de.htwg.multipleChoice.enums.RequestType;
 import dev.langchain4j.classification.EmbeddingModelTextClassifier;
 import dev.langchain4j.classification.TextClassifier;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;

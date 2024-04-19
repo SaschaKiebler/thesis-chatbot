@@ -1,6 +1,6 @@
 package de.htwg.multipleChoice.services;
 
-import de.htwg.multipleChoice.tools.RequestType;
+import de.htwg.multipleChoice.enums.RequestType;
 import dev.langchain4j.service.SystemMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 

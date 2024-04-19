@@ -1,4 +1,4 @@
-package de.htwg.multipleChoice.tools;
+package de.htwg.multipleChoice.enums;
 
 public enum RequestType {
 
