@@ -76,6 +76,8 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
         <button id="copy-personal-id"><img src="/pictures/clone-solid.svg" alt="kopieren" height="25px" width="25px"></button>
       </div>
       </div>
+    <div id="score-container">
+    </div>
     <div class="name-input-container">
       <label for="user-name">Name:</label>
       <input type="text" id="user-name" placeholder="Hier deinen Namen eingeben" >
@@ -123,6 +125,7 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   window.onload = function() {
     uiService.loadDarkMode();
     studentService.setStudentDataInUI(personalId);
+    uiService.addStudentScoresToUI(personalId, studentService);
     {#insert onLoad}
     {/}
   };

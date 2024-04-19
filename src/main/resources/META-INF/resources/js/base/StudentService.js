@@ -35,7 +35,8 @@ class StudentService {
             data => {
                 this.studentId = data.studentId;
                 localStorage.setItem('personal-id', this.studentId);
-                this.name = data.name;
+                this.name = "";
+                data.name = "";
                 this.lectures = data.lectures;
                 return data
             }
@@ -59,7 +60,8 @@ class StudentService {
         )
         .then(
             data => {
-                this.name = data.name;
+                this.name = data.name ? data.name : "";
+
                 this.lectures = data.lectures;
                 return data
             }
@@ -112,6 +114,25 @@ class StudentService {
         )
     }
 
+    async getStudentScores(studentId) {
+        if (!studentId) {
+            return;
+        }
+        return await fetch("/api/quiz/results/" + studentId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(
+            response => response.json()
+        )
+        .then(
+            data => {
+                return data
+            }
+        )
+    }
+
     async setStudentDataInUI(studentId){
         this.studentId = studentId;
         const data = await this.getStudentData();
@@ -150,6 +171,8 @@ class StudentService {
             })
         }
     }
+
+
 
 
  sanitizeString(str) {

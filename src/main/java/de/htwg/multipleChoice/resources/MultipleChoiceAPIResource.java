@@ -165,10 +165,13 @@ public class MultipleChoiceAPIResource {
                 }
                 averageResultsByLecture.put(entry.getKey(), average);
             }
+            List<LectureResultDTO> lectureResultsList = new ArrayList<>();
 
-            LectureResultDTO lectureResultDTO = new LectureResultDTO(averageResultsByLecture);
-            System.out.println("Get student results: " + lectureResultDTO);
-            return Response.ok().entity(lectureResultDTO).build();
+            for (Map.Entry<String, Float> entry : averageResultsByLecture.entrySet()) {
+                lectureResultsList.add(new LectureResultDTO(entry.getKey(), entry.getValue()));
+            }
+            System.out.println(lectureResultsList);
+            return Response.ok().entity(lectureResultsList).build();
         } catch (Exception e) {
             System.out.println(e);
             return Response.status(Response.Status.NOT_FOUND).build();

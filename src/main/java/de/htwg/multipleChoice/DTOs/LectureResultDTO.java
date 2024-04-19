@@ -4,24 +4,35 @@ import java.util.Map;
 
 public class LectureResultDTO {
 
-    Map<String, Float> results;
+    String lectureName;
+    float result;
 
-    public LectureResultDTO(Map<String, Float> results) {
-        this.results = results;
+    public LectureResultDTO(String lectureName, float result) {
+        this.lectureName = lectureName;
+        this.result = result;
     }
 
-    public Map<String, Float> getResults() {
-        return results;
+    public String getLectureName() {
+        return lectureName;
     }
 
-    public void setResults(Map<String, Float> results) {
-        this.results = results;
+    public void setLectureName(String lectureName) {
+        this.lectureName = lectureName;
+    }
+
+    public float getResult() {
+        return result;
+    }
+
+    public void setResult(float result) {
+        this.result = result;
     }
 
     @Override
     public String toString() {
         return "LectureResultDTO{" +
-                "results=" + results +
+                "lectureName='" + lectureName + '\'' +
+                ", result=" + result +
                 '}';
     }
 }

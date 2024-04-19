@@ -81,4 +81,27 @@ class UIService {
         else
         document.getElementById("user-popup").style.display = "flex";
     }
+
+    async addStudentScoresToUI(studentId, studentService) {
+        const scores = await studentService.getStudentScores(studentId);
+        const scoreContainer = document.getElementById("score-container");
+        scoreContainer.innerHTML = "";
+        scores.forEach(score => {
+            const scoreElement = document.createElement("div");
+            scoreElement.classList.add("score-field");
+            const scoreName = document.createElement("p");
+            scoreName.textContent = score.lectureName + ": ";
+            scoreName.classList.add("score-name");
+            scoreElement.appendChild(scoreName);
+            const progressBarContainer = document.createElement("div");
+            progressBarContainer.classList.add("progressbar-container");
+            const progressBar = document.createElement("div");
+            progressBar.classList.add("progressbar");
+            progressBar.style.width = (score.result*100).toFixed(2) + "%";
+            progressBar.textContent = (score.result*100).toFixed(2) + "%";
+            progressBarContainer.appendChild(progressBar);
+            scoreElement.appendChild(progressBarContainer);
+            scoreContainer.appendChild(scoreElement);
+        })
+    }
 }
