@@ -1,10 +1,7 @@
 package de.htwg.rag.ingestor.resources;
 
 import de.htwg.multipleChoice.entities.Lecture;
-import de.htwg.multipleChoice.entities.Script;
 import de.htwg.multipleChoice.repositories.LectureRepository;
-import de.htwg.multipleChoice.repositories.ScriptRepository;
-import de.htwg.rag.dataTools.Summarizer;
 import de.htwg.rag.dataTools.TextCleaner;
 import de.htwg.rag.dataTools.WebsiteTextExtractor;
 import de.htwg.rag.ingestor.DocumentIngestor;
@@ -31,7 +28,6 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * This class is the Resource for the Ingestion of Documents.
@@ -51,8 +47,6 @@ public class IngestDocumentResource {
     @Inject
     LectureRepository lectureRepository;
 
-    @Inject
-    ScriptRepository scriptRepository;
 
     @Inject
     TextCleaner cleaner;
@@ -107,7 +101,6 @@ public class IngestDocumentResource {
                     lecture = Lecture.builder().name(lectureName).build();
                     lectureRepository.persist(lecture);
                 }
-                scriptRepository.persist(Script.builder().name(name).lecture(lecture).text(text).build());
             }
 
             // Summarize the text and ingest it (Commented it out bc im waiting for the filterclass of langchain4j)

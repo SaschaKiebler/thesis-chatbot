@@ -8,11 +8,19 @@ public class PostQuizResultsDTO {
     String conversationId;
     String quizId;
     List<String> results;
+    String studentId;
 
     public PostQuizResultsDTO(String conversationId, String quizId, List<String> results) {
         this.conversationId = conversationId;
         this.quizId = quizId;
         this.results = results;
+    }
+
+    public PostQuizResultsDTO(String conversationId, String quizId, List<String> results, String studentId) {
+        this.conversationId = conversationId;
+        this.quizId = quizId;
+        this.results = results;
+        this.studentId = studentId;
     }
 
     public PostQuizResultsDTO() {
@@ -41,5 +49,13 @@ public class PostQuizResultsDTO {
 
     public void setResults(List<String> results) {
         this.results = results;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 }

@@ -55,7 +55,7 @@ class MultipleChoiceService {
     }
 
     async sendResults(quizId, answers) {
-        const body = { conversationId: this.conversationId, results: answers, quizId: quizId };
+        const body = { conversationId: this.conversationId, results: answers, quizId: quizId, studentId: localStorage.getItem('personal-id') };
         return await fetch(`/api/quiz/result`, {
             method: 'POST',
             headers: {

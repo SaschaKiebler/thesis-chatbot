@@ -19,6 +19,8 @@ public class Student {
     @ManyToMany
     private List<Lecture> lectures;
 
+
+
     public Student() {
 
     }

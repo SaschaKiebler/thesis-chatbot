@@ -1,7 +1,6 @@
 package de.htwg.rag.ingestor.resources;
 
 import de.htwg.multipleChoice.repositories.LectureRepository;
-import de.htwg.multipleChoice.repositories.ScriptRepository;
 import de.htwg.rag.dataTools.Summarizer;
 import de.htwg.rag.ingestor.DocumentIngestor;
 import de.htwg.rag.ingestor.UploadFileRepository;
@@ -9,10 +8,7 @@ import de.htwg.rag.ingestor.UploadedFile;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -33,8 +29,6 @@ class IngestDocumentResourceTest {
     @Inject
     LectureRepository lectureRepository;
 
-    @Inject
-    ScriptRepository scriptRepository;
 
     @InjectMock
     Summarizer summarizer;
@@ -152,7 +146,6 @@ class IngestDocumentResourceTest {
         verify(documentIngestor, times(1)).ingest(anyList());
         verify(summarizer, times(1)).summarize(anyString());
         assert lectureRepository.findByName("GibtsNicht") != null;
-        assert scriptRepository.findByName("test") != null;
 
         // cleanup
         UploadedFile file = uploadFileRepository.findByName("test");

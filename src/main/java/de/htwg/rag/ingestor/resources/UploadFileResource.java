@@ -1,7 +1,5 @@
 package de.htwg.rag.ingestor.resources;
 
-import de.htwg.multipleChoice.entities.Script;
-import de.htwg.multipleChoice.repositories.ScriptRepository;
 import de.htwg.rag.ingestor.UploadFileRepository;
 import de.htwg.rag.ingestor.UploadedFile;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,7 +10,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,9 +21,6 @@ public class UploadFileResource {
 
     @Inject
     UploadFileRepository uploadFileRepository;
-
-    @Inject
-    ScriptRepository scriptRepository;
 
     /**
      * This method is called when a GET request is sent to /all.
@@ -51,10 +45,6 @@ public class UploadFileResource {
     public Response deleteFile(@PathParam("id") UUID id) {
         try {
             System.out.println("Deleting file with id: " + id + " from database at: " + new Date());
-            UploadedFile file = uploadFileRepository.findById(id);
-            if (file != null) {
-                scriptRepository.delete("name", file.getName());
-            }
             uploadFileRepository.deleteById(id);
             return Response.ok().build();
         } catch (Exception e) {

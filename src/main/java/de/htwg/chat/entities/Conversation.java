@@ -1,8 +1,7 @@
 package de.htwg.chat.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import de.htwg.multipleChoice.entities.Student;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.UUID;
@@ -22,6 +21,9 @@ public class Conversation {
     private Date date;
     private boolean rag;
     private String serviceName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     public Conversation() {
         this.date = new Date();

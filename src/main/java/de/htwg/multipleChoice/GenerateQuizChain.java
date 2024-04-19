@@ -1,5 +1,7 @@
 package de.htwg.multipleChoice;
 
+import de.htwg.chat.entities.Conversation;
+import de.htwg.chat.repositories.ConversationRepository;
 import de.htwg.multipleChoice.DTOs.LectureDTO;
 import de.htwg.multipleChoice.DTOs.serviceDTOs.GenerateTheQuizDTO;
 import de.htwg.multipleChoice.entities.Lecture;
@@ -48,6 +50,8 @@ public class GenerateQuizChain {
     LectureClassifierAIService lectureClassifierAIService;
     @Inject
     MCQuizRepository mcQuizRepository;
+    @Inject
+    ConversationRepository conversationRepository;
 
     /**
      * This method implements a chain of AIServices to generate a quiz.
@@ -126,11 +130,22 @@ public class GenerateQuizChain {
 
         // After that it should be sent to the user
         if (generateTheQuizDTO.getSuccess()) {
+            // add quiz to the conversation and the student
+            MCQuiz mcQuiz = null;
+            try {
+                Conversation conversation = conversationRepository.findById(conversationId);
+                mcQuiz = mcQuizRepository.findById(UUID.fromString(generateTheQuizDTO.getQuizId()));
+                mcQuiz.setConversation(conversation);
+                mcQuiz.setStudent(student);
+                mcQuizRepository.persist(mcQuiz);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
             // add the classified lecture to the quiz
             Lecture lecture = student.getLectures() != null ? getTheLecture(lectureName, student.getLectures()) : null;
-            if (lecture != null) {
+            if (lecture != null && mcQuiz != null) {
                 try {
-                    MCQuiz mcQuiz = mcQuizRepository.findById(UUID.fromString(generateTheQuizDTO.getQuizId()));
                     mcQuiz.setLecture(lecture);
                     mcQuizRepository.persist(mcQuiz);
                 }catch (Exception e) {

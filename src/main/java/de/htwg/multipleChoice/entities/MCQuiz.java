@@ -1,6 +1,7 @@
 package de.htwg.multipleChoice.entities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.htwg.chat.entities.Conversation;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,15 @@ public class MCQuiz {
 
     @ManyToOne(targetEntity = Lecture.class)
     private Lecture lecture;
+
+    @ManyToOne(targetEntity = Conversation.class)
+    private Conversation conversation;
+
+    @ManyToOne(targetEntity = Student.class)
+    private Student student;
+
+    @Column(name = "result")
+    private float result;
 
 
     public MCQuiz(UUID id, List<MultipleChoiceQuestion> questions) {
@@ -80,6 +90,30 @@ public class MCQuiz {
 
     public Lecture getLecture() {
         return this.lecture;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
+    public Conversation getConversation() {
+        return this.conversation;
+    }
+
+    public float getResult() {
+        return this.result;
+    }
+
+    public void setResult(float result) {
+        this.result = result;
+    }
+
+    public Student getStudent() {
+        return this.student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     @Override

@@ -3,14 +3,11 @@ package de.htwg.multipleChoice.tools;
 import de.htwg.multipleChoice.entities.MCQuiz;
 import de.htwg.multipleChoice.entities.MultipleChoiceQuestion;
 import de.htwg.multipleChoice.entities.PossibleAnswer;
-import de.htwg.multipleChoice.entities.Script;
 import de.htwg.multipleChoice.repositories.MCQuizRepository;
 import de.htwg.multipleChoice.repositories.MultipleChoiceQuestionRepository;
 import de.htwg.multipleChoice.repositories.PossibleAnswerRepository;
-import de.htwg.multipleChoice.repositories.ScriptRepository;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
-import dev.langchain4j.service.MemoryId;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -23,6 +20,7 @@ import java.util.UUID;
  * This class provides a method as a langchain4j Tool to generate multiple choice questions for a quiz.
  */
 @ApplicationScoped
+@Transactional
 public class QuizTools {
 
     @Inject
@@ -31,8 +29,6 @@ public class QuizTools {
     MultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
     @Inject
     PossibleAnswerRepository possibleAnswerRepository;
-    @Inject
-    ScriptRepository scriptRepository;
 
     /**
      * This method is a tool for an AiService to send a multiple choice question to the user.
