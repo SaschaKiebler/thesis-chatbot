@@ -11,7 +11,7 @@ class QuizUIService {
 
     // initializes the welcome message
     initializeWelcomeMessage(name) {
-        const welcomeMessage = new Message(null, `Hallo <span style="font-weight: bold; font-size: large">${name ? name : ""}</span>! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, erstelle ich dir ein Multiple-Choice-Quiz.`, "ai");
+        const welcomeMessage = new Message(null, `Hallo <span style="font-weight: bold; font-size: large">${name ? name : ""}</span>! Toll, dass du hier bist 🤩. Ich kann dir beim Lernen helfen. Wenn du mir eine URL zu deinem Thema oder direkt den Text gibst, erstelle ich dir ein Multiple-Choice-Quiz. Ansonsten kannst du dich auch mit mir über ein Thema deiner Wahl unterhalten.`, "ai");
         this.uiService.clearMessages(welcomeMessage);
     }
 
