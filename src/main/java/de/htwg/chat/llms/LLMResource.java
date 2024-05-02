@@ -26,7 +26,6 @@ import java.util.UUID;
  * It serves the LLM-Answers for the Chat-UI.
  * It can be configured with the variables ai.left-service, ai.right-service, ai.left-service.rag, ai.right-service.rag and ai.prompt.
  *
- * TODO: Delete all unused code
  */
 @Path("/llm")
 @ApplicationScoped

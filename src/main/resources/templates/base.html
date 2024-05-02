@@ -178,6 +178,7 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   // Eventlistener für save button
   document.getElementById('save-user').addEventListener('click', function() {
     studentService.updateStudentData();
+    uiService.addStudentScoresToUI(personalId, studentService);
     uiService.userPopUp();
   });
 

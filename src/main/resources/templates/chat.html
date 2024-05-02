@@ -1,5 +1,5 @@
 {#include base.html}
-    {#title}Chat Modus{/title}
+    {#title}Q&A Modus{/title}
   {#scripts}
         <script src="js/chat/DualMessage.js"></script>
         <script src="js/chat/RatingHint.js"></script>
@@ -11,12 +11,7 @@
     {#onLoad}
     uiService.addMessage(new Message(null,"Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?","ai"));
     {/onLoad}
-    {#input}<textarea id="input" placeholder="Schreibe hier deine Nachricht..."></textarea>{/input}
-    {#sendButton}<button id="send">Senden</button>{/sendButton}
-    {#messages}
-        <div id="scroller">
-            <div class="message" id="message1">
-                <div class="messageContent">Erkläre kurz was Gesundheitsinformatik ist, welche Vorteile ein Studium in dem
+
     {#popUp}<div class="popup" id="popup">Bitte gebe eine Bewertung ab!</div>{/popUp}
     {#eventListener}
         const ratingHint = new RatingHint();
