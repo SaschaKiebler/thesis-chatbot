@@ -90,7 +90,12 @@ public class GenerateQuizChain {
              // get the Students lectures he currently takes
              List<String> lectureNames = getTheLectureNames(student);
              // classify the text
-             lectureName = classifyDataForLecture(data, lectureNames);
+             try {
+                 lectureName = classifyDataForLecture(data, lectureNames);
+             }catch (Exception e){
+                 e.printStackTrace();
+                 lectureName = "";
+             }
              // ingest the data into the rag
              ingestDataIntoRAG(data, studentId, lectureName);
          }
@@ -101,7 +106,12 @@ public class GenerateQuizChain {
              // scrape the text from the url
              data = webScraperService.scrapeURL(userInput, conversationId);
              // classify the text
-             lectureName = classifyDataForLecture(data, lectureNames);
+             try {
+                 lectureName = classifyDataForLecture(data, lectureNames);
+             }catch (Exception e){
+                 e.printStackTrace();
+                 lectureName = "";
+             }
              // ingest the data into the rag
              ingestDataIntoRAG(data, studentId, lectureName);
 

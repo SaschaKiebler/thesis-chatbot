@@ -14,7 +14,11 @@ public class WebDataTools {
     public String getWebPageContent(@P("URL of the page") String url) {
         try {
             Document jsoupDocument = Jsoup.connect(url).get();
-            return jsoupDocument.body().text();
+            String text = jsoupDocument.body().text();
+            if (text.length() > 5000) {
+                text = text.substring(0, 5000);
+            }
+            return text;
         }
         catch (Exception e) {
             return e.getMessage();

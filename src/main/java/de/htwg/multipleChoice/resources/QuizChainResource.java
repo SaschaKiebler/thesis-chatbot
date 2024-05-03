@@ -17,6 +17,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 
 import java.util.List;
 import java.util.UUID;
@@ -60,6 +61,7 @@ public class QuizChainResource {
      */
     @POST
     @Transactional
+    @TransactionConfiguration(timeout = 3000)
     @Produces(MediaType.APPLICATION_JSON)
     public Response startQuizChain(@RequestBody QuizChainInputDTO inputDTO) {
         Conversation conversation = null;

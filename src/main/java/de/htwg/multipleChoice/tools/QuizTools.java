@@ -20,7 +20,6 @@ import java.util.UUID;
  * This class provides a method as a langchain4j Tool to generate multiple choice questions for a quiz.
  */
 @ApplicationScoped
-@Transactional
 public class QuizTools {
 
     @Inject

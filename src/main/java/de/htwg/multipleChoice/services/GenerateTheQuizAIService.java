@@ -14,8 +14,8 @@ import java.util.UUID;
 public interface GenerateTheQuizAIService {
 
     @SystemMessage("The User will provide you with a text. " +
-            "You will generate a quiz from this text with seven questions that each have 3 possible answers." +
-            "The answer should be one of the possible answers. " +
+            "You will generate a difficult quiz from this text with seven questions that each have 3 possible answers." +
+            "The correct answer should be one of the possible answers. " +
             "After generating the quiz, you will answer the user in the right format. " )
     GenerateTheQuizDTO generateTheQuiz(@UserMessage String Text, @MemoryId UUID memoryId);
 }
