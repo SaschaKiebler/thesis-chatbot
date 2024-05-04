@@ -20,6 +20,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class GenerateQuizChain {
     @Inject
     GenerateTheQuizAIService generateTheQuizAIService;
     @Inject
-    UserInputClassifierAIService userInputClassifier;
+    InputClassifierAIService inputClassifier;
     @Inject
     WebScraperService webScraperService;
     @Inject
@@ -75,7 +76,7 @@ public class GenerateQuizChain {
         String data = "";
         String lectureName = "";
         // List<RequestType> type = userInputClassifier.classifyInput(userInput);
-        RequestType type = userInputClassifier.classify(userInput);
+        RequestType type = inputClassifier.classify(userInput);
         // no data was provided
          if(type == RequestType.NO_DATA){
 
@@ -135,8 +136,37 @@ public class GenerateQuizChain {
          // TODO: add methods that connect the data from pubmed etc. to the user input
 
 
+        // calculate the current userScore in the lecture
+        String difficulty = "hard";
+        Lecture currentLecture = getTheLecture(lectureName, student.getLectures());
+        ArrayList <Float> scoreList = new ArrayList<>();
+
+        if(currentLecture != null) {
+            List<MCQuiz> studentQuizzes = mcQuizRepository.findAllFromStudent(student.getId());
+            if(studentQuizzes != null) {
+                studentQuizzes.stream().filter(
+                        quiz -> quiz.getLecture().getId().equals(currentLecture.getId())
+                ).forEach(quiz -> scoreList.add(quiz.getResult()));
+            }
+            float avaerage = 0;
+            if(!scoreList.isEmpty()) {
+                float sum = 0;
+                for (Float aFloat : scoreList) {
+                    sum += aFloat;
+                }
+                avaerage = sum / scoreList.size();
+            }
+            if (avaerage == 0f) {
+                difficulty = "easy";
+            } else if (avaerage <= 0.5f) {
+                difficulty = "medium";
+            } else if (avaerage > 0.5f) {
+                difficulty = "hard";
+            }
+        }
+
         // Second step is to generate a new quiz and then add the questions to the quiz.
-        GenerateTheQuizDTO generateTheQuizDTO = generateTheQuizAIService.generateTheQuiz(data, conversationId);
+        GenerateTheQuizDTO generateTheQuizDTO = generateTheQuizAIService.generateTheQuiz(data, difficulty, conversationId);
 
         // After that it should be sent to the user
         if (generateTheQuizDTO.getSuccess()) {

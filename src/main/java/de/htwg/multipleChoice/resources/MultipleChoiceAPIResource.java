@@ -26,6 +26,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -152,19 +153,7 @@ public class MultipleChoiceAPIResource {
                 }
             }
 
-            Map<String, Float> averageResultsByLecture = new HashMap<>();
-            for (Map.Entry<String, List<Float>> entry : scoresByLecture.entrySet()) {
-                List<Float> scores = entry.getValue();
-                float average = 0;
-                if (!scores.isEmpty()) {
-                    float sum = 0;
-                    for (Float score : scores) {
-                        sum += score;
-                    }
-                    average = sum / scores.size();
-                }
-                averageResultsByLecture.put(entry.getKey(), average);
-            }
+            Map<String, Float> averageResultsByLecture = getAverageResults(scoresByLecture);
             List<LectureResultDTO> lectureResultsList = new ArrayList<>();
 
             for (Map.Entry<String, Float> entry : averageResultsByLecture.entrySet()) {
@@ -178,6 +167,41 @@ public class MultipleChoiceAPIResource {
         }
     }
 
+    private static @NotNull Map<String, Float> getAverageResults(Map<String, List<Float>> scoresByLecture) {
+        Map<String, Float> averageResultsByLecture = new HashMap<>();
+        for (Map.Entry<String, List<Float>> entry : scoresByLecture.entrySet()) {
+            List<Float> scores = entry.getValue();
+            float average = 0;
+            if (!scores.isEmpty()) {
+                float sum = 0;
+                for (Float score : scores) {
+                    sum += score;
+                }
+                average = sum / scores.size();
+            }
+            averageResultsByLecture.put(entry.getKey(), average);
+        }
+        return averageResultsByLecture;
+    }
+
+    /**
+     * Retrieves a quiz by its ID.
+     *
+     * @param  id  the ID of the quiz to retrieve
+     * @return     the quiz with the specified ID, or a NOT_FOUND response if the quiz does not exist
+     */
+    @Path("{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getQuiz(@PathParam("id") String id) {
+        try {
+            MCQuiz quiz = mcQuizRepository.findById(UUID.fromString(id));
+            return Response.ok(quiz).build();
+        }
+        catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
 
 
 

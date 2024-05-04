@@ -5,7 +5,7 @@ import dev.langchain4j.service.SystemMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
 @RegisterAiService(modelName = "input-classifier", chatMemoryProviderSupplier = RegisterAiService.NoChatMemoryProviderSupplier.class)
-public interface UserInputClassifierAIService {
+public interface InputClassifierAIService {
 
     /**
      * Classifies the user's input. If the User asks a normal question or just wants to talk, returns NO_DATA.
