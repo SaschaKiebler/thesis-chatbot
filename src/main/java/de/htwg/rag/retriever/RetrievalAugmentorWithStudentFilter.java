@@ -44,7 +44,11 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
                 .build();
         QueryTransformer queryTransformer = CompressingQueryTransformer.builder()
                 .chatLanguageModel(chatModel)
-                .promptTemplate(PromptTemplate.from("Lese und verstehe das Gespräch zwischen dem Benutzer und dem KI. Analysiere dann die neue Anfrage des Benutzers. Identifiziere alle relevanten Details, Begriffe und den Kontext sowohl aus dem Gespräch als auch aus der neuen Anfrage. Formuliere diese Anfrage in ein klares, prägnantes und in sich geschlossenes Format um, das für die Informationssuche geeignet ist.\n" +
+                .promptTemplate(PromptTemplate.from("Lese und verstehe das Gespräch zwischen dem Benutzer und dem KI. " +
+                        "Analysiere dann die neue Anfrage des Benutzers. Identifiziere alle relevanten Details, " +
+                        "Begriffe und den Kontext sowohl aus dem Gespräch als auch aus der neuen Anfrage. " +
+                        "Formuliere diese Anfrage in ein klares, prägnantes und in sich geschlossenes Format um, " +
+                        "das für die Informationssuche geeignet ist.\n" +
                         "\n" +
                         "Gespräch:\n" +
                         "{{chatMemory}}\n" +
@@ -68,19 +72,18 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
         // einbauen.
         // siehe https://github.com/langchain4j/langchain4j-examples/blob/main/rag-examples/src/main/java/_06_Metadata_Filtering.java
 
-        // Filters by student ID, the id has to be in the metadata, right now it gets transferred as @UserName
+        // Filters by student ID, the id has to be in the metadata, the id gets transferred from AIService as @UserName
         Function<Query, Filter> filterByStudentID = query -> {
             try {
                 return metadataKey("studentId").isEqualTo(query.metadata().userMessage().name());
             } catch (Exception e) {
                 return null;
             }
-
         };
 
-
-        // The normal Retriever to get the Documents from the store.
-        EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
+        // The Retriever to get the Documents from the store.
+        EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever
+                .builder()
                 .embeddingModel(model)
                 .embeddingStore(store)
                 .dynamicFilter(filterByStudentID)
@@ -88,14 +91,11 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
                 .minScore(0.75)
                 .build();
 
-
         augmentor = DefaultRetrievalAugmentor
                 .builder()
                 .contentRetriever(contentRetriever)
                 .queryTransformer(queryTransformer)
-/*
-                .contentInjector(contentInjector)
-*/
+            //    .contentInjector(contentInjector)   Auskommentiert
                 .build();
     }
 

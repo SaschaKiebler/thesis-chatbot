@@ -40,7 +40,7 @@ public class DocumentIngestor {
                 .documentSplitter(new DocumentBySentenceSplitter(500,50))
                 .build();
         if (documents.isEmpty()) {
-            System.out.println("No documents to ingest");
+            System.err.println("No documents to ingest");
             throw new IllegalArgumentException("No documents to ingest");
         }
         else {
