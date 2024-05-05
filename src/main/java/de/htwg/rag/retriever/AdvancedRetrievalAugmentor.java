@@ -88,7 +88,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
         EmbeddingStoreContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(model)
                 .embeddingStore(store)
-                .maxResults(3)
+                .maxResults(5)
                 .minScore(0.75)
                 .build();
 

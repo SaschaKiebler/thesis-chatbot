@@ -87,7 +87,7 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
                 .embeddingModel(model)
                 .embeddingStore(store)
                 .dynamicFilter(filterByStudentID)
-                .maxResults(3)
+                .maxResults(4)
                 .minScore(0.75)
                 .build();
 

@@ -136,7 +136,7 @@ public class GenerateQuizChain {
          // TODO: add methods that connect the data from pubmed etc. to the user input
 
 
-        // calculate the current userScore in the lecture
+        // calculate the current userScore in the lecture and set the difficulty accordingly
         String difficulty = "hard";
         Lecture currentLecture = getTheLecture(lectureName, student.getLectures());
         ArrayList <Float> scoreList = new ArrayList<>();

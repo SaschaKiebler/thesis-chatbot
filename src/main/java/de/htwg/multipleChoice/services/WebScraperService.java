@@ -14,8 +14,8 @@ import java.util.UUID;
                     tools = {WebDataTools.class})
 public interface WebScraperService {
     /**
-     * Retrieves the text from the specified website by utilizing the designated tools available
-     * and gives the user the full text back.
+     * Retrieves the text from the specified website using the tools available
+     * and returns the text to the user.
      *
      * @param  input  the user input containing the URL of the website to scrape
      * @param  id     the unique identifier for the user's memory
@@ -26,3 +26,4 @@ public interface WebScraperService {
                     "available and give the user the full text back")
     String scrapeURL(@UserMessage String input, @MemoryId UUID id);
 }
+
