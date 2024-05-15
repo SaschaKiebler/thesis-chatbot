@@ -43,7 +43,6 @@ public class SimpleMemory implements ChatMemoryStore{
     }
 
     public void updateMessages(Object o, List<ChatMessage> list) {
-        System.out.println(list.toString());
         ChatMessage lastMessage = list.get(list.size() - 1);
         SimpleChatMessage message;
         UUID memoryIdUUID = o instanceof UUID ? (UUID) o : UUID.fromString((String) o);

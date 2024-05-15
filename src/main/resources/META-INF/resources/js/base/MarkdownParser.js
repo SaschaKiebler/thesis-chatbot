@@ -52,7 +52,7 @@ class MarkdownParser {
 
     // changes [link](url) in <a href="url">link</a>
     convertLink(html) {
-        return html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+        return html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
     }
 
     // changes 1. in <ol>1.</ol>

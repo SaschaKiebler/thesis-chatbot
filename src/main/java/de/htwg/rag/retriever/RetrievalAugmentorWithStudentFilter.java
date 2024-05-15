@@ -58,24 +58,20 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
                         "Es ist sehr wichtig, dass du nur die umformulierte Anfrage und nichts anderes bereitstellst! Füge einer Anfrage nichts voran!"))
                 .build();
 
-        System.out.println(queryTransformer.toString());
 
         // ContentInjector to give metadata with the retrieved documents
-        // comment the metadata injector out bc there is no reference to the documents injected by the user
-        /*ContentInjector contentInjector = DefaultContentInjector.builder()
+        ContentInjector contentInjector = DefaultContentInjector.builder()
                 .metadataKeysToInclude(asList("link"))
                 .promptTemplate(PromptTemplate.from("{{userMessage}}\n\nAntworte unter Verwendung der folgenden Informationen und füge unter deiner Antwort einen Link zu den Dokumenten hinzu:\n{{contents}}"))
-                .build();*/
+                .build();
 
-        // In den Retriever kann man auch einen filter einbauen der nach metadaten filtert also z.B.
-        // wenn bei Dokument als Metadaten steht Fach xy, könnte man in der Oberfläche ein Auswahlmenü
-        // einbauen.
-        // siehe https://github.com/langchain4j/langchain4j-examples/blob/main/rag-examples/src/main/java/_06_Metadata_Filtering.java
 
         // Filters by student ID, the id has to be in the metadata, the id gets transferred from AIService as @UserName
         Function<Query, Filter> filterByStudentID = query -> {
             try {
-                return metadataKey("studentId").isEqualTo(query.metadata().userMessage().name());
+                return metadataKey("studentId")
+                        .isEqualTo(query.metadata().userMessage().name())
+                        .or(metadataKey("studentId").isEqualTo(""));
             } catch (Exception e) {
                 return null;
             }
@@ -95,7 +91,7 @@ public class RetrievalAugmentorWithStudentFilter implements Supplier<RetrievalAu
                 .builder()
                 .contentRetriever(contentRetriever)
                 .queryTransformer(queryTransformer)
-            //    .contentInjector(contentInjector)   Auskommentiert
+                .contentInjector(contentInjector)
                 .build();
     }
 

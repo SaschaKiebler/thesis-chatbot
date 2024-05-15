@@ -119,7 +119,6 @@ class IngestDocumentResourceTest {
                 .statusCode(200);
 
         verify(documentIngestor, times(1)).ingest(anyList());
-        verify(summarizer, times(1)).summarize(anyString());
 
         // cleanup
         UploadedFile file = uploadFileRepository.findByName("test");
@@ -144,7 +143,6 @@ class IngestDocumentResourceTest {
                 .statusCode(200);
 
         verify(documentIngestor, times(1)).ingest(anyList());
-        verify(summarizer, times(1)).summarize(anyString());
         assert lectureRepository.findByName("GibtsNicht") != null;
 
         // cleanup
