@@ -94,9 +94,10 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   <div class="selected-lectures">
     <p id="selected-lectures-label">Deine Vorlesungen:</p>
   </div>
-    <div>
+    <div class="user-popup-buttons-container">
     <button id="save-user" class="save-button">Speichern</button>
     <button id="cancel-user" class="cancel-button">Abbrechen</button>
+      <button id="refresh-user" class="refresh-button"><img src="/pictures/refresh-solid.svg" alt="neuladen"></button>
     </div>
 </div>
 </div>
@@ -196,6 +197,12 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
     personalId = await studentService.fetchNewStudentId();
     document.querySelector("#personal-id").innerHTML = personalId;
   }
+
+  // Eventlistener to refresh userinfo
+  document.getElementById('refresh-user').addEventListener('click', function() {
+    studentService.setStudentDataInUI(personalId);
+    uiService.addStudentScoresToUI(personalId, studentService);
+  });
 
     // Eventlistener für das Senden einer Nachricht
   {#insert eventListener}

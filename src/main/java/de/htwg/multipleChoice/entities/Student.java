@@ -17,6 +17,12 @@ public class Student {
     @JoinColumn(name = "student_id")
     private List<Conversation> conversations;
     @ManyToMany
+    @JoinTable(
+            name = "student_lecture",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "lecture_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "lecture_id"})
+    )
     private List<Lecture> lectures;
 
 

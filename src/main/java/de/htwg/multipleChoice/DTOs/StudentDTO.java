@@ -14,6 +14,10 @@ public class StudentDTO {
         this.lectures = lectures;
     }
 
+    public StudentDTO(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

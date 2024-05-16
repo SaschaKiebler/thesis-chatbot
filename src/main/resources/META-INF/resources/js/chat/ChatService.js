@@ -79,8 +79,8 @@ class ChatService {
                     document.getElementById("loading-message").remove();
                     data1.answer = this.markdownParser.parse(data1.answer);
                     data2.answer = this.markdownParser.parse(data2.answer);
-                    const messageLeft = new Message(data1.answerId, data1.answer, "ai");
-                    const messageRight = new Message(data2.answerId, data2.answer, "ai");
+                    const messageLeft = new Message(data1.answerId, data1.answer, "ai", data1.modelname);
+                    const messageRight = new Message(data2.answerId, data2.answer, "ai", data2.modelname);
                     const dualMessage = new DualMessage(messageLeft, messageRight);
                     this.addMessage(dualMessage);
                     this.addMessage(ratingHint);

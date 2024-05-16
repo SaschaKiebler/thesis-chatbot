@@ -32,7 +32,7 @@ class QuizUIService {
     async handleRequest(input) {
         const inputText = this.sanitizeString(input);
         this.displayUserMessage(inputText);
-        const loadingMessageId = this.displayLoadingMessage("");
+        const loadingMessageId = this.displayLoadingMessage("inputs werden verarbeitet...");
 
         const answer = await this.multipleChoiceService.startTheQuizChain(input);
         console.log(answer);

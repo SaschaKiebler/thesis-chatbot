@@ -1,13 +1,27 @@
 package de.htwg.multipleChoice.resources;
 
+import de.htwg.multipleChoice.DTOs.LectureDTO;
+import de.htwg.multipleChoice.entities.Lecture;
+import de.htwg.multipleChoice.repositories.LectureRepository;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class LectureResourceTest {
+
+
+    @InjectMock
+    LectureRepository lectureRepository;
+
 
     @Test
     void getAllLectures() {
@@ -19,21 +33,17 @@ class LectureResourceTest {
     }
 
     @Test
-    void getScriptsFromLecture() {
+    @TestTransaction
+    void testAddLectureWithValidInputDTO() {
+        LectureDTO lectureDTO = new LectureDTO("test", "test");
+        doNothing().when(lectureRepository).persist(any(Lecture.class));
         given()
-                .when()
-                .get("/api/lectures/c159158e-2ca4-4d86-9b35-1b33fa7654b9/scripts")
+                .contentType("application/json")
+                .body(lectureDTO)
+                .post("/api/lectures/add")
                 .then()
                 .statusCode(200);
     }
 
-    @Test
-    void getScriptsFromLectureNotFound() {
-        given()
-                .when()
-                .get("/api/lectures//scripts")
-                .then()
-                .statusCode(404);
-    }
 
 }

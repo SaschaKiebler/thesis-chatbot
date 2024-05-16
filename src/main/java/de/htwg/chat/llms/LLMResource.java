@@ -92,9 +92,19 @@ public class LLMResource {
             return Json.object().put("error", "etwas ist mit der Antwort-ID schiefgelaufen versuche es später nochmal..." + messageFromDb.getId()).build();
         }
 
+        // add the model and rag status to the answer
+        String modelAndRag;
+        if (side.equals("left")) {
+            modelAndRag = leftServiceName + " " + (leftServiceRag ? " with RAG" : "without RAG");
+        }else {
+            modelAndRag = rightServiceName + " " + (rightServiceRag ? " with RAG" : "without RAG");
+        }
+
+
         return Json.object().put("answer", answer)
                 .put("conversationId", conversation.getId().toString())
                 .put("answerId", savedAnswer.getId().toString())
+                .put("modelname", modelAndRag)
                 .build();
     }
 

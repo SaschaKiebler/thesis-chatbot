@@ -9,7 +9,14 @@ class PossibleQuestionsService {
         possibleQuestionsDiv.className = 'possible-questions';
         possibleQuestionsDiv.innerText = 'Hier sind ein paar Vorschläge die du als nächstes Fragen könntest: ';
 
-
+        if (possibleQuestions.length > 3 ) {
+            for (let question of possibleQuestions) {
+                if (question === ""){
+                    possibleQuestions.splice(possibleQuestions.indexOf(question), 1);
+                }
+            }
+            possibleQuestions = possibleQuestions.slice(1, 4);
+        }
         for (const possibleQuestion of possibleQuestions) {
             if (possibleQuestion !== "" && possibleQuestion.length > 0) {
             const button = document.createElement('button');

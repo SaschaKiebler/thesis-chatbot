@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * TODO: Add RAG to normal chat with user input text and metadata with "#:~:text="
+ * This class implements a chain of AIServices to generate a quiz or just handle the conversation.
  */
 @ApplicationScoped
 public class GenerateQuizChain {
@@ -97,8 +97,6 @@ public class GenerateQuizChain {
                  e.printStackTrace();
                  lectureName = "";
              }
-             // ingest the data into the rag
-             ingestDataIntoRAG(data, studentId, lectureName);
          }
         // url
          if(type == RequestType.URL){

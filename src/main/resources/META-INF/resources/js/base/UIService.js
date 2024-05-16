@@ -18,6 +18,8 @@ class UIService {
     clearMessages(message) {
         this.conversation.innerHTML = '';
         this.addMessage(message ? message : new Message(null, "Hallo! Wie kann ich dir in den Themen Gesundheitsinformatik, Telemedizin und dem deutschen Gesundheitswesen behilflich sein?", "ai"));
+        document.getElementById("input").disabled = false;
+        document.getElementById("input").focus();
     }
 
     // function to toggle the dark mode

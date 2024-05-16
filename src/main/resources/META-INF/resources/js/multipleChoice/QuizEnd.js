@@ -14,8 +14,9 @@ class QuizEnd {
             </div>
             <div id="question-result-container" class="questions"></div>
             <div class="progress"></div>
+            <div class="quiz-end-buttons">
             <button id="talk-about-results" class="question-control-buttons">Ergebnisse senden</button>
-            <button id="new-quiz" class="question-control-buttons">neues Quiz</button>
+            </div>
         `;
         this.questionContainer = this.element.querySelector('.questions');
         this.progress = this.element.querySelector('.progress');
@@ -59,7 +60,6 @@ class QuizEnd {
     addEventListenerToTalkAboutResults() {
         this.element.querySelector('#talk-about-results').addEventListener('click', async () => {
             document.querySelector('#talk-about-results').disabled = true;
-            document.querySelector('#new-quiz').disabled = true;
             const answers = [];
             document.querySelectorAll('.clicked').forEach(element => {
                 answers.push(element.id);

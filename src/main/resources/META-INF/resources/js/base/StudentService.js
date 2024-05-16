@@ -91,6 +91,9 @@ class StudentService {
         const lectureIds = [];
         const selectedLectures = document.querySelectorAll('.selected-lecture');
         for (const selectedLecture of selectedLectures) {
+            if (lectureIds.includes(selectedLecture.id)) {
+                continue;
+            }
             lectureIds.push(selectedLecture.id);
         }
 
@@ -137,6 +140,7 @@ class StudentService {
         this.studentId = studentId;
         const data = await this.getStudentData();
         document.querySelector('#user-name').value = data.name;
+        this.removeAllLecturesFromUI();
         this.addLecturesToUI(data.lectures);
     }
 
@@ -169,6 +173,13 @@ class StudentService {
                 this.deleteLectureForStudent(removeLectureButton.parentElement.id);
                 removeLectureButton.parentElement.remove();
             })
+        }
+    }
+
+    removeAllLecturesFromUI() {
+        const removeLectureButtons = document.querySelectorAll('.remove-lecture');
+        for (const removeLectureButton of removeLectureButtons) {
+            removeLectureButton.parentElement.remove();
         }
     }
 

@@ -18,6 +18,6 @@ public interface PossibleFollowUpQuestionsAIService {
             "Dabei ermittelst du relevante und wahrscheinliche Fragen, " +
             "die der Nutzer als Anschluss an die letzte Antwort der KI stellen könnte. " +
             "Ziel ist es, den Dialogfluss vorausschauend zu gestalten und proaktiv auf potenzielle " +
-            "Informationsbedürfnisse des Nutzers einzugehen. Du gibst nur die Liste mit den möglichen Fragen zurück." )
+            "Informationsbedürfnisse des Nutzers einzugehen. Du gibst nur die Liste mit den möglichen Fragen auf Deutsch zurück." )
     List<String> possibleQuestionsChat(@UserMessage String lastMessage);
 }

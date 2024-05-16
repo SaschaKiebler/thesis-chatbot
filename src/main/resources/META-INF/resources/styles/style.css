@@ -480,6 +480,12 @@ code {
   border: none;
 }
 
+.user-popup-buttons-container{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
 .save-button{
   cursor: pointer;
   background-color: transparent;
@@ -510,6 +516,15 @@ code {
   background-color: #e24a4a;
   color: white;
   transition: all 0.3s ease;
+}
+
+.refresh-button{
+  cursor: pointer;
+  background-color: transparent;
+  border: black 1px solid;
+  width: 25px;
+  height: 25px;
+  padding: 3px;
 }
 
 #score-container{

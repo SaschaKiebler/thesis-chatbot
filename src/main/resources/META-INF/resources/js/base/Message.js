@@ -15,10 +15,13 @@ class Message {
         if(this.id){
             this.element.id = this.id;
         }
+        this.botName = "Bot";
+        if(this.sender === "ai" && this.modelname){
+            this.botName = this.modelname;
+        }
         this.element.innerHTML = `<div class="icon"></div>
                                     <div class="message-content">
-                                        <div class="name">${this.sender === "ai" ? "Bot" : "You"}</div>
-                                        <div class="modelname">${this.modelname !== null && this.modelname !== undefined ? this.modelname : ""}</div>    
+                                        <div class="name">${this.sender === "ai" ? this.botName : "You"}</div>  
                                         <p class="text">${this.message}</p>
                                     </div>`;
     }
