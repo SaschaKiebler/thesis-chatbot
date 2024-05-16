@@ -156,24 +156,39 @@ class StudentService {
         const lectureDiv = document.createElement('div');
         lectureDiv.className = 'selected-lecture';
         lectureDiv.id = lecture.id;
-        const removeLectureButton = document.createElement("button");
+
+        const removeLectureButton = document.createElement('button');
         removeLectureButton.className = 'remove-lecture';
         removeLectureButton.innerHTML = 'X';
+
         lectureDiv.innerHTML = lecture.name ? lecture.name : lecture.value;
         lectureDiv.appendChild(removeLectureButton);
         document.querySelector('.selected-lectures').appendChild(lectureDiv);
-        this.addRemoveLectureListener();
-    }
 
+        // Directly add event listener to the new remove button
+        removeLectureButton.addEventListener('click', async () => {
+            await this.handleRemoveLecture(removeLectureButton);
+        });
+    }
 
     addRemoveLectureListener() {
         const removeLectureButtons = document.querySelectorAll('.remove-lecture');
+
+        // Ensure each button has the event listener attached
         for (const removeLectureButton of removeLectureButtons) {
-            removeLectureButton.addEventListener('click', () => {
-                this.deleteLectureForStudent(removeLectureButton.parentElement.id);
-                removeLectureButton.parentElement.remove();
-            })
+            // Remove existing event listeners to avoid multiple bindings
+            const newButton = removeLectureButton.cloneNode(true);
+            removeLectureButton.replaceWith(newButton);
+
+            newButton.addEventListener('click', async () => {
+                await this.handleRemoveLecture(newButton);
+            });
         }
+    }
+
+    async handleRemoveLecture(removeLectureButton) {
+        await this.deleteLectureForStudent(removeLectureButton.parentElement.id);
+        removeLectureButton.parentElement.remove();
     }
 
     removeAllLecturesFromUI() {

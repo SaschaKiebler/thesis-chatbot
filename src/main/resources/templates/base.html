@@ -177,10 +177,11 @@ mit Javascript beliebige Variationen von der Klasse Message darstellen. !}
   });
 
   // Eventlistener für save button
-  document.getElementById('save-user').addEventListener('click', function() {
-    studentService.updateStudentData();
-    uiService.addStudentScoresToUI(personalId, studentService);
+  document.getElementById('save-user').addEventListener('click', async function() {
     uiService.userPopUp();
+    await studentService.updateStudentData();
+    await studentService.setStudentDataInUI(personalId);
+    await uiService.addStudentScoresToUI(personalId, studentService);
   });
 
   // Eventlistener für LectureOptions
