@@ -22,4 +22,8 @@ public class LectureRepository implements PanacheRepository<Lecture> {
     public List<Lecture> findByIds(Set<UUID> ids) {
         return list("id in ?1", ids);
     }
+
+    public void deleteById(UUID id) {
+        delete("id", id);
+    }
 }

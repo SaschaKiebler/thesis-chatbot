@@ -20,4 +20,8 @@ public class StudentRepository implements PanacheRepository<Student> {
         student.getLectures().removeIf(lecture -> lecture.getId().equals(lectureId));
         persist(student);
     }
+
+    public void deleteById(UUID id) {
+        delete("id", id);
+    }
 }
