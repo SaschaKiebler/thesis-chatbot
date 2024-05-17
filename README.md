@@ -38,3 +38,36 @@ Die zweite Möglichkeit ist das Starten mit Docker-Compose. Hier wird auch das .
 ```shell script
 docker-compose -f docker-compose-htwg.yaml up -d
 ```
+
+
+## Programmaufbau
+
+### Verwalten der Dokumente im RAG
+In der Dokumentverwaltung können Dokumente für das RAG hinzugefügt und gelöscht werden. 
+Es wird eine Übersicht aller im RAG enthaltenen Dokumente angezeigt. 
+Zudem können über die Oberfläche Vorlesungen erstellt und Dokumente diesen zugeordnet werden, 
+sobald sie hinzugefügt werden.
+
+Die Oberfläche ist erreichbar unter der URL:
+
+http://localhost:8080/dokumente
+
+### Vergleichsoberfläche
+
+
+Die Vergleichsoberfläche ist erreichbar unter der URL:
+
+http://localhost:8080/chat
+
+
+### KI-Tutor Oberfläche
+
+Die KI-Tutor Oberfläche ist erreichbar unter der URL:
+
+http://localhost:8080/multipleChoice
+
+
+## JavaDocs
+Die automatisierte Dokumentation für das Programm ist erreichbar unter der URL:
+
+http://localhost:63342/thesis-chatbot/target/site/apidocs/index.html
