@@ -81,7 +81,7 @@ public class GenerateQuizChain {
          if(type == RequestType.NO_DATA){
 
              // add the username to the context to make it more personal
-             userInput += "\n\n\n context: {username: " + student.getName() + "}";
+             userInput.concat("\n\n\n context: {username: " + student.getName() + "}");
 
              return chatService.chat(conversationId, userInput, studentId);
          }
