@@ -47,7 +47,7 @@ public class AdvancedRetrievalAugmentor implements Supplier<RetrievalAugmentor> 
         ChatLanguageModel chatModel = OpenAiChatModel.builder()
                 .apiKey(System.getenv("TOGETHERAI_API_KEY"))
                 .baseUrl("https://api.together.xyz")
-                .modelName("openchat/openchat-3.5-1210")
+                .modelName("meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo")
                 .logRequests(true)
                 .logResponses(true)
                 .build();
