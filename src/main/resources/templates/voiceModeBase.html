@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta and Title -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Voice Assistant</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <!-- PDF.js Viewer CSS and JS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf_viewer.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf_viewer.min.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles/voiceMode.css">
+</head>
+<body>
+<!-- PDF Viewer Container -->
+<div id="pdf-container">
+  <!-- PDF Viewer -->
+  <div id="pdf-viewer" class="pdf-viewer">
+    <!-- PDF content will be rendered here -->
+  </div>
+
+  <!-- Floating Toolbar -->
+  <div class="toolbar">
+    <input type="file" id="pdf-upload" accept="application/pdf" hidden>
+    <button id="upload-button" class="toolbar-button" title="Upload PDF">
+      <i class="fas fa-file-upload"></i>
+    </button>
+    <button id="prev-page" class="toolbar-button" title="Previous Page">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button id="next-page" class="toolbar-button" title="Next Page">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+    <button id="zoom-in" class="toolbar-button" title="Zoom In">
+      <i class="fas fa-search-plus"></i>
+    </button>
+    <button id="zoom-out" class="toolbar-button" title="Zoom Out">
+      <i class="fas fa-search-minus"></i>
+    </button>
+    <button id="highlight-button" class="toolbar-button" title="Highlight Text">
+      <i class="fas fa-highlighter"></i>
+    </button>
+    <button id="go-to-page" class="toolbar-button" title="Go to Page">
+      <i class="fas fa-book-open"></i>
+    </button>
+  </div>
+
+  <!-- Floating Microphone Button -->
+  <button id="voice-button" class="voice-button" title="Voice Mode">
+    <i class="fas fa-microphone"></i>
+  </button>
+
+  <!-- Listening Indicator -->
+  <div class="listening-indicator" id="listening-indicator">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+  let pdfDoc = null;
+  let currentPage = 1;
+  let scale = 1;
+  const eventBus = new pdfjsViewer.EventBus();
+
+  // PDF.js Configuration
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+
+  // DOM Elements
+  const pdfViewer = document.getElementById('pdf-viewer');
+  const pdfUpload = document.getElementById('pdf-upload');
+  const uploadButton = document.getElementById('upload-button');
+  const prevPageButton = document.getElementById('prev-page');
+  const nextPageButton = document.getElementById('next-page');
+  const zoomInButton = document.getElementById('zoom-in');
+  const zoomOutButton = document.getElementById('zoom-out');
+  const highlightButton = document.getElementById('highlight-button');
+  const goToPageButton = document.getElementById('go-to-page');
+  const voiceButton = document.getElementById('voice-button');
+  const listeningIndicator = document.getElementById('listening-indicator');
+
+  // Event Listeners
+  uploadButton.addEventListener('click', () => pdfUpload.click());
+
+  pdfUpload.addEventListener('change', () => {
+    const file = pdfUpload.files[0];
+    if (file && file.type === 'application/pdf') {
+      const fileReader = new FileReader();
+      fileReader.onload = function() {
+        const typedarray = new Uint8Array(this.result);
+        pdfjsLib.getDocument(typedarray).promise.then(pdf => {
+          pdfDoc = pdf;
+          currentPage = 1;
+          scale = 1;
+          renderPage(currentPage);
+        });
+      };
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      alert("Please upload a valid PDF file.");
+    }
+  });
+
+  prevPageButton.addEventListener('click', () => {
+    if (pdfDoc && currentPage > 1) {
+      currentPage--;
+      renderPage(currentPage);
+    }
+  });
+
+  nextPageButton.addEventListener('click', () => {
+    if (pdfDoc && currentPage < pdfDoc.numPages) {
+      currentPage++;
+      renderPage(currentPage);
+    }
+  });
+
+  zoomInButton.addEventListener('click', () => {
+    if (pdfDoc) {
+      scale += 0.2;
+      renderPage(currentPage);
+    }
+  });
+
+  zoomOutButton.addEventListener('click', () => {
+    if (pdfDoc && scale > 0.4) {
+      scale -= 0.2;
+      renderPage(currentPage);
+    }
+  });
+
+  highlightButton.addEventListener('click', () => {
+    const text = prompt("Enter text to highlight:");
+    if (text) {
+      highlightTextInPDF(text);
+    }
+  });
+
+  goToPageButton.addEventListener('click', () => {
+    const pageNumber = parseInt(prompt("Enter page number:"), 10);
+    if (pdfDoc && pageNumber >= 1 && pageNumber <= pdfDoc.numPages) {
+      currentPage = pageNumber;
+      renderPage(currentPage);
+    } else {
+      alert("Invalid page number.");
+    }
+  });
+
+  voiceButton.addEventListener('click', () => {
+    const isActive = voiceButton.classList.toggle('active');
+    // Inside voiceButton event listener
+    if (isActive) {
+      // Start voice recognition here
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Voice Input:', transcript);
+        // Handle voice commands here
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
+
+      voiceButton.recognition = recognition; // Store recognition instance
+    } else {
+      // Stop voice recognition here
+      if (voiceButton.recognition) {
+        voiceButton.recognition.stop();
+        voiceButton.recognition = null;
+      }
+    }
+
+  });
+
+  // Render PDF Page
+  function renderPage(pageNumber) {
+    pdfDoc.getPage(pageNumber).then(page => {
+      const viewport = page.getViewport({ scale: scale });
+
+      // Set dimensions
+      {|
+      pdfViewer.style.width = `${viewport.width}px`;
+      pdfViewer.style.height = `${viewport.height}px`;
+|}
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      // Clear previous render
+      pdfViewer.innerHTML = '';
+      pdfViewer.appendChild(canvas);
+
+      // Render PDF page into canvas context
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+      page.render(renderContext).promise.then(() => {
+        // Render text layer
+        return page.getTextContent();
+      }).then(textContent => {
+        const textLayerDiv = document.createElement('div');
+        textLayerDiv.classList.add('textLayer');
+        pdfViewer.appendChild(textLayerDiv);
+
+        const textLayer = new pdfjsViewer.TextLayerBuilder({
+          textLayerDiv: textLayerDiv,
+          pageIndex: page.pageIndex,
+          viewport: viewport,
+          eventBus: eventBus
+        });
+
+        textLayer.setTextContent(textContent);
+        textLayer.render();
+      });
+    });
+  }
+
+  // Highlight Text Function
+  function highlightTextInPDF(textToHighlight) {
+    const textLayerDiv = document.querySelector(".textLayer");
+    if (!textLayerDiv) return;
+
+    const regex = new RegExp(textToHighlight, 'gi');
+
+    // Iterate through all span elements in the text layer
+    const spans = textLayerDiv.querySelectorAll("span");
+
+    spans.forEach(span => {
+      if (regex.test(span.textContent)) {
+        span.classList.add("highlight");
+      }
+    });
+  }
+
+</script>
+</body>
+</html>
