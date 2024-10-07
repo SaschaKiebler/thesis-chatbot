@@ -160,8 +160,9 @@
     // Inside voiceButton event listener
     if (isActive) {
       // Start voice recognition here
+      listeningIndicator.style.display = 'flex';
       const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.lang = 'en-US';
+      recognition.lang = 'de-DE';
       recognition.start();
 
       recognition.onresult = (event) => {
@@ -176,6 +177,7 @@
 
       voiceButton.recognition = recognition; // Store recognition instance
     } else {
+      listeningIndicator.style.display = 'none';
       // Stop voice recognition here
       if (voiceButton.recognition) {
         voiceButton.recognition.stop();
@@ -190,32 +192,45 @@
     pdfDoc.getPage(pageNumber).then(page => {
       const viewport = page.getViewport({ scale: scale });
 
-      // Set dimensions
+      // Clear previous render
+      pdfViewer.innerHTML = '';
+
+      // Create a container div for the canvas and text layer
+      const pageContainer = document.createElement('div');
+      pageContainer.classList.add('page-container');
       {|
-      pdfViewer.style.width = `${viewport.width}px`;
-      pdfViewer.style.height = `${viewport.height}px`;
+      pageContainer.style.width = `${viewport.width}px`;
+      pageContainer.style.height = `${viewport.height}px`;
 |}
+      pdfViewer.appendChild(pageContainer);
+
+      // Create canvas element
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
-      // Clear previous render
-      pdfViewer.innerHTML = '';
-      pdfViewer.appendChild(canvas);
+      pageContainer.appendChild(canvas);
 
       // Render PDF page into canvas context
       const renderContext = {
         canvasContext: context,
         viewport: viewport
       };
+
       page.render(renderContext).promise.then(() => {
         // Render text layer
         return page.getTextContent();
       }).then(textContent => {
         const textLayerDiv = document.createElement('div');
         textLayerDiv.classList.add('textLayer');
-        pdfViewer.appendChild(textLayerDiv);
+
+        {|
+        textLayerDiv.style.width = `${viewport.width}px`;
+        textLayerDiv.style.height = `${viewport.height}px`;
+        |}
+
+        pageContainer.appendChild(textLayerDiv);
 
         const textLayer = new pdfjsViewer.TextLayerBuilder({
           textLayerDiv: textLayerDiv,
