@@ -1,4 +1,4 @@
-# thesis-chatbot
+# chatbot entstanden aus meiner Bachelorarbeit 2024 
 
 ## Lokale Ausführung des Programms mit maven
 ### Requirements
